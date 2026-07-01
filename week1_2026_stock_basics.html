@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>1주차 | 2026년 알아야 할 증시 상식</title>
+<style>
+  :root{
+    --bg-apricot:#FBE9D8;
+    --bg-apricot-soft:#FFF3E6;
+    --card-bg:#FFFFFF;
+    --accent:#E8804B;
+    --accent-dark:#D4672F;
+    --chip-bg:#FCE3CC;
+    --chip-text:#C1601F;
+    --ink:#2A2420;
+    --ink-soft:#6B6058;
+    --dark-box:#221E1B;
+    --line:#F0D9C2;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;
+    background:var(--bg-apricot);
+    font-family:"Noto Serif KR","Malgun Gothic","맑은 고딕",Georgia,serif;
+    color:var(--ink);
+  }
+  .deck{
+    max-width:1280px;
+    margin:0 auto;
+    padding:18px 24px 40px;
+  }
+  /* ===== Top Nav ===== */
+  .topnav{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 6px 18px;
+    border-bottom:1px solid var(--line);
+    flex-wrap:wrap;
+  }
+  .toc-btn{
+    display:flex;align-items:center;gap:6px;
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:8px 14px;
+    font-size:14px;font-weight:700;
+    color:var(--ink-soft);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .chapter-badge{
+    background:var(--accent);
+    color:#fff;
+    font-weight:800;
+    font-size:14px;
+    border-radius:8px;
+    padding:8px 12px;
+    white-space:nowrap;
+  }
+  .chapter-title{
+    font-size:20px;font-weight:700;color:var(--ink);
+    white-space:nowrap;margin-right:6px;
+  }
+  .tab{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    cursor:pointer;
+    font-family:Georgia,serif;
+  }
+  .tab.active{
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+  }
+  .nav-controls{
+    display:flex;gap:6px;margin-left:auto;
+  }
+  .nav-controls button{
+    width:36px;height:36px;border-radius:8px;
+    border:1px solid var(--line);
+    background:var(--card-bg);
+    color:var(--ink-soft);
+    cursor:pointer;font-size:15px;
+  }
+  .nav-controls button:hover{ background:var(--bg-apricot-soft); }
+
+  /* ===== Slide Stage ===== */
+  .stage{ padding-top:26px; min-height:560px; }
+  .slide{ display:none; animation:fade .25s ease; }
+  .slide.active{ display:block; }
+  @keyframes fade{ from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:translateY(0);} }
+
+  .cards-row{
+    display:flex;
+    gap:24px;
+    align-items:stretch;
+  }
+  .card{
+    background:var(--card-bg);
+    border-left:5px solid var(--accent);
+    border-radius:18px;
+    padding:34px 36px;
+    box-shadow:0 10px 24px rgba(180,110,60,.10);
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  .card.single{ max-width:980px; margin:0 auto; }
+  .chip{
+    display:inline-block;
+    background:var(--chip-bg);
+    color:var(--chip-text);
+    font-size:13px;font-weight:800;
+    border-radius:20px;
+    padding:5px 14px;
+    margin-bottom:18px;
+    width:fit-content;
+    font-family:"맑은 고딕",sans-serif;
+  }
+  .card h2{
+    font-size:30px;
+    margin:0 0 10px;
+    font-weight:800;
+    color:var(--ink);
+    line-height:1.35;
+  }
+  .card .sub{
+    font-size:15px;
+    color:var(--ink-soft);
+    margin:0 0 22px;
+    font-family:"맑은 고딕",sans-serif;
+  }
+  .bullets{ list-style:none; margin:0; padding:0; }
+  .bullets li{
+    position:relative;
+    padding-left:22px;
+    margin-bottom:14px;
+    font-size:19px;
+    line-height:1.6;
+    color:var(--ink);
+    font-family:"맑은 고딕",sans-serif;
+  }
+  .bullets li::before{
+    content:"";
+    position:absolute;
+    left:2px; top:9px;
+    width:7px;height:7px;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .callout{
+    margin-top:auto;
+    background:var(--dark-box);
+    color:#fff;
+    border-radius:14px;
+    padding:18px 22px;
+    font-size:18px;
+    font-weight:700;
+    line-height:1.6;
+    font-family:"맑은 고딕",sans-serif;
+    margin-top:24px;
+    text-align:center;
+  }
+  /* intro slide */
+  .intro-wrap{
+    text-align:center;
+    padding:60px 20px 20px;
+  }
+  .intro-wrap .week{
+    color:var(--accent-dark);
+    font-weight:800;
+    font-size:18px;
+    margin-bottom:14px;
+    font-family:"맑은 고딕",sans-serif;
+  }
+  .intro-wrap h1{
+    font-size:44px;
+    font-weight:900;
+    margin:0 0 14px;
+  }
+  .intro-wrap .sub{
+    font-size:20px;
+    color:var(--ink-soft);
+    margin-bottom:34px;
+    font-family:"맑은 고딕",sans-serif;
+  }
+  .intro-wrap .callout{
+    max-width:720px;
+    margin:0 auto;
+    text-align:center;
+  }
+  .agenda-grid{
+    display:flex;gap:24px;
+  }
+  .agenda-grid .card h3{
+    font-size:23px;font-weight:800;margin:0 0 16px;color:var(--accent-dark);
+  }
+  .tabs-row-wrap{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:14px 6px 18px;
+    border-bottom:1px solid var(--line);
+  }
+  .tabs-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    flex:1;
+  }
+  .footer-page{
+    text-align:right;
+    margin-top:24px;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-family:Georgia,serif;
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <div class="topnav">
+    <button class="toc-btn" onclick="goSlide(1)">&#9776; 목차</button>
+    <div class="chapter-badge">01</div>
+    <div class="chapter-title">2026년 알아야 할 증시 상식</div>
+  </div>
+
+  <div class="tabs-row-wrap">
+    <div class="tabs-row" id="tabs"></div>
+    <div class="nav-controls">
+      <button onclick="prevSlide()">&#9664;</button>
+      <button onclick="nextSlide()">&#9654;</button>
+      <button onclick="toggleFullscreen()">&#9974;</button>
+    </div>
+  </div>
+
+  <div class="stage" id="stage"></div>
+  <div class="footer-page" id="pageFooter"></div>
+</div>
+
+<script>
+const slides = [
+{
+  type:"intro",
+  week:"1주차",
+  title:"2026년 알아야 할 증시 상식",
+  subtitle:"초급자가 가장 먼저 채워야 할 시야",
+  callout:"뉴스는 매일 쏟아지지만, 구조를 모르면 같은 뉴스도 매번 새롭게 느껴진다."
+},
+{
+  type:"agenda",
+  cards:[
+    {chip:"1부", title:"증시 구조 읽기", bullets:[
+      "2026년 증시, 무엇이 달라졌나",
+      "금리와 주식의 관계",
+      "누가 시장을 움직이나"
+    ]},
+    {chip:"2부", title:"수급과 일정 읽기", bullets:[
+      "외국인 수급 읽기",
+      "환율과 수출 매크로 지표",
+      "하반기 이벤트 캘린더",
+      "뉴스를 구조로 읽는 법"
+    ]}
+  ]
+},
+{
+  type:"single",
+  chip:"변화",
+  title:"밸류업 프로그램 이후 달라진 것",
+  bullets:[
+    "저평가 해소를 위한 기업 주주환원 확대 흐름",
+    "코리아 디스카운트 논의의 실질적 변화",
+    "외국인 투자자들의 한국 증시 재평가"
+  ],
+  callout:"🎯 \"싸다\"는 이유만으로 사던 시대에서, \"변하고 있는가\"를 보는 시대로"
+},
+{
+  type:"single",
+  chip:"체질",
+  title:"지수 레벨이 올라간 이유",
+  bullets:[
+    "반도체·2차전지 등 핵심 업종의 글로벌 위상 변화",
+    "개인투자자 직접투자 저변 확대",
+    "국내 자금의 증시 유입 구조 변화"
+  ]
+},
+{
+  type:"single",
+  chip:"원리",
+  title:"왜 금리가 내리면 주식이 오른다고 할까",
+  bullets:[
+    "기업의 자금조달 비용 감소 → 투자·실적 개선 기대",
+    "예금·채권 대비 주식의 상대적 매력 상승",
+    "단, \"내려야 오른다\"는 단순 공식이 아님 — 인하의 이유가 중요"
+  ],
+  callout:"🎯 금리 인하 자체가 호재가 아니라, \"왜 내리는가\"가 호재인지 악재인지를 가른다"
+},
+{
+  type:"single",
+  chip:"수급",
+  title:"개인 · 외국인 · 기관, 세 주체의 차이",
+  bullets:[
+    "개인 — 단기 변동성에 민감, 거래량 비중 높음",
+    "외국인 — 환율·글로벌 자금흐름에 영향, 추세 형성력 큼",
+    "기관(연금 등) — 장기·리밸런싱 중심, 수급의 '안전판' 역할"
+  ]
+},
+{
+  type:"single",
+  chip:"흐름",
+  title:"외국인 순매수/순매도, 어떻게 읽나",
+  bullets:[
+    "연속 순매수 = 추세 형성의 신호로 해석되는 경우 多",
+    "특정 섹터 집중 매수는 업종 로테이션의 선행 지표",
+    "단기 변동보다 누적 흐름(주간·월간 단위)이 중요"
+  ]
+},
+{
+  type:"single",
+  chip:"연결",
+  title:"원/달러 환율과 수출, 같이 봐야 하는 이유",
+  bullets:[
+    "원화 약세 → 외국인 투자 매력 감소(환손실 우려), 수출기업엔 가격 경쟁력 호재",
+    "매달 1일 발표되는 수출입 동향 — 전년 동월 대비 수출 증가율이 핵심 체크포인트",
+    "반도체·자동차 등 주력 품목 수출 추이 = 해당 섹터 실적 선행 신호",
+    "무역수지(흑자/적자)와 환율의 상호작용 — 무역흑자 누적은 원화 강세 요인"
+  ],
+  callout:"🎯 환율이 오르는데 수출 증가율도 같이 오르고 있다면, 그건 약세가 아니라 경쟁력의 신호다"
+},
+{
+  type:"single",
+  chip:"일정",
+  title:"놓치면 안 되는 시장 변수들",
+  bullets:[
+    "분기 실적 발표 시즌(어닝 시즌)",
+    "한국은행·미 연준 통화정책 회의 일정",
+    "국민연금 등 주요 기관 리밸런싱 시점"
+  ],
+  callout:"🎯 일정을 알면 \"왜 그날 시장이 흔들렸는지\"가 보인다"
+},
+{
+  type:"single",
+  chip:"정리",
+  title:"호재/악재를 표면이 아닌 구조로 읽기",
+  bullets:[
+    "같은 뉴스도 시장 상황에 따라 다르게 해석된다",
+    "\"이 뉴스가 수급·금리·환율 중 무엇과 연결되는가\"를 먼저 질문할 것",
+    "다음 주: 코스피 8000 이후의 증시 방향"
+  ]
+}
+];
+
+let current = 0;
+
+function renderSlide(idx){
+  const s = slides[idx];
+  let html = "";
+  if(s.type === "intro"){
+    html = `
+      <div class="intro-wrap">
+        <div class="week">${s.week}</div>
+        <h1>${s.title}</h1>
+        <div class="sub">${s.subtitle}</div>
+        <div class="callout">${s.callout}</div>
+      </div>`;
+  } else if(s.type === "agenda"){
+    html = `<div class="cards-row agenda-grid">` +
+      s.cards.map(c => `
+        <div class="card">
+          <div class="chip">${c.chip}</div>
+          <h3>${c.title}</h3>
+          <ul class="bullets">${c.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+        </div>`).join("") +
+      `</div>`;
+  } else {
+    html = `
+      <div class="cards-row">
+        <div class="card single">
+          <div class="chip">${s.chip}</div>
+          <h2>${s.title}</h2>
+          <ul class="bullets">${s.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>
+          ${s.callout ? `<div class="callout">${s.callout}</div>` : ""}
+        </div>
+      </div>`;
+  }
+  document.getElementById("stage").innerHTML = `<div class="slide active">${html}</div>`;
+  document.getElementById("pageFooter").innerText = (idx+1) + " / " + slides.length;
+  document.querySelectorAll(".tab").forEach((t,i)=>{
+    t.classList.toggle("active", i===idx);
+  });
+}
+
+function buildTabs(){
+  const tabs = document.getElementById("tabs");
+  tabs.innerHTML = slides.map((_,i)=>`<div class="tab" onclick="goSlide(${i+1})">${i+1}</div>`).join("");
+}
+
+
+function goSlide(n){
+  current = Math.min(Math.max(n-1,0), slides.length-1);
+  renderSlide(current);
+}
+function nextSlide(){ goSlide(current+2 > slides.length ? slides.length : current+2); }
+function prevSlide(){ goSlide(current <= 0 ? 1 : current); }
+function toggleFullscreen(){
+  if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+  else { document.exitFullscreen(); }
+}
+
+document.addEventListener("keydown",(e)=>{
+  if(e.key==="ArrowRight") nextSlide();
+  if(e.key==="ArrowLeft") prevSlide();
+});
+
+buildTabs();
+renderSlide(0);
+</script>
+</body>
+</html>

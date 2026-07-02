@@ -3,665 +3,1500 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>4주차 · 미래산업 테크트리 — 섹터별 병목 주도주 지도</title>
+<title>2차시 · 주식시장의 구조</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&family=Georgia&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg-primary:#FEFCF8; --bg-warm:#FFF9F0; --bg-card:#FFFFFF; --bg-accent:#FFF5E8;
-  --gold:#D4A853; --amber:#E8943A; --coral:#E87461; --sage:#7BA68C; --lavender:#9B8EC4;
-  --text-primary:#1A1612; --text-secondary:#6B5E52; --text-muted:#9E8E7E;
-  --gradient-gold:linear-gradient(135deg,#D4A853,#E8943A);
-  --gradient-hero:linear-gradient(160deg,#FFF5E8,#FFD9C0,#FFF8F0);
-  --shadow-card:0 4px 20px rgba(26,22,18,0.07);
-  --shadow-hover:0 14px 44px rgba(26,22,18,0.10);
-  --radius-sm:12px; --radius-md:16px; --radius-lg:24px; --radius-xl:32px;
+  --bg:#FEFCF8;
+  --bg-soft:#FBF6EE;
+  --card:#FFFFFF;
+  --gold:#D4A853;
+  --gold-deep:#B98A2E;
+  --coral:#E87461;
+  --sage:#7BA68C;
+  --ink:#2E2A24;
+  --ink-soft:#6B6258;
+  --line:#ECE3D2;
+  --shadow: 0 4px 18px rgba(46,42,36,0.07);
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{
-  font-family:'Plus Jakarta Sans','Pretendard',-apple-system,sans-serif;
-  color:var(--text-primary); background:var(--bg-primary);
-  line-height:1.6; word-break:keep-all; overflow:hidden;
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Noto Sans KR','Noto Serif KR',sans-serif;
+  overflow:hidden;
+  height:100%;
+  width:100%;
 }
-body::before{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(1100px 600px at 80% -8%, rgba(232,148,58,0.10), transparent 60%),
-    radial-gradient(900px 500px at -5% 18%, rgba(212,168,83,0.10), transparent 55%),
-    radial-gradient(900px 700px at 50% 120%, rgba(123,166,140,0.08), transparent 60%);
-}
-.serif{font-family:'Playfair Display','Noto Serif KR',Georgia,serif;}
+.serif{font-family:'Noto Serif KR',serif;}
+.num{font-family:Georgia,'Noto Serif KR',serif;}
 
-/* ===== DECK SHELL ===== */
-.deck{display:flex;flex-direction:column;height:100vh;max-width:1180px;margin:0 auto;padding:0 22px;}
-.progress-track{height:4px;background:rgba(212,168,83,0.15);border-radius:4px;margin-top:14px;flex:0 0 auto;}
-.progress-fill{height:100%;background:var(--gradient-gold);border-radius:4px;transition:width .35s ease;width:4.5%;}
-
-.deck-header{display:flex;align-items:center;justify-content:space-between;padding:16px 2px 0;flex:0 0 auto;}
-.chip{
-  font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--amber);background:rgba(232,148,58,0.10);padding:7px 14px;border-radius:30px;
+#deck{
+  position:relative;
+  width:100vw;
+  height:100vh;
 }
-.slide-counter{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-muted);}
-
-.stage{flex:1 1 auto;position:relative;overflow:hidden;padding:6px 2px 14px;}
 .slide{
-  position:absolute;inset:6px 2px 14px;overflow-y:auto;
-  opacity:0;visibility:hidden;transform:translateY(14px);
-  transition:opacity .35s ease,transform .35s ease;padding-right:6px;
+  position:absolute;
+  inset:0;
+  display:none;
+  flex-direction:column;
+  padding:64px 80px 56px 80px;
+  background:var(--bg);
+  opacity:0;
+  transition:opacity .35s ease;
 }
-.slide.active{opacity:1;visibility:visible;transform:translateY(0);}
-.slide::-webkit-scrollbar{width:6px;}
-.slide::-webkit-scrollbar-thumb{background:rgba(212,168,83,0.35);border-radius:4px;}
-
-.deck-nav{
-  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
-  gap:14px;padding:14px 2px 22px;
+.slide.active{
+  display:flex;
+  opacity:1;
 }
-.nav-btn{
-  font-family:inherit;font-size:.92rem;font-weight:700;color:var(--text-primary);
-  background:var(--bg-card);border:1px solid rgba(26,22,18,0.10);border-radius:30px;
-  padding:11px 22px;cursor:pointer;transition:all .22s ease;box-shadow:var(--shadow-card);
+
+/* ---------- top bar ---------- */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+  flex-shrink:0;
 }
-.nav-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--shadow-hover);}
-.nav-btn.primary{color:#fff;background:var(--gradient-gold);border-color:transparent;}
-.nav-btn:disabled{opacity:.35;cursor:not-allowed;}
-.dots{display:flex;gap:6px;flex:1;justify-content:center;flex-wrap:wrap;}
-.dot-btn{width:8px;height:8px;border-radius:50%;background:rgba(212,168,83,0.25);border:none;cursor:pointer;padding:0;}
-.dot-btn.on{background:var(--gradient-gold);width:20px;border-radius:6px;}
-
-/* ===== GENERIC SLIDE CONTENT ===== */
-.eyebrow{
-  display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--amber);
-  background:rgba(232,148,58,0.10);padding:6px 14px;border-radius:30px;margin-bottom:14px;
+.page-badge{
+  width:46px;height:46px;border-radius:50%;
+  background:var(--gold);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;font-weight:700;font-size:20px;
+  box-shadow:var(--shadow);
 }
-h1.big{font-family:'Playfair Display','Noto Serif KR',serif;font-weight:900;
-  font-size:clamp(1.8rem,4.6vw,3rem);line-height:1.18;margin-bottom:10px;
-  background:linear-gradient(120deg,#1A1612 0%,#8a6a2c 55%,#D4A853 100%);
-  -webkit-background-clip:text;background-clip:text;color:transparent;}
-h2.slide-title{font-family:'Playfair Display','Noto Serif KR',serif;font-weight:700;
-  font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:6px;}
-.slide-sub{color:var(--text-secondary);font-size:.98rem;max-width:760px;margin-bottom:22px;}
-.key{color:var(--amber);font-weight:700;}
+.crumb{
+  font-size:16px;
+  color:var(--ink-soft);
+  letter-spacing:0.5px;
+}
+.crumb b{color:var(--coral);font-weight:700;}
 
-/* card grid */
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
-@media(max-width:820px){.grid3,.grid2{grid-template-columns:1fr;}}
+.slide-head{margin-bottom:26px;flex-shrink:0;}
+.slide-title{
+  font-family:'Noto Serif KR',serif;
+  font-weight:700;
+  font-size:35px;
+  color:var(--ink);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.slide-title .dot{color:var(--coral);}
+.slide-head.center{text-align:center;}
+.slide-head.center .slide-title{justify-content:center;font-size:59px;}
+.slide-sub{
+  font-size:19px;
+  color:var(--ink-soft);
+  margin-top:6px;
+}
 
+.content{
+  flex:1;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding-bottom:30px;
+}
+.content-narrow{
+  max-width:760px;
+  width:100%;
+  margin:0 auto;
+}
+
+/* ---------- footer ---------- */
+.footer{
+  position:absolute;
+  bottom:24px;right:80px;
+  font-size:13px;color:var(--ink-soft);
+  font-family:Georgia,serif;
+  letter-spacing:1px;
+}
+
+/* ---------- card ---------- */
 .card{
-  background:var(--bg-card);border:1px solid rgba(26,22,18,0.06);border-radius:var(--radius-lg);
-  padding:22px 22px 24px;box-shadow:var(--shadow-card);
+  background:var(--card);
+  border-left:4px solid var(--gold);
+  border-radius:12px;
+  box-shadow:var(--shadow);
+  padding:22px 24px;
 }
-.card .num{
-  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.86rem;color:var(--gold);
-  background:rgba(212,168,83,0.12);border-radius:9px;padding:5px 10px;display:inline-block;margin-bottom:10px;
+.card.coral{border-left-color:var(--coral);}
+.card.sage{border-left-color:var(--sage);}
+.card-num{
+  font-family:Georgia,serif;
+  font-weight:700;
+  font-size:35px;
+  color:var(--gold);
+  line-height:1;
+  margin-bottom:8px;
 }
-.card h4{font-family:'Noto Serif KR',serif;font-weight:700;font-size:1.08rem;margin-bottom:8px;}
-.card p{color:var(--text-secondary);font-size:.9rem;}
-
-/* legend */
-.legend-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:.92rem;color:var(--text-secondary);}
-.dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto;margin-top:5px;}
-.dot.g{background:var(--sage);} .dot.y{background:var(--amber);} .dot.r{background:var(--coral);}
-.legend-row b{color:var(--text-primary);}
-.meter-demo{display:inline-flex;gap:3px;align-items:center;vertical-align:middle;}
-.meter-demo i{width:8px;height:8px;border-radius:2px;background:var(--gold);display:inline-block;}
-.meter-demo i.off{background:rgba(212,168,83,0.22);}
-
-/* cluster intro */
-.cluster-head{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
-.cluster-ico{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem;
-  flex:0 0 auto;box-shadow:var(--shadow-card);background:linear-gradient(135deg,#FFEFD6,#FFD9A8);}
-.clabel{font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);}
-
-/* sector slide */
-.sector-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;align-items:center;}
-.metachip{font-size:.76rem;font-weight:700;padding:6px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;}
-.metachip.macro{background:var(--bg-accent);color:var(--amber);}
-.metachip.bot{background:rgba(155,142,196,0.12);color:var(--lavender);}
-.meter{display:inline-flex;gap:3px;align-items:center;}
-.meter i{width:8px;height:8px;border-radius:2px;background:var(--lavender);display:inline-block;}
-.meter i.off{background:rgba(155,142,196,0.22);}
-
-.tree{margin-top:8px;}
-.node{position:relative;margin-bottom:12px;}
-.node:last-child{margin-bottom:0;}
-.node-head{
-  display:flex;align-items:center;gap:12px;cursor:pointer;flex-wrap:wrap;
-  background:var(--bg-warm);border:1px solid rgba(26,22,18,0.06);
-  border-radius:14px;padding:13px 16px;transition:all .25s ease;
+.card.coral .card-num{color:var(--coral);}
+.card.sage .card-num{color:var(--sage);}
+.card-title{
+  font-size:22px;font-weight:700;color:var(--ink);
+  margin-bottom:6px;
 }
-.node-head:hover,.node.open .node-head{
-  background:var(--bg-accent);border-color:rgba(212,168,83,0.4);
-  box-shadow:0 6px 22px rgba(212,168,83,0.14);
+.card-desc{
+  font-size:18px;color:var(--ink-soft);line-height:1.55;
 }
-.rank{width:26px;height:26px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
-  font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;color:#fff;
-  background:var(--gradient-gold);}
-.n-name{font-weight:700;font-size:1.02rem;color:var(--text-primary);}
-.n-code{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-muted);}
-.n-role{font-size:.84rem;color:var(--text-secondary);flex:1;min-width:120px;}
-.vis{font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:20px;flex:0 0 auto;}
-.vis.g{background:rgba(123,166,140,0.15);color:#5d8a6f;}
-.vis.y{background:rgba(232,148,58,0.15);color:#c2761f;}
-.vis.r{background:rgba(232,116,97,0.15);color:#cf5340;}
-.chev{margin-left:auto;color:var(--text-muted);font-size:.85rem;transition:transform .3s ease;}
-.node.open .chev{transform:rotate(180deg);}
-.node-body{max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .3s ease,margin .3s ease;opacity:0;}
-.node.open .node-body{max-height:400px;opacity:1;margin-top:9px;}
-.nb-inner{background:linear-gradient(160deg,#fff,#fffaf2);border:1px solid rgba(212,168,83,0.18);
-  border-left:3px solid var(--gold);border-radius:0 12px 12px 12px;padding:15px 17px;margin-left:6px;}
-.nb-row{display:flex;gap:9px;font-size:.88rem;color:var(--text-secondary);margin-bottom:9px;line-height:1.55;}
-.nb-row:last-child{margin-bottom:0;}
-.nb-row .ic{flex:0 0 auto;}
-.nb-row b{color:var(--text-primary);font-weight:700;}
-.nb-row.bot b{color:#8a6a2c;}
-.nb-row.risk b{color:#cf5340;}
 
-/* summary matrix */
-.matrix{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-@media(max-width:820px){.matrix{grid-template-columns:1fr;}}
-.mtile{background:var(--bg-card);border:1px solid rgba(26,22,18,0.06);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-card);}
-.mtile h5{font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:8px;}
-.mtile p{font-size:.88rem;color:var(--text-secondary);}
-.mtile b{color:var(--text-primary);}
+/* ---------- grid helpers ---------- */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;}
 
-.disc-box{padding:20px 22px;background:var(--bg-card);border:1px dashed rgba(26,22,18,0.16);border-radius:var(--radius-md);margin-top:18px;}
-.disc-box h4{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);font-weight:700;margin-bottom:10px;}
-.disc-box ul{list-style:none;}
-.disc-box li{font-size:.88rem;color:var(--text-secondary);padding-left:18px;position:relative;margin-bottom:8px;}
-.disc-box li::before{content:"—";position:absolute;left:0;color:var(--gold);}
+/* ---------- cover ---------- */
+.cover{
+  justify-content:center;
+  align-items:flex-start;
+  position:relative;
+}
+.cover .chapter-label{
+  font-family:Georgia,serif;
+  letter-spacing:3px;
+  color:var(--gold-deep);
+  font-size:20px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+.cover .big-num{
+  font-family:Georgia,serif;
+  font-weight:700;
+  font-size:170px;
+  color:var(--gold);
+  line-height:0.85;
+  opacity:0.92;
+}
+.cover .cover-title{
+  font-family:'Noto Serif KR',serif;
+  font-weight:700;
+  font-size:51px;
+  color:var(--ink);
+  margin-top:18px;
+  line-height:1.35;
+}
+.cover .cover-sub{
+  font-size:21px;
+  color:var(--ink-soft);
+  margin-top:18px;
+  letter-spacing:0.4px;
+}
+.cover .deco-line{
+  position:absolute;
+  right:90px;top:64px;bottom:64px;
+  width:1px;
+  background:linear-gradient(to bottom, transparent, var(--line), transparent);
+}
+.cover .tag{
+  display:inline-block;
+  background:var(--bg-soft);
+  border:1px solid var(--line);
+  color:var(--coral);
+  font-size:18px;font-weight:700;
+  padding:6px 14px;border-radius:20px;
+  margin-top:26px;
+}
 
-.closing-box{text-align:center;padding:60px 20px;}
-.closing-box .emoji{font-size:2.6rem;margin-bottom:14px;}
-.qa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px;}
-@media(max-width:820px){.qa-grid{grid-template-columns:1fr;}}
-.qa-card{background:var(--bg-card);border:1px solid rgba(26,22,18,0.06);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow-card);}
-.qa-card h5{font-size:.9rem;color:var(--amber);margin-bottom:8px;font-weight:700;}
-.qa-card p{font-size:.86rem;color:var(--text-secondary);}
-.hint{font-size:.8rem;color:var(--text-muted);margin-top:16px;}
+/* ---------- part divider ---------- */
+.part-slide{
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+.part-slide .part-label{
+  font-family:Georgia,serif;
+  color:var(--gold-deep);
+  letter-spacing:4px;
+  font-weight:700;
+  font-size:21px;
+}
+.part-slide .part-num{
+  font-family:Georgia,serif;
+  font-weight:700;
+  font-size:120px;
+  color:var(--gold);
+  opacity:0.85;
+  line-height:1;
+  margin:14px 0;
+}
+.part-slide .part-title{
+  font-family:'Noto Serif KR',serif;
+  font-weight:700;
+  font-size:41px;
+  color:var(--ink);
+}
+.part-slide .part-desc{
+  font-size:19px;color:var(--ink-soft);margin-top:14px;
+}
+
+/* ---------- table ---------- */
+table.titan{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--card);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+table.titan th{
+  background:var(--gold);
+  color:#fff;
+  font-size:19px;
+  font-weight:700;
+  padding:14px 16px;
+  text-align:left;
+}
+table.titan td{
+  font-size:18.5px;
+  padding:13px 16px;
+  border-bottom:1px solid var(--line);
+  color:var(--ink);
+}
+table.titan tr:last-child td{border-bottom:none;}
+table.titan tr:nth-child(even) td{background:var(--bg-soft);}
+table.titan td.hl{color:var(--coral);font-weight:700;}
+table.titan td.hl2{color:var(--sage);font-weight:700;}
+
+/* ---------- badge ---------- */
+.badge{
+  display:inline-block;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:17px;
+  font-weight:700;
+}
+.badge.gold{background:#FBEFD9;color:var(--gold-deep);}
+.badge.coral{background:#FBE3DE;color:var(--coral);}
+.badge.sage{background:#E2EEE6;color:var(--sage);}
+
+/* ---------- vs box ---------- */
+.vs-wrap{display:flex;align-items:center;gap:18px;}
+.vs-box{flex:1;}
+.vs-circle{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;font-weight:700;font-size:19px;
+  flex-shrink:0;
+}
+
+/* ---------- step ---------- */
+.step-row{display:flex;align-items:flex-start;gap:18px;margin-bottom:16px;}
+.step-circle{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--gold);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;font-weight:700;font-size:21px;
+  flex-shrink:0;
+}
+.step-row.coral .step-circle{background:var(--coral);}
+.step-row.sage .step-circle{background:var(--sage);}
+.step-body{flex:1;padding-top:4px;}
+.step-title{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.step-desc{font-size:18px;color:var(--ink-soft);line-height:1.5;}
+
+/* ---------- warning ---------- */
+.warn-strip{
+  background:#FBE3DE;
+  border-radius:10px;
+  padding:14px 20px;
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:18px;
+}
+.warn-strip .ic{font-size:20px;}
+.warn-strip .tx{font-size:18.5px;color:#9C4A3D;font-weight:600;}
+
+/* ---------- nav ---------- */
+.nav-btn{
+  position:fixed;
+  top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,0.9);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  font-size:18px;color:var(--ink-soft);
+  z-index:50;
+  transition:all .2s;
+  user-select:none;
+}
+.nav-btn:hover{background:var(--gold);color:#fff;}
+#prevBtn{left:18px;}
+#nextBtn{right:18px;}
+
+.progress-wrap{
+  position:fixed;bottom:0;left:0;right:0;
+  height:4px;background:var(--line);
+  z-index:60;
+}
+.progress-bar{
+  height:100%;background:var(--gold);
+  transition:width .3s ease;
+}
+
+.dots{
+  position:fixed;
+  bottom:14px;left:50%;
+  transform:translateX(-50%);
+  display:flex;gap:6px;
+  z-index:60;
+}
+.dots .dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--line);
+  cursor:pointer;
+}
+.dots .dot.active{background:var(--gold);width:18px;border-radius:4px;transition:all .25s;}
+
+/* ---------- ho-ga (order book) ---------- */
+.hoga-table{
+  width:100%;border-collapse:collapse;
+  font-family:Georgia,serif;
+}
+.hoga-table td{
+  text-align:center;
+  font-size:19px;font-weight:700;
+  padding:9px 6px;
+  border-bottom:1px solid var(--line);
+}
+.hoga-table .sell{background:#FDF2F0;color:var(--coral);}
+.hoga-table .buy{background:#EEF5F0;color:var(--sage);}
+.hoga-table .price{background:var(--ink);color:#fff;font-size:20px;}
+.hoga-table .qty{color:var(--ink-soft);font-weight:400;font-size:18px;}
+
+/* ---------- checklist ---------- */
+.check-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);
+  border-radius:10px;
+  padding:13px 16px;
+  margin-bottom:10px;
+  box-shadow:var(--shadow);
+}
+.check-circle{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--sage);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;flex-shrink:0;
+}
+.check-text{font-size:18.5px;color:var(--ink);}
+
+/* ---------- key message ---------- */
+.key-card{
+  text-align:center;
+  background:var(--card);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+  padding:30px 20px;
+}
+.key-card .emoji{font-size:34px;margin-bottom:10px;}
+.key-card .key-num{
+  font-family:Georgia,serif;font-weight:700;
+  color:var(--gold);font-size:18px;letter-spacing:2px;
+  margin-bottom:8px;
+}
+.key-card .key-text{font-size:20px;font-weight:700;color:var(--ink);line-height:1.5;}
+
+/* ---------- closing ---------- */
+.closing{
+  justify-content:center;align-items:center;text-align:center;
+}
+.closing .clap{font-size:48px;margin-bottom:18px;}
+.closing .thanks{
+  font-family:'Noto Serif KR',serif;font-weight:700;
+  font-size:37px;color:var(--ink);margin-bottom:20px;
+}
+.closing .msg{font-size:20px;color:var(--ink-soft);line-height:1.8;}
+
 </style>
 </head>
 <body>
+<div id="deck"></div>
 
-<div class="deck">
-  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="deck-header">
-    <span class="chip">차트초급반 · 4주차</span>
-    <span class="slide-counter" id="slideCounter">1 / 1</span>
-  </div>
-
-  <main class="stage" id="stage"></main>
-
-  <div class="deck-nav">
-    <button class="nav-btn" id="prevBtn">‹ 이전</button>
-    <div class="dots" id="dots"></div>
-    <button class="nav-btn primary" id="nextBtn">다음 ›</button>
-  </div>
-</div>
+<div class="nav-btn" id="prevBtn">‹</div>
+<div class="nav-btn" id="nextBtn">›</div>
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="dots" id="dots"></div>
 
 <script>
-/* =========================================================
-   섹터 데이터 (미래산업 테크트리 원본 자료 기반)
-========================================================= */
-const clusters = [
-  {
-    id:'A', icon:'🔷', label:'Branch 01', name:'반도체 코어',
-    subtitle:'미세화의 한계, 후공정으로 돌파',
-    desc:'전공정(나노 미세화)이 물리적 벽에 부딪히면서, 격전지가 <b>적층·접합·기판·검사</b>의 후공정으로 이동했습니다. AI 가속기·HBM 세대 전환마다 "장비·소재·검사"가 곧 공급 병목이 됩니다.',
-    sectors:[
-      { num:'S1', title:'HBM 첨단 패키징 · 본딩',
-        keyLine:'미세화의 한계를 적층·접합으로 돌파.', rest:'HBM을 수직으로 쌓는 본딩 장비가 AI 메모리 공급의 핵심 병목.',
-        macro:'AI·HBM4 발주 사이클', meter:3,
-        stocks:[
-          {name:'한미반도체', code:'042700', role:'HBM TC본더 글로벌 1위', vis:'g', visLabel:'실적 본격화',
-            bot:'HBM 적층 TC본더 글로벌 점유율 70%대. 삼성·SK하이닉스·마이크론 양산 수율 데이터·공정 노하우 자체가 진입장벽.',
-            mom:'HBM4 발주 사이클(2026 하반기~2028) + 하이브리드 본더 2027~2028 상용화 라인업.',
-            risk:'한화세미텍·세메스 멀티벤더화, 차세대 장비 전환기 단기 발주 공백.'},
-          {name:'이오테크닉스', code:'039030', role:'정밀 레이저 후공정', vis:'g', visLabel:'실적 본격화',
-            bot:'레이저 마킹·다이싱·어닐링 — AI칩/유리기판 정밀 가공의 레이저 영역에서 독보적 레퍼런스.',
-            mom:'HBM 다이싱 수요 급증 + 유리기판 TGV 가공으로 영역 확장.',
-            risk:'전방 메모리·후공정 캐파 투자 사이클에 실적 연동.'},
-          {name:'하나마이크론', code:'067310', role:'HBM·시스템 OSAT', vis:'y', visLabel:'실적 회복기',
-            bot:'외주 후공정(OSAT) 패키징 캐파. 국내 패키징 물량 외주화·증설의 직접 수혜.',
-            mom:'후공정 물량 증가 + 브라질·베트남 해외 거점 가동.',
-            risk:'메모리 업황·가동률 민감, 수익성 변동.'}
-        ]},
-      { num:'S2', title:'유리기판 (Glass Substrate)',
-        keyLine:'플라스틱 기판의 발열·미세화 한계를 깨는 게임체인저.', rest:"2026~2028년이 '스토리 → 양산·실적'으로 넘어가는 길목.",
-        macro:'AI 가속기 기판 한계 돌파', meter:3,
-        stocks:[
-          {name:'SKC (앱솔릭스)', code:'011790', role:'세계 최초 양산시설', vis:'r', visLabel:'양산 前',
-            bot:'미 조지아에 세계 최초 유리기판 전용 양산시설 선제 완공. 특정 칩사에 종속되지 않는 오픈 생태계 표준 주도(First Mover).',
-            mom:'엔비디아·AMD·브로드컴 품질 인증(Qual) 통과 공시가 최대 촉매.',
-            risk:'본격 매출 2027년 이후, 적자·증설 자금·양산 수율 안정화 부담.'},
-          {name:'필옵틱스', code:'161580', role:'TGV 레이저 장비 (병목 공정)', vis:'y', visLabel:'실적 초기',
-            bot:"TGV(유리 관통전극) — '깨짐 없이 정밀하게 구멍 뚫기'가 유리기판 최대 공정 병목. 세계 유일 양산 장비 출하 레퍼런스.",
-            mom:'앱솔릭스·삼성전기 양쪽 모두에 납품 → 누가 먼저 양산해도 수혜.',
-            risk:'고객사 양산 일정 지연 시 장비 매출 이연.'},
-          {name:'와이씨켐', code:'112290', role:'유리기판 전용 소재', vis:'r', visLabel:'양산 前',
-            bot:"유리기판 전용 소재 풀라인업(포토레지스트·현상·박리·특수 코팅제) 세계 유일. 유리의 고질적 '깨짐'을 잡는 코팅 소재.",
-            mom:'양산 진입 시 소모성 소재 → 반복 구매 매출 구조.',
-            risk:'소규모·고변동, 양산 인증 통과 전 실적 미반영.'}
-        ]},
-      { num:'S3', title:'반도체 검사 · 계측 장비',
-        keyLine:"미세화·적층이 심할수록 '불량을 잡는 눈'이 수율 병목.", rest:'검사·계측 없이는 첨단 공정 양산이 불가능.',
-        macro:'수율 = 첨단공정 경제성', meter:2,
-        stocks:[
-          {name:'파크시스템스', code:'140860', role:'AFM 나노 계측 글로벌 1위', vis:'g', visLabel:'실적 성장',
-            bot:'원자현미경(AFM) 나노 계측 글로벌 1위. EUV·HBM 미세구조를 원자 단위로 측정하는 독보적 장비.',
-            mom:'공정 미세화·신소재 도입으로 AFM 채택 라인 확대.',
-            risk:'고가 장비 특성상 고객 투자 사이클에 민감.'},
-          {name:'넥스틴', code:'348210', role:'패턴 결함 검사 국산화', vis:'g', visLabel:'실적 성장',
-            bot:'반도체 패턴 결함 검사(다크필드) 국산화 — KLA 과점 시장에 진입한 희소 대체재.',
-            mom:'중국·국내 검사 장비 수요, 신모델 라인업.',
-            risk:'대중 수출규제·특정 고객 편중.'},
-          {name:'고영', code:'098460', role:'3D 검사 글로벌 1위', vis:'g', visLabel:'실적 안정',
-            bot:'3D 납도포·외관 검사(SPI/AOI) 글로벌 1위. 반도체·전장 영역으로 검사 확장.',
-            mom:'반도체 3D 검사·의료로봇 신사업.',
-            risk:'전방 전자·전장 경기 의존.'}
-        ]}
-    ]
-  },
-  {
-    id:'B', icon:'⚡', label:'Branch 02', name:'에너지·인프라·방산',
-    subtitle:'공급자 우위로 재편',
-    desc:'AI 전력 폭증, 노후 인프라 교체, 글로벌 재무장이 동시에 터지며 <b>전력기기·원전·방산·조선</b>이 일제히 공급자 우위 구조로 진입. 이미 실적이 강하게 따라오는 영역입니다.',
-    sectors:[
-      { num:'S4', title:'AI 데이터센터 전력 인프라',
-        keyLine:'"AI의 진짜 병목은 칩이 아니라 전력."', rest:'미국 노후 전력망 + 데이터센터 폭증 → 초고압 변압기 공급 부족.',
-        macro:'미국 송배전 슈퍼사이클', meter:3,
-        stocks:[
-          {name:'HD현대일렉트릭', code:'267260', role:'초고압 변압기', vis:'g', visLabel:'실적 본격화',
-            bot:'미국 고압 변압기 점유율 약 15~20%. 공장 풀가동·수년치 수주잔고로 사실상 슬롯이 병목.',
-            mom:'765kV급 대형 단일 수주 + 앨라배마·울산 증설.',
-            risk:'미국 관세·환율 변동.'},
-          {name:'효성중공업', code:'298040', role:'765kV·HVDC', vis:'g', visLabel:'실적 본격화',
-            bot:'미국 765kV 초고압 변압기 점유율 1위 + 전압형 HVDC 독자기술 — 장거리 대용량 송전의 차세대 병목.',
-            mom:'멤피스 공장 2배 증설, HVDC 실증·2027 가동.',
-            risk:'건설 부문 변동성, 단기 급등 후 조정 가능성.'},
-          {name:'LS일렉트릭', code:'010120', role:'배전·데이터센터 솔루션', vis:'g', visLabel:'실적 성장',
-            bot:'배전기기·전력솔루션 강자 + 데이터센터향 패키지. 텍사스 현지생산으로 관세 우회.',
-            mom:'데이터센터 수주 1조원+, 초고압 변압기 캐파 확장.',
-            risk:'경쟁사 대비 상대적으로 낮은 수출 비중.'}
-        ]},
-      { num:'S5', title:'원전 · SMR',
-        keyLine:'24시간 무탄소 기저전력 = 원전.', rest:'빅테크가 SMR에 베팅. 한국은 주기기 제작·설계 라이선스를 독점 보유.',
-        macro:'데이터센터 기저전력 + 수출', meter:3,
-        stocks:[
-          {name:'두산에너빌리티', code:'034020', role:'국내 유일 원전 주기기', vis:'y', visLabel:'실적 본격화',
-            bot:'국내 유일 원전 주기기(원자로·증기발생기) 일괄 제작 + SMR 제작 슬롯 선점(X-energy 투자). 글로벌 SMR 양산기지로 거론.',
-            mom:'체코 두코바니, 데이터센터향 가스·스팀터빈(300MW급 점유율 1위), 창원 SMR 전용 시설.',
-            risk:'SMR 매출 본격화는 중장기, 단기는 터빈·대형원전 중심.'},
-          {name:'한전기술', code:'052690', role:'원전 설계 엔지니어링', vis:'y', visLabel:'수주 연동',
-            bot:"원전 설계 '두뇌'. 해외 수출 시 설계 라이선스 수수료가 물량 비례로 발생.",
-            mom:'체코·폴란드·중동 수출 시 설계 용역 자동 동반.',
-            risk:'수주~매출 인식까지 시차가 길고, 뉴스에 변동성 큼.'},
-          {name:'한전KPS', code:'051600', role:'원전 정비 · O&M', vis:'g', visLabel:'실적 안정',
-            bot:'원전 정비·O&M 사실상 독점. 가동 원전이 늘수록 반복·안정 매출.',
-            mom:'원전 가동률 상승·계속운전, 해외 정비 진출.',
-            risk:'폭발적 성장보다는 안정형, 정책·요금 변수.'}
-        ]},
-      { num:'S6', title:'K-방산',
-        keyLine:'글로벌 재무장·NATO 증액·중동 방공이 만든 구조적 성장.', rest:'빅4 수주잔고 120조+ = 4~5년치 일감 확보.',
-        macro:'글로벌 국방비 구조적 증가', meter:2,
-        stocks:[
-          {name:'한화에어로스페이스', code:'012450', role:'지상방산 · 패키지 수출', vis:'g', visLabel:'실적 본격화',
-            bot:'K9 자주포·천무 글로벌 검증 + 가성비 패키지 수출. 수주잔고 빅4 최대(37조+), 지상방산 영업이익률 25%+.',
-            mom:'사우디 최대 20조 패키지, 미국 MTC·현지 생산 진입 시 위상 변화.',
-            risk:'가파른 주가 상승으로 밸류에이션 부담.'},
-          {name:'현대로템', code:'064350', role:'K2 전차', vis:'g', visLabel:'실적 본격화',
-            bot:'K2 흑표 전차 — 폴란드 1000대급 + 중동·남미 확장. 방산 부문이 전사 이익의 95%.',
-            mom:'폴란드 후속(EC3), 이라크 K2ME 250대 검토.',
-            risk:'수주의 분기별 인도 일정에 실적이 좌우.'},
-          {name:'LIG넥스원', code:'079550', role:'유도무기 · 천궁', vis:'g', visLabel:'실적 성장',
-            bot:"천궁-II·L-SAM 유도무기 — 중동 방공 수요를 정조준. '비궁'으로 미군 납품 최초 도전.",
-            mom:'카타르·쿠웨이트 등 M-SAM2 신규 진출, 천궁 추가 수출.',
-            risk:'무기 특성상 정보 제한·수주 변동성.'}
-        ]},
-      { num:'S7', title:'조선 · 해양 슈퍼사이클',
-        keyLine:'13년 만의 슈퍼사이클 2막(LNG + 한·미 MASGA).', rest:'LNG선 고난도 기술·도크 슬롯이 병목 — 2029년치까지 일감 확보.',
-        macro:'LNG 발주 + 미 해군 MRO', meter:3,
-        stocks:[
-          {name:'HD한국조선해양', code:'009540', role:'LNG·암모니아 운반선', vis:'g', visLabel:'실적 본격화',
-            bot:'LNG·LPG·암모니아 에너지 운송선 수주 1위. 영하 163도 화물창 등 고난도 기술 장벽 + 도크 슬롯 희소성.',
-            mom:'2026 LNG선 발주 150척 전망, 미 해군 NGLS 설계·MRO 협력.',
-            risk:'숙련 인력 부족, 중국 LNG선 추격.'},
-          {name:'한화오션', code:'042660', role:'특수선·잠수함·미 해군 MRO', vis:'g', visLabel:'실적 개선',
-            bot:'특수선·잠수함 + 필리조선소 통한 미 해군 MRO 교두보. 한화에어로·시스템과 패키지딜이 차별점.',
-            mom:'최대 60조 캐나다 잠수함 수주전, 미 해군 MRO 수주 확대.',
-            risk:'높은 PER로 기대가 상당히 선반영.'},
-          {name:'삼성중공업', code:'010140', role:'LNG·FLNG·부유식 DC', vis:'g', visLabel:'실적 개선',
-            bot:'LNG·FLNG(부유식 LNG) 독보 기술 + 50MW급 부유식 데이터센터(FDC) 개념설계 인증 — 조선·AI 인프라 교두보.',
-            mom:'FLNG 발주, 미 해군 NGLS 개념설계 수주.',
-            risk:'높은 PER, 인력·생산성 과제.'}
-        ]}
-    ]
-  },
-  {
-    id:'C', icon:'🚀', label:'Branch 03', name:'신성장 프론티어',
-    subtitle:'미래가 주가에 먼저 온 영역',
-    desc:'로봇·양자·바이오는 가장 미래 지향적이지만, 실적보다 <b>기대가 먼저 반영(고변동)</b>되는 영역입니다. 각 종목의 실적 가시성 라벨을 꼭 함께 확인하세요.',
-    sectors:[
-      { num:'S8', title:'휴머노이드 로봇',
-        keyLine:"2026 '상용화 원년'.", rest:'관절 구동계(감속기·액추에이터)가 품질·원가의 핵심 병목.',
-        macro:'피지컬 AI + 제조·물류 실증', meter:2,
-        stocks:[
-          {name:'레인보우로보틱스', code:'277810', role:'이족보행 플랫폼·삼성 편입', vis:'r', visLabel:'기대 선반영',
-            bot:'국내 유일 이족보행(휴보) 플랫폼 + 삼성전자 자회사 편입으로 자본·양산 역량 확보.',
-            mom:'쿠팡 물류센터 실증, 삼성 그룹 시너지.',
-            risk:'휴머노이드 매출 비중은 아직 작아 기대 선반영 구간.'},
-          {name:'두산로보틱스', code:'454910', role:'협동로봇·엔비디아 협력', vis:'r', visLabel:'기대 선반영',
-            bot:'협동로봇 플랫폼 + 엔비디아 협력(피지컬 AI). 그룹 재편으로 로봇 중심 사업 집중.',
-            mom:'북미 협동로봇 확장, 휴머노이드 진출.',
-            risk:'적자·높은 밸류에이션.'},
-          {name:'에스비비테크', code:'389500', role:'하모닉 감속기 (관절 병목)', vis:'r', visLabel:'기대 선반영',
-            bot:'하모닉(정밀) 감속기 국산화 — 일본 하모닉드라이브 독점의 대체. 로봇 관절의 핵심 부품 병목.',
-            mom:'휴머노이드 양산 시 관절당 다수 감속기 수요.',
-            risk:'소규모·양산 신뢰성 검증 단계.'}
-        ]},
-      { num:'S9', title:'양자컴퓨터 (美 상장)',
-        keyLine:"'불 발견 이래 최대 혁명'이라지만 상용화는 2030년+.", rest:'고변동·투기적 테마 — 분산·소액 관점.',
-        macro:'정부·빅테크 투자 가속', meter:1,
-        stocks:[
-          {name:'아이온큐', code:'NYSE:IONQ', role:'트랩이온·DARPA 선정', vis:'r', visLabel:'투기적',
-            bot:"트랩이온 방식 정확도 우위 + DARPA 차세대 양자 아키텍처 프로그램 'B단계' 선정으로 정부 신뢰 선점.",
-            mom:'양자 네트워킹(광자 연결) 이정표, 연 매출 가이던스 상향.',
-            risk:'상업적 수익화 불확실, 거시 위험선호에 좌우되는 초고변동.'},
-          {name:'리게티 컴퓨팅', code:'NASDAQ:RGTI', role:'초전도 게이트 방식', vis:'r', visLabel:'투기적',
-            bot:'초전도 게이트 방식 — 연산 속도 강점, 자체 양자칩 파운드리 보유.',
-            mom:'큐비트 수·정확도 확장 로드맵.',
-            risk:'DARPA 일부 단계 탈락 등 신뢰도 회복 과제, 고변동.'},
-          {name:'디웨이브 퀀텀', code:'NYSE:QBTS', role:'양자 어닐링·실사용', vis:'r', visLabel:'투기적',
-            bot:'양자 어닐링 — 최적화 문제에서 실제 상업 적용 사례를 가장 먼저 확보.',
-            mom:'양자 클라우드 서비스 채택 확대.',
-            risk:'게이트형 대비 범용성 한계, 테마 쏠림 변동.'}
-        ]},
-      { num:'S10', title:'비만치료제 (GLP-1)',
-        keyLine:'위고비·마운자로가 연 수십조 시장을 개막.', rest:"한국은 '장기지속형 제형(주1회→월1회)'으로 차별화.",
-        macro:'글로벌 비만약 메가트렌드', meter:2,
-        stocks:[
-          {name:'한미약품', code:'128940', role:'국내 임상 최선두', vis:'y', visLabel:'상용화 임박',
-            bot:'에페글레나타이드(랩스커버리 장기지속형) 국내 임상 최선두, 연내 상용화 추진. 근손실 개선 차세대 파이프라인까지 다층 보유.',
-            mom:'식약처 허가 절차(GIFT 지정), 삼중작용제·근육증가 신약.',
-            risk:'노보·릴리 등 글로벌 빅파마와 경쟁, 후발 주자.'},
-          {name:'펩트론', code:'087010', role:'스마트데포·릴리 평가', vis:'r', visLabel:'기대 선반영',
-            bot:'스마트데포 장기지속형 플랫폼 — 주1회를 월1회로 전환하는 핵심 제형기술. 일라이릴리와 기술평가 진행.',
-            mom:'릴리 본계약 체결 여부(연내 결정)가 최대 촉매, PT403 임상 데이터.',
-            risk:'평가 결렬 시 급락 위험, 임상 단계 고변동.'},
-          {name:'인벤티지랩', code:'389470', role:'월1회 제형·유한 협력', vis:'r', visLabel:'기대 선반영',
-            bot:'IVL-DrugFluidic 월1회 장기지속형 제형 플랫폼 + LNP 약물전달. 유한양행과 IVL3021 공동개발.',
-            mom:'위고비→월1회 전환 유지요법 데이터, 기술수출 기대.',
-            risk:'임상 초기·소규모, 자금·변동성.'}
-        ]}
-    ]
-  }
-];
+// 2차시: 주식시장의 구조
+// 코스피·코스닥 차이 / 주문의 종류 / 한국투자증권 계좌개설과 첫 매매
 
-/* =========================================================
-   슬라이드 마크업 생성
-========================================================= */
-function meterHTML(level, total){
-  let h = '<span class="meter">';
-  for(let i=0;i<total;i++){ h += `<i class="${i<level?'':'off'}"></i>`; }
-  h += '</span>';
-  return h;
-}
+const SLIDES = [];
 
-function sectorSlideHTML(cl, s){
-  const stocksHTML = s.stocks.map((st,i)=>`
-    <div class="node">
-      <div class="node-head">
-        <span class="rank">${i+1}</span>
-        <span class="n-name">${st.name}</span>
-        <span class="n-code">${st.code}</span>
-        <span class="n-role">${st.role}</span>
-        <span class="vis ${st.vis}">${st.visLabel}</span>
-        <span class="chev">▾</span>
+// ============ 01. 표지 ============
+SLIDES.push(`
+<div class="slide cover">
+  <div class="deco-line"></div>
+  <div class="chapter-label">CHAPTER</div>
+  <div class="big-num">02</div>
+  <div class="cover-title">주식시장의 구조</div>
+  <div class="cover-sub">코스피·코스닥의 차이 · 한국투자증권 계좌개설과 첫 매매 · 주문의 종류</div>
+  <div class="tag">주식초급반 · 2차시</div>
+</div>
+`);
+
+// ============ 02. 지난시간 복습 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">02</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">지난시간 복습 <span class="dot">·</span></div>
+    <div class="slide-sub">1차시, 우리는 '왜 투자해야 하는가'를 배웠어요</div>
+  </div>
+  <div class="content">
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">투자 vs 투기</div>
+        <div class="card-desc">장기 분석과 확률에 근거한 투자, 단기 감정과 운에 의존한 투기의 차이</div>
       </div>
-      <div class="node-body"><div class="nb-inner">
-        <div class="nb-row bot"><span class="ic">🔒</span><span><b>병목</b> · ${st.bot}</span></div>
-        <div class="nb-row"><span class="ic">📈</span><span><b>모멘텀</b> · ${st.mom}</span></div>
-        <div class="nb-row risk"><span class="ic">⚠️</span><span><b>리스크</b> · ${st.risk}</span></div>
-      </div></div>
-    </div>`).join('');
-
-  return `
-    <span class="eyebrow">${s.num} · ${cl.name}</span>
-    <h2 class="slide-title">${s.title}</h2>
-    <p class="slide-sub"><span class="key">${s.keyLine}</span> ${s.rest}</p>
-    <div class="sector-meta">
-      <span class="metachip macro">📡 ${s.macro}</span>
-      <span class="metachip bot">병목 강도 ${meterHTML(s.meter,3).replace('meter','meter')}</span>
-    </div>
-    <div class="tree">${stocksHTML}</div>
-    <p class="hint">💡 종목명을 클릭하면 병목·모멘텀·리스크 상세 설명이 펼쳐져요.</p>
-  `;
-}
-
-function clusterIntroHTML(cl){
-  return `
-    <div class="cluster-head">
-      <div class="cluster-ico">${cl.icon}</div>
-      <div>
-        <div class="clabel">${cl.label}</div>
-        <h2 class="slide-title">${cl.name} — ${cl.subtitle}</h2>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">예금 vs 투자</div>
+        <div class="card-desc">안전하지만 느린 예금과, 변동성은 있지만 자산을 키우는 투자</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">복리의 비밀</div>
+        <div class="card-desc">시간이 쌓일수록 눈덩이처럼 불어나는 복리 효과의 힘</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">04</div>
+        <div class="card-title">72의 법칙</div>
+        <div class="card-desc">72 ÷ 수익률 = 자산이 2배가 되는 데 걸리는 시간(년)</div>
       </div>
     </div>
-    <p class="slide-sub" style="max-width:820px;">${cl.desc}</p>
-    <div class="grid3" style="margin-top:26px;">
-      ${cl.sectors.map(s=>`
+  </div>
+  <div class="footer">02 / 29</div>
+</div>
+`);
+
+// ============ 03. 학습목표 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">03</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">오늘의 학습 목표 <span class="dot">·</span></div>
+    <div class="slide-sub">투자를 시작하기 전, 시장의 '지도'를 먼저 그려봐요</div>
+  </div>
+  <div class="content">
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">시장의 구조 이해</div>
+        <div class="card-desc">코스피와 코스닥이 무엇이고 어떻게 다른지 구분할 수 있어요</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">주문의 종류 익히기</div>
+        <div class="card-desc">시장가·지정가 주문의 차이를 알고 상황에 맞게 선택할 수 있어요</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">계좌개설 &amp; 첫 매매</div>
+        <div class="card-desc">한국투자증권 계좌를 직접 개설하고 첫 주문을 넣을 수 있어요</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">03 / 29</div>
+</div>
+`);
+
+// ============ 04. 한국 주식시장 전체 구조 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">04</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">한국 주식시장, 한눈에 보기 <span class="dot">·</span></div>
+    <div class="slide-sub">우리가 사고파는 '시장'은 사실 하나가 아니라 여러 개예요</div>
+  </div>
+  <div class="content">
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-num num">①</div>
+        <div class="card-title">코스피 KOSPI</div>
+        <div class="card-desc">대기업 · 우량주 중심<br>삼성전자, SK하이닉스 등<br>'대형 안정주' 무대</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">②</div>
+        <div class="card-title">코스닥 KOSDAQ</div>
+        <div class="card-desc">중소·벤처기업 중심<br>바이오, IT 성장주 多<br>'성장과 변동성' 무대</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">③</div>
+        <div class="card-title">코넥스 KONEX</div>
+        <div class="card-desc">초기 중소기업 전용<br>코스닥 상장 전 단계<br>초급 단계에서는 참고만</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">04 / 29</div>
+</div>
+`);
+
+// ============ 05. 코스피란 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">05</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">코스피(KOSPI)란? <span class="dot">·</span></div>
+    <div class="slide-sub">대한민국 대표 기업들이 모여있는 '메인 시장'</div>
+  </div>
+  <div class="content">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">정식 명칭</div>
+        <div class="card-desc">Korea Composite Stock Price Index<br>한국종합주가지수 · 1983년 출범</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">대표 기업</div>
+        <div class="card-desc">삼성전자, SK하이닉스, 현대차,<br>LG에너지솔루션, 네이버 등</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">상장 조건</div>
+        <div class="card-desc">자기자본·매출액 등 엄격한 기준<br>→ 상대적으로 안정적인 대기업 多</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">04</div>
+        <div class="card-title">특징</div>
+        <div class="card-desc">시가총액이 크고 변동성이 낮은 편<br>외국인·기관 투자자 비중이 높음</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">05 / 29</div>
+</div>
+`);
+
+
+// ============ 06. 코스피 상장 조건 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">06</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">코스피 상장 조건 <span class="dot">·</span></div>
+    <div class="slide-sub">아무 기업이나 들어올 수 없어요 — 엄격한 심사를 통과해야 해요</div>
+  </div>
+  <div class="content">
+    <table class="titan">
+      <tr><th>구분</th><th>주요 조건</th><th>기준</th></tr>
+      <tr><td>자기자본</td><td class="hl">납입자본금 기준</td><td>300억 원 이상</td></tr>
+      <tr><td>매출액</td><td>최근 연간 매출</td><td class="hl2">1,000억 원 이상</td></tr>
+      <tr><td>영업이익</td><td>최근 3년 중 2년</td><td>흑자 유지</td></tr>
+      <tr><td>상장 주식 수</td><td>소액주주 분산 요건</td><td>100만 주 이상</td></tr>
+      <tr><td>주식 분산</td><td>소액주주 비율</td><td>25% 이상 또는 500명 이상</td></tr>
+      <tr><td>감사의견</td><td>외부 감사 결과</td><td class="hl2">적정 의견 필수</td></tr>
+    </table>
+  </div>
+  <div class="footer">06 / 29</div>
+</div>
+`);
+
+// ============ 06. 코스닥이란 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">07</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">코스닥(KOSDAQ)이란? <span class="dot">·</span></div>
+    <div class="slide-sub">미래 성장 가능성에 베팅하는 '성장 시장'</div>
+  </div>
+  <div class="content">
+    <div class="grid-2">
+      <div class="card coral">
+        <div class="card-num num">01</div>
+        <div class="card-title">정식 명칭</div>
+        <div class="card-desc">Korea Securities Dealers Automated Quotation<br>1996년 출범 · 미국 나스닥을 본떠 설계</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">02</div>
+        <div class="card-title">대표 기업</div>
+        <div class="card-desc">에코프로비엠, 알테오젠,<br>HLB, 클래시스 등 성장주</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">상장 조건</div>
+        <div class="card-desc">코스피보다 완화된 기준<br>→ 중소·벤처·바이오 기업이 많음</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">04</div>
+        <div class="card-title">특징</div>
+        <div class="card-desc">성장성은 높지만 변동성도 큼<br>개인 투자자 비중이 상대적으로 높음</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">07 / 29</div>
+</div>
+`);
+
+
+// ============ 새. 코스닥 상장 조건 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">08</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">코스닥 상장 조건 <span class="dot">·</span></div>
+    <div class="slide-sub">코스피보다 완화된 기준 — 성장 가능성 있는 중소·벤처기업의 문이 열려있어요</div>
+  </div>
+  <div class="content">
+    <table class="titan">
+      <tr><th>구분</th><th>주요 조건</th><th>기준</th></tr>
+      <tr><td>자기자본</td><td class="hl">납입자본금 기준</td><td>30억 원 이상</td></tr>
+      <tr><td>매출액</td><td>최근 연간 매출</td><td class="hl2">100억 원 이상</td></tr>
+      <tr><td>영업이익</td><td>최근 사업연도</td><td>20억 원 이상 또는 시총 90억 원↑</td></tr>
+      <tr><td>상장 주식 수</td><td>소액주주 분산 요건</td><td>100만 주 이상</td></tr>
+      <tr><td>주식 분산</td><td>소액주주 비율</td><td>25% 이상 또는 500명 이상</td></tr>
+      <tr><td>감사의견</td><td>외부 감사 결과</td><td class="hl2">적정 의견 필수</td></tr>
+    </table>
+  </div>
+  <div class="footer">08 / 29</div>
+</div>
+`);
+
+// ============ 07. 코스피 vs 코스닥 비교표 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">09</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">코스피 vs 코스닥, 한 번에 비교 <span class="dot">·</span></div>
+    <div class="slide-sub">같은 '주식시장'이지만 성격이 전혀 달라요</div>
+  </div>
+  <div class="content">
+    <table class="titan">
+      <tr><th>구분</th><th>코스피</th><th>코스닥</th></tr>
+      <tr><td>시장 성격</td><td class="hl">대형 우량주 중심</td><td class="hl2">중소·성장주 중심</td></tr>
+      <tr><td>대표 기업</td><td>삼성전자, 현대차</td><td>에코프로비엠, HLB</td></tr>
+      <tr><td>상장 기준</td><td>엄격함 (자본·매출 高)</td><td>상대적으로 완화</td></tr>
+      <tr><td>변동성</td><td class="hl">낮은 편</td><td class="hl2">높은 편</td></tr>
+      <tr><td>주요 투자자</td><td>외국인 · 기관 비중 高</td><td>개인 투자자 비중 高</td></tr>
+      <tr><td>비유</td><td>안정적인 '대기업 직장인'</td><td>가능성 있는 '스타트업'</td></tr>
+    </table>
+  </div>
+  <div class="footer">09 / 29</div>
+</div>
+`);
+
+// ============ 08. 실전 예시 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">10</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">대표 종목으로 감 잡기 <span class="dot">·</span></div>
+    <div class="slide-sub">HTS·MTS에서 종목명 옆에 시장 구분이 함께 표시돼요</div>
+  </div>
+  <div class="content">
+    <div class="vs-wrap">
+      <div class="vs-box">
         <div class="card">
-          <span class="num">${s.num}</span>
-          <h4>${s.title}</h4>
-          <p>${s.keyLine}</p>
-        </div>`).join('')}
+          <span class="badge gold">KOSPI</span>
+          <div class="card-title" style="margin-top:12px;">삼성전자 · SK하이닉스</div>
+          <div class="card-desc">현대차 · LG에너지솔루션 · 네이버<br><br>"대한민국 시가총액 상위권,<br>이름만 들어도 아는 기업들"</div>
+        </div>
+      </div>
+      <div class="vs-circle">VS</div>
+      <div class="vs-box">
+        <div class="card coral">
+          <span class="badge coral">KOSDAQ</span>
+          <div class="card-title" style="margin-top:12px;">에코프로비엠 · 알테오젠</div>
+          <div class="card-desc">HLB · 클래시스 · 펄어비스<br><br>"2차전지, 바이오, 게임 등<br>성장 테마가 강한 기업들"</div>
+        </div>
+      </div>
     </div>
-  `;
+  </div>
+  <div class="footer">10 / 29</div>
+</div>
+`);
+
+// ============ 새. 시장에서 거래할 수 있는 종목의 종류 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">11</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">시장에서 거래할 수 있는 것들 <span class="dot">·</span></div>
+    <div class="slide-sub">주식만 있는 게 아니에요 — 시장에는 다양한 투자 상품이 함께 거래돼요</div>
+  </div>
+  <div class="content">
+    <table class="titan">
+      <tr>
+        <th>종류</th>
+        <th>대표 상품</th>
+        <th>특징</th>
+        <th>난이도</th>
+      </tr>
+      <tr>
+        <td><b>주식</b></td>
+        <td>삼성전자, 카카오, HLB 등</td>
+        <td>기업의 소유권 일부를 사는 것</td>
+        <td class="hl2">★☆☆ 초급</td>
+      </tr>
+      <tr>
+        <td><b>ETF</b></td>
+        <td>KODEX 200, TIGER 반도체</td>
+        <td>여러 종목을 묶은 펀드를 주식처럼 거래</td>
+        <td class="hl2">★☆☆ 초급</td>
+      </tr>
+      <tr>
+        <td><b>레버리지 ETF</b></td>
+        <td>KODEX 레버리지</td>
+        <td>지수 움직임의 2배 수익·손실 (고위험)</td>
+        <td class="hl">★★☆ 중급</td>
+      </tr>
+      <tr>
+        <td><b>인버스 ETF</b></td>
+        <td>KODEX 인버스</td>
+        <td>지수가 내릴 때 수익 — 하락장 헤지용</td>
+        <td class="hl">★★☆ 중급</td>
+      </tr>
+      <tr>
+        <td><b>지수 선물·옵션</b></td>
+        <td>KOSPI200 선물·옵션</td>
+        <td>미래 가격에 베팅하는 파생상품 (증거금 거래)</td>
+        <td style="color:#9C4A3D;font-weight:700;">★★★ 고급</td>
+      </tr>
+      <tr>
+        <td><b>주식 선물</b></td>
+        <td>삼성전자 선물 등</td>
+        <td>개별 주식을 기초로 한 선물 계약</td>
+        <td style="color:#9C4A3D;font-weight:700;">★★★ 고급</td>
+      </tr>
+      <tr>
+        <td><b>상품(광물) 선물</b></td>
+        <td>금·원유·구리 선물</td>
+        <td>실물 원자재 가격에 연동한 파생상품</td>
+        <td style="color:#9C4A3D;font-weight:700;">★★★ 고급</td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">11 / 29</div>
+</div>
+`);
+
+// ============ 새. 미국 시장과 한국 시장 ============
+SLIDES.push(`
+<div class="slide" style="padding:36px 80px 36px 80px;">
+  <div class="topbar">
+    <div class="page-badge num">12</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주식시장의 구조</div>
+  </div>
+  <div class="slide-head" style="margin-bottom:14px;">
+    <div class="slide-title">미국 시장이 움직이면, 한국도 움직여요 <span class="dot">·</span></div>
+    <div class="slide-sub">🌏 <b>동조화(Coupling) 현상</b> — 미국 증시가 오르면 다음날 코스피도 오르고, 급락하면 한국도 함께 흔들려요</div>
+  </div>
+  <div class="content">
+    <table class="titan" style="font-size:16px;">
+      <tr>
+        <th style="padding:10px 14px;">시장</th>
+        <th style="padding:10px 14px;">거래소</th>
+        <th style="padding:10px 14px;">한국시간 개장</th>
+        <th style="padding:10px 14px;">한국시간 마감</th>
+        <th style="padding:10px 14px;">특징</th>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>🇺🇸 뉴욕증권거래소</b></td>
+        <td style="padding:10px 14px;">NYSE</td>
+        <td style="padding:10px 14px;" class="hl">밤 10:30 <span style="font-size:12px;color:#888">(서머타임 9:30)</span></td>
+        <td style="padding:10px 14px;" class="hl">새벽 5:00 <span style="font-size:12px;color:#888">(서머타임 4:00)</span></td>
+        <td style="padding:10px 14px;">애플·JP모건 등 전통 대형주</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>🇺🇸 나스닥</b></td>
+        <td style="padding:10px 14px;">NASDAQ</td>
+        <td style="padding:10px 14px;" class="hl">밤 10:30 <span style="font-size:12px;color:#888">(서머타임 9:30)</span></td>
+        <td style="padding:10px 14px;" class="hl">새벽 5:00 <span style="font-size:12px;color:#888">(서머타임 4:00)</span></td>
+        <td style="padding:10px 14px;">엔비디아·테슬라·메타 등 기술주</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>🇰🇷 코스피·코스닥</b></td>
+        <td style="padding:10px 14px;">KRX</td>
+        <td style="padding:10px 14px;" class="hl2">오전 9:00</td>
+        <td style="padding:10px 14px;" class="hl2">오후 3:30</td>
+        <td style="padding:10px 14px;">미국 마감 결과를 반영해 개장</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>🇰🇷 에프터마켓</b><br><span style="font-size:13px;color:#888">(시간외 단일가)</span></td>
+        <td style="padding:10px 14px;">KRX</td>
+        <td style="padding:10px 14px;" class="hl2">오후 3:40</td>
+        <td style="padding:10px 14px;" class="hl2">오후 6:00</td>
+        <td style="padding:10px 14px;">정규장 마감 후 10분 단위 단일가 체결<br><span style="font-size:13px;color:#888">호가 범위: 당일 종가 ±10%</span></td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">12 / 29</div>
+</div>
+`);
+
+// ============ 09. PART 02 표지 - 계좌개설과 첫 매매 ============
+SLIDES.push(`
+<div class="slide part-slide">
+  <div class="part-label">PART 02</div>
+  <div class="part-num">START</div>
+  <div class="part-title">계좌개설과 첫 매매</div>
+  <div class="part-desc">한국투자증권 계좌, 직접 만들고 첫 주문까지 따라가 봐요</div>
+</div>
+`);
+
+// ============ 16. 계좌 개설 준비물 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">14</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 계좌개설과 첫 매매</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">계좌 개설, 준비물부터 챙겨요 <span class="dot">·</span></div>
+    <div class="slide-sub">스마트폰 하나로 10분이면 충분해요</div>
+  </div>
+  <div class="content">
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">신분증</div>
+        <div class="card-desc">주민등록증 또는<br>운전면허증</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">본인 명의 휴대폰</div>
+        <div class="card-desc">본인 인증 및<br>앱 설치용</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">본인 명의 계좌</div>
+        <div class="card-desc">기존 은행 계좌<br>(연계 인증용)</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">04</div>
+        <div class="card-title">앱 설치</div>
+        <div class="card-desc">'한국투자증권 마이뱅크'<br>또는 'eBEST' 앱</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">14 / 29</div>
+</div>
+`);
+
+// ============ 17. 한국투자증권 계좌개설 단계별 가이드 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">15</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 계좌개설과 첫 매매</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">한국투자증권 계좌개설, 5단계 <span class="dot">·</span></div>
+    <div class="slide-sub">앱을 켜고 순서대로 따라가기만 하면 돼요</div>
+  </div>
+  <div class="content">
+    <div class="content-narrow">
+      <div class="step-row">
+        <div class="step-circle num">1</div>
+        <div class="step-body">
+          <div class="step-title">앱 다운로드 &amp; 계좌개설 시작</div>
+          <div class="step-desc">'한국투자증권' 앱 설치 → '비대면 계좌개설' 메뉴 선택</div>
+        </div>
+      </div>
+      <div class="step-row coral">
+        <div class="step-circle num">2</div>
+        <div class="step-body">
+          <div class="step-title">본인 인증</div>
+          <div class="step-desc">휴대폰 인증 + 신분증 촬영으로 본인 확인 진행</div>
+        </div>
+      </div>
+      <div class="step-row sage">
+        <div class="step-circle num">3</div>
+        <div class="step-body">
+          <div class="step-title">계좌 종류 선택</div>
+          <div class="step-desc">일반 위탁계좌 또는 비과세 혜택이 있는 ISA 계좌 중 선택</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-circle num">4</div>
+        <div class="step-body">
+          <div class="step-title">연계 계좌 등록 &amp; 1원 인증</div>
+          <div class="step-desc">기존 은행계좌 연결 후 1원 입금 인증으로 본인 확인 마무리</div>
+        </div>
+      </div>
+      <div class="step-row coral">
+        <div class="step-circle num">5</div>
+        <div class="step-body">
+          <div class="step-title">계좌개설 완료 &amp; 앱 로그인</div>
+          <div class="step-desc">개설된 계좌번호 확인 후 거래용 앱(MTS)에 등록하면 끝!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">15 / 29</div>
+</div>
+`);
+
+// ============ 새. 계좌 종류 비교 ============
+SLIDES.push(`
+<div class="slide" style="padding:40px 80px 36px 80px;">
+  <div class="topbar">
+    <div class="page-badge num">16</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 계좌개설과 첫 매매</div>
+  </div>
+  <div class="slide-head" style="margin-bottom:16px;">
+    <div class="slide-title">계좌 종류, 뭐가 다를까요? <span class="dot">·</span></div>
+    <div class="slide-sub">목적에 맞는 계좌를 선택하는 것도 투자 전략이에요</div>
+  </div>
+  <div class="content">
+    <table class="titan" style="font-size:15.5px;">
+      <tr>
+        <th style="padding:10px 14px;">계좌 종류</th>
+        <th style="padding:10px 14px;">주요 목적</th>
+        <th style="padding:10px 14px;">투자 가능 상품</th>
+        <th style="padding:10px 14px;">세금 혜택</th>
+        <th style="padding:10px 14px;">인출 제한</th>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>📈 증권 위탁계좌</b></td>
+        <td style="padding:10px 14px;">주식·ETF 일반 매매</td>
+        <td style="padding:10px 14px;">주식, ETF, 펀드, 선물·옵션</td>
+        <td style="padding:10px 14px;" class="hl">없음 (매매차익 비과세)</td>
+        <td style="padding:10px 14px;">언제든 자유롭게</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>🌿 ISA 계좌</b><br><span style="font-size:12px;color:#888">개인종합자산관리계좌</span></td>
+        <td style="padding:10px 14px;">중장기 자산 형성</td>
+        <td style="padding:10px 14px;">주식, ETF, 펀드, RP, ELS</td>
+        <td style="padding:10px 14px;" class="hl2">순이익 200만 원 비과세<br><span style="font-size:12px;">초과분 9.9% 분리과세</span></td>
+        <td style="padding:10px 14px;">의무 가입 3년 후 인출</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>💰 CMA 계좌</b><br><span style="font-size:12px;color:#888">자산관리계좌</span></td>
+        <td style="padding:10px 14px;">대기 자금 + 소액 투자</td>
+        <td style="padding:10px 14px;">RP·MMF 등 단기 금융상품<br><span style="font-size:12px;">+ 주식 연계 가능</span></td>
+        <td style="padding:10px 14px;" class="hl">이자소득세 일반 과세</td>
+        <td style="padding:10px 14px;">언제든 자유롭게</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 14px;"><b>🏦 IRP 계좌</b><br><span style="font-size:12px;color:#888">개인형 퇴직연금</span></td>
+        <td style="padding:10px 14px;">노후 대비 연금 적립</td>
+        <td style="padding:10px 14px;">ETF, 펀드, 채권<br><span style="font-size:12px;">위험자산 70% 한도</span></td>
+        <td style="padding:10px 14px;" class="hl2">연 900만 원 세액공제<br><span style="font-size:12px;">16.5% (연소득 5500만↓)</span></td>
+        <td style="padding:10px 14px;">만 55세 이후 연금 수령</td>
+      </tr>
+    </table>
+  </div>
+  <div class="footer">16 / 29</div>
+</div>
+`);
+
+// ============ 18. 첫 매매 따라하기 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">17</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 계좌개설과 첫 매매</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">첫 매매, 차근차근 따라해봐요 <span class="dot">·</span></div>
+    <div class="slide-sub">소액으로 직접 눌러보는 것이 가장 좋은 공부예요</div>
+  </div>
+  <div class="content">
+    <div class="content-narrow">
+      <div class="step-row">
+        <div class="step-circle num">1</div>
+        <div class="step-body">
+          <div class="step-title">예수금 입금</div>
+          <div class="step-desc">증권계좌로 매매할 금액을 이체 (처음엔 소액 추천)</div>
+        </div>
+      </div>
+      <div class="step-row coral">
+        <div class="step-circle num">2</div>
+        <div class="step-body">
+          <div class="step-title">종목 검색</div>
+          <div class="step-desc">MTS 검색창에 사고 싶은 회사 이름 또는 종목코드 입력</div>
+        </div>
+      </div>
+      <div class="step-row sage">
+        <div class="step-circle num">3</div>
+        <div class="step-body">
+          <div class="step-title">매수 화면 진입 &amp; 주문 입력</div>
+          <div class="step-desc">'매수' 버튼 → 지정가/시장가 선택 → 수량·가격 입력</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-circle num">4</div>
+        <div class="step-body">
+          <div class="step-title">주문 확인 &amp; 체결 확인</div>
+          <div class="step-desc">주문 내역 한 번 더 확인 → 체결되면 '보유종목'에 표시</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">17 / 29</div>
+</div>
+`);
+
+// ============ 19. 첫 매매 체크리스트 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">18</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 계좌개설과 첫 매매</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">첫 매매 전, 체크리스트 <span class="dot">·</span></div>
+    <div class="slide-sub">다섯 가지만 확인하면 마음 편하게 시작할 수 있어요</div>
+  </div>
+  <div class="content">
+    <div class="content-narrow">
+      <div class="check-item"><div class="check-circle">①</div><div class="check-text">처음에는 잃어도 괜찮은 소액으로 시작했나요?</div></div>
+      <div class="check-item"><div class="check-circle">②</div><div class="check-text">코스피인지 코스닥인지 시장 구분을 확인했나요?</div></div>
+      <div class="check-item"><div class="check-circle">③</div><div class="check-text">시장가/지정가 중 어떤 주문인지 정확히 선택했나요?</div></div>
+      <div class="check-item"><div class="check-circle">④</div><div class="check-text">매수/매도 버튼과 수량·가격을 다시 확인했나요?</div></div>
+      <div class="check-item"><div class="check-circle">⑤</div><div class="check-text">주문 후 체결 내역을 직접 눈으로 확인했나요?</div></div>
+    </div>
+  </div>
+  <div class="footer">18 / 29</div>
+</div>
+`);
+
+// ============ 15. PART 03 표지 - 주문의 종류 ============
+SLIDES.push(`
+<div class="slide part-slide">
+  <div class="part-label">PART 03</div>
+  <div class="part-num">주문</div>
+  <div class="part-title">주문의 종류</div>
+  <div class="part-desc">사고팔 때 누르는 그 버튼, 정확히 알고 누르고 있나요?</div>
+</div>
+`);
+
+// ============ 10. 주문 기본 개념 (호가창) ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">20</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주문의 종류</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">호가창, 주식 가격의 '실시간 경매장' <span class="dot">·</span></div>
+    <div class="slide-sub">사고 싶은 사람과 팔고 싶은 사람의 가격이 한 화면에 모여요</div>
+  </div>
+  <div class="content">
+    <div class="grid-2" style="align-items:center;">
+      <div class="card">
+        <table class="hoga-table">
+          <tr><td class="sell">66,900</td><td class="qty">1,200</td></tr>
+          <tr><td class="sell">66,800</td><td class="qty">3,400</td></tr>
+          <tr><td class="sell">66,700</td><td class="qty">2,100</td></tr>
+          <tr><td class="price" colspan="2">66,600 현재가</td></tr>
+          <tr><td class="buy">66,500</td><td class="qty">2,800</td></tr>
+          <tr><td class="buy">66,400</td><td class="qty">4,100</td></tr>
+          <tr><td class="buy">66,300</td><td class="qty">1,900</td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="card coral" style="margin-bottom:14px;">
+          <div class="card-title">🔴 매도호가 (위쪽)</div>
+          <div class="card-desc">"이 가격에 팔겠다"는 사람들의 줄<br>가격이 낮을수록 먼저 체결</div>
+        </div>
+        <div class="card sage">
+          <div class="card-title">🔵 매수호가 (아래쪽)</div>
+          <div class="card-desc">"이 가격에 사겠다"는 사람들의 줄<br>가격이 높을수록 먼저 체결</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">20 / 29</div>
+</div>
+`);
+
+// ============ 11. 시장가 주문 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">21</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주문의 종류</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">시장가 주문 <span class="dot">·</span></div>
+    <div class="slide-sub">"가격 상관없이, 지금 당장 사고/팔고 싶어요"</div>
+  </div>
+  <div class="content">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">개념</div>
+        <div class="card-desc">가격을 지정하지 않고 현재 시장에 나와있는<br>가장 유리한 호가에 즉시 체결되는 주문</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">장점</div>
+        <div class="card-desc">체결 속도가 빠름<br>"무조건 사고 싶다/팔고 싶다"일 때 유리</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">단점</div>
+        <div class="card-desc">생각보다 비싸게 사거나<br>싸게 팔릴 수 있음 (가격 변동 위험)</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">04</div>
+        <div class="card-title">언제 쓸까?</div>
+        <div class="card-desc">거래량이 충분히 많은 대형주<br>+ 가격보다 체결이 더 중요할 때</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">21 / 29</div>
+</div>
+`);
+
+// ============ 12. 지정가 주문 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">22</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주문의 종류</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">지정가 주문 <span class="dot">·</span></div>
+    <div class="slide-sub">"이 가격에만 사고/팔고 싶어요" — 내가 가격의 주인</div>
+  </div>
+  <div class="content">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">개념</div>
+        <div class="card-desc">원하는 가격을 직접 지정해서 주문<br>그 가격 이하(매수)/이상(매도)에서만 체결</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">장점</div>
+        <div class="card-desc">내가 원하는 가격을 지킬 수 있음<br>초보자에게 더 안전한 방식</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">단점</div>
+        <div class="card-desc">가격이 맞지 않으면<br>체결이 안 되고 주문이 남을 수 있음</div>
+      </div>
+      <div class="card">
+        <div class="card-num num">04</div>
+        <div class="card-title">언제 쓸까?</div>
+        <div class="card-desc">변동성이 큰 종목<br>+ "이 가격 아니면 안 산다"는 기준이 있을 때</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">22 / 29</div>
+</div>
+`);
+
+// ============ 13. 시장가 vs 지정가 비교 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">23</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주문의 종류</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">시장가 vs 지정가, 무엇을 선택할까? <span class="dot">·</span></div>
+    <div class="slide-sub">초보자에게는 지정가 주문을 먼저 추천해요</div>
+  </div>
+  <div class="content">
+    <table class="titan">
+      <tr><th>구분</th><th>시장가 주문</th><th>지정가 주문</th></tr>
+      <tr><td>가격 지정</td><td class="hl">지정 안 함</td><td class="hl2">직접 지정</td></tr>
+      <tr><td>체결 속도</td><td class="hl">매우 빠름</td><td>조건 충족 시 체결</td></tr>
+      <tr><td>가격 리스크</td><td>높음 (예상과 다를 수 있음)</td><td class="hl2">낮음 (지정한 가격 보장)</td></tr>
+      <tr><td>미체결 가능성</td><td>거의 없음</td><td>있음</td></tr>
+      <tr><td>추천 대상</td><td>거래량 많은 대형주, 급할 때</td><td class="hl2">초보자, 변동성 큰 종목</td></tr>
+    </table>
+  </div>
+  <div class="footer">23 / 29</div>
+</div>
+`);
+
+// ============ 14. 주문 시 주의사항 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">24</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주문의 종류</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">주문 넣기 전, 꼭 확인하세요 <span class="dot">·</span></div>
+    <div class="slide-sub">손가락 하나 차이로 결과가 크게 달라질 수 있어요</div>
+  </div>
+  <div class="content">
+    <div class="warn-strip">
+      <div class="ic">⚠️</div>
+      <div class="tx">매수/매도, 수량, 가격 — 세 가지는 누르기 전에 꼭 한 번 더 확인!</div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-num num">01</div>
+        <div class="card-title">매수·매도 구분</div>
+        <div class="card-desc">사는 건지 파는 건지<br>버튼 색·문구를 다시 확인</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">02</div>
+        <div class="card-title">수량 확인</div>
+        <div class="card-desc">0 하나 더 누르면<br>주문 금액이 10배 차이</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">03</div>
+        <div class="card-title">가격 확인</div>
+        <div class="card-desc">지정가 주문 시<br>현재가와 너무 차이나는지 체크</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">24 / 29</div>
+</div>
+`);
+
+// ============ 새. 체결의 우선순위 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">25</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 주문의 종류</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">체결의 우선순위 <span class="dot">·</span></div>
+    <div class="slide-sub">같은 가격이라면 누가 먼저 체결될까요? — 순서에는 규칙이 있어요</div>
+  </div>
+  <div class="content">
+    <div class="grid-3" style="margin-bottom:20px;">
+      <div class="card">
+        <div class="card-num num">1순위</div>
+        <div class="card-title">🏆 가격 우선</div>
+        <div class="card-desc">더 좋은 가격을 제시한 주문이 먼저<br>매수는 <b>높은 가격</b>, 매도는 <b>낮은 가격</b>이 우선</div>
+      </div>
+      <div class="card coral">
+        <div class="card-num num">2순위</div>
+        <div class="card-title">⏱️ 시간 우선</div>
+        <div class="card-desc">같은 가격이라면 <b>먼저 접수된 주문</b>이 먼저<br>빠르게 주문 넣는 것이 유리</div>
+      </div>
+      <div class="card sage">
+        <div class="card-num num">3순위</div>
+        <div class="card-title">📦 수량 우선</div>
+        <div class="card-desc">동시 접수 시 <b>수량이 많은 주문</b>이 우선<br>(동시호가 등 특수 상황에 적용)</div>
+      </div>
+    </div>
+    <div class="warn-strip">
+      <div class="ic">💡</div>
+      <div class="tx">시장가 주문은 가격 제한이 없어 항상 가장 유리한 호가에 즉시 체결 → 사실상 최우선 처리</div>
+    </div>
+  </div>
+  <div class="footer">25 / 29</div>
+</div>
+`);
+
+// ============ 20. 핵심 정리 3가지 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">26</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 핵심 정리</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">오늘의 핵심 메시지 3가지 <span class="dot">·</span></div>
+    <div class="slide-sub">오늘 배운 내용, 이 세 문장만 기억하세요</div>
+  </div>
+  <div class="content">
+    <div class="grid-3">
+      <div class="key-card">
+        <div class="emoji">🏛️</div>
+        <div class="key-num">KEY 01</div>
+        <div class="key-text">코스피는 대형 우량주,<br>코스닥은 중소·성장주 시장</div>
+      </div>
+      <div class="key-card">
+        <div class="emoji">🎯</div>
+        <div class="key-num">KEY 02</div>
+        <div class="key-text">초보자는 가격을 지키는<br>지정가 주문부터</div>
+      </div>
+      <div class="key-card">
+        <div class="emoji">🌱</div>
+        <div class="key-num">KEY 03</div>
+        <div class="key-text">소액으로 직접 매매해보는<br>경험이 최고의 공부</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">26 / 29</div>
+</div>
+`);
+
+// ============ 21. 다음시간 미리보기 ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">27</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · 다음 시간 미리보기</div>
+  </div>
+  <div class="slide-head">
+    <div class="slide-title">3차시 미리보기 <span class="dot">·</span></div>
+    <div class="slide-sub">계좌를 만들었으니, 이제 '어떤 회사를 살지' 알아봐요</div>
+  </div>
+  <div class="content">
+    <div class="grid-2" style="align-items:center;">
+      <div class="part-num num" style="font-size:130px;text-align:center;">03</div>
+      <div class="grid-2" style="gap:14px;">
+        <div class="card" style="padding:16px 18px;">
+          <div class="card-title" style="font-size:14px;">기업 분석 기초</div>
+        </div>
+        <div class="card coral" style="padding:16px 18px;">
+          <div class="card-title" style="font-size:14px;">매출 · 영업이익 보기</div>
+        </div>
+        <div class="card sage" style="padding:16px 18px;">
+          <div class="card-title" style="font-size:14px;">PER · PBR이란?</div>
+        </div>
+        <div class="card" style="padding:16px 18px;">
+          <div class="card-title" style="font-size:14px;">좋은 기업 vs 비싼 주식</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">27 / 29</div>
+</div>
+`);
+
+// ============ 22. Q&A ============
+SLIDES.push(`
+<div class="slide">
+  <div class="topbar">
+    <div class="page-badge num">22</div>
+    <div class="crumb">주식초급반 · <b>2차시</b> · Q&amp;A</div>
+  </div>
+  <div class="slide-head center">
+    <div class="slide-title num">Q &amp; A</div>
+  </div>
+  <div class="content">
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Q. 코스피/코스닥, 둘 다 한 계좌로 거래되나요?</div>
+        <div class="card-desc" style="margin-top:8px;">네, 하나의 증권계좌로 코스피·코스닥 종목을 모두 매매할 수 있어요.</div>
+      </div>
+      <div class="card coral">
+        <div class="card-title">Q. 지정가 주문이 안 체결되면 어떻게 되나요?</div>
+        <div class="card-desc" style="margin-top:8px;">장이 끝날 때까지 가격이 안 맞으면 자동으로 취소돼요. 직접 취소도 가능해요.</div>
+      </div>
+      <div class="card sage">
+        <div class="card-title">Q. 계좌개설 후 바로 매매할 수 있나요?</div>
+        <div class="card-desc" style="margin-top:8px;">예수금(투자할 돈)을 이체하면 바로 가능해요. 입금 후 보통 즉시 반영돼요.</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">28 / 29</div>
+</div>
+`);
+
+// ============ 23. 마무리 ============
+SLIDES.push(`
+<div class="slide closing">
+  <div class="clap">👏</div>
+  <div class="thanks">수고하셨습니다</div>
+  <div class="msg">
+    시장의 구조를 알았고, 주문의 원리를 배웠고,<br>
+    이제 직접 계좌를 열고 첫 매매까지 할 수 있게 됐어요.<br>
+    <span style="color:var(--coral);font-weight:700;">작은 한 번의 매매가, 투자자로 가는 첫걸음이에요 🌱</span>
+  </div>
+</div>
+`);
+
+</script>
+<script>
+// 슬라이드 네비게이션 로직
+let current = 0;
+const deck = document.getElementById('deck');
+const total = SLIDES.length;
+
+function render(){
+  deck.innerHTML = SLIDES.map((html, i) => {
+    return html.replace('class="slide', i === current ? 'class="slide active' : 'class="slide');
+  }).join('');
 }
 
-/* =========================================================
-   고정 슬라이드 (표지 / 학습목표 / 개념 / 마무리 등)
-========================================================= */
-const staticSlides = {
-  cover: `
-    <div style="padding-top:6vh;text-align:center;">
-      <span class="eyebrow">◆ 차트초급반 · 4주차 · 2026.06 기준</span>
-      <h1 class="big">미래 산업 테크트리</h1>
-      <div style="font-family:'Noto Serif KR',serif;font-weight:600;font-size:clamp(1.05rem,2.2vw,1.35rem);margin-top:10px;">
-        기술·제품의 <b>병목(Choke Point)</b>을 쥔 섹터별 주도주 지도
-      </div>
-      <p class="slide-sub" style="max-width:680px;margin:20px auto 0;text-align:center;">
-        오늘은 차트를 보는 눈에서 한 걸음 나아가, "왜 이 종목인가?"를 설명하는
-        <b>펀더멘털·구조적 관점</b>을 함께 익혀봅니다. 3개 클러스터 × 10개 섹터 × 30개 종목을
-        하나의 지도로 정리했어요.
-      </p>
-    </div>
-  `,
-  objectives: `
-    <span class="eyebrow">학습 목표</span>
-    <h2 class="slide-title">오늘 수업이 끝나면 이런 게 가능해져요</h2>
-    <p class="slide-sub">차트 매매 타점 이전에, "이 종목을 왜 담는가"를 스스로 설명할 수 있는 눈을 만드는 시간입니다.</p>
-    <div class="grid3">
-      <div class="card"><span class="num">01</span><h4>병목(Choke Point) 개념 이해</h4>
-        <p>"이 기업이 없으면 공급망이 멈춘다"는 위치가 왜 강력한 투자 포인트인지 설명할 수 있어요.</p></div>
-      <div class="card"><span class="num">02</span><h4>실적 가시성 3단계 구분</h4>
-        <p>같은 테마 안에서도 실적이 이미 찍히는 종목과, 기대가 먼저 반영된 종목을 구분할 수 있어요.</p></div>
-      <div class="card"><span class="num">03</span><h4>10개 섹터 대표주 파악</h4>
-        <p>반도체·에너지·방산·조선부터 로봇·양자·바이오까지, 오늘의 미래 산업 지도를 한눈에 그릴 수 있어요.</p></div>
-    </div>
-  `,
-  lens: `
-    <span class="eyebrow">오늘의 렌즈</span>
-    <h2 class="slide-title">병목(Choke Point)이란 무엇일까요?</h2>
-    <p class="slide-sub">"미래 산업"이라는 말은 누구나 씁니다. 중요한 건 <span class="key">그 산업의 어느 지점을, 어떤 기업이 대체 불가능하게 쥐고 있는가</span> 예요.</p>
-    <div class="grid2">
-      <div class="card">
-        <h4>📊 실적 가시성 (Earnings Visibility)</h4>
-        <div class="legend-row" style="margin-top:10px;"><span class="dot g"></span><span><b>실적 본격화</b> · 이미 큰 매출·이익이 실적에 찍히는 단계</span></div>
-        <div class="legend-row"><span class="dot y"></span><span><b>실적 초기·임박</b> · 수주·상용화가 막 실적으로 전환되는 구간</span></div>
-        <div class="legend-row"><span class="dot r"></span><span><b>기대 선반영</b> · 양산·임상 前, 주가가 미래를 먼저 반영(고변동)</span></div>
-      </div>
-      <div class="card">
-        <h4>🔒 병목 강도 (에디터 정성 평가)</h4>
-        <div class="legend-row" style="margin-top:10px;"><span class="meter-demo"><i></i><i></i><i></i></span><span><b>매우 높음</b> · 사실상 대체 불가한 독과점·표준 위치</span></div>
-        <div class="legend-row"><span class="meter-demo"><i></i><i></i><i class="off"></i></span><span><b>높음</b> · 소수 과점, 진입장벽 뚜렷</span></div>
-        <div class="legend-row"><span class="meter-demo"><i></i><i class="off"></i><i class="off"></i></span><span><b>보통</b> · 경쟁 존재, 초기 단계</span></div>
-        <p style="font-size:.8rem;color:var(--text-muted);margin-top:8px;">※ 객관적 수치가 아닌 정성적 판단 기준입니다.</p>
-      </div>
-    </div>
-  `,
-  framework: `
-    <span class="eyebrow">프레임워크</span>
-    <h2 class="slide-title">좋은 종목을 고르는 3가지 체크포인트</h2>
-    <p class="slide-sub">같은 '미래 테마'라도 이 세 가지 중 몇 개를 만족하는지에 따라 리스크·기대수익이 완전히 달라집니다.</p>
-    <div class="grid3">
-      <div class="card"><span class="num">①</span><h4>미래 지향</h4><p>구조적으로 성장하는 산업 트렌드 위에 있는가?</p></div>
-      <div class="card"><span class="num">②</span><h4>실적 동행</h4><p>스토리가 아니라 매출·이익이 실제로 따라오고 있는가?</p></div>
-      <div class="card"><span class="num">③</span><h4>병목 보유</h4><p>대체 불가능한 공급 위치를 쥐고 있는가?</p></div>
-    </div>
-    <div class="card" style="margin-top:18px;background:var(--gradient-hero);border:none;">
-      <p style="font-size:.95rem;">오늘 살펴볼 3개 클러스터·10개 섹터·30개 종목을 이 세 가지 렌즈로 함께 걸러보겠습니다. 🔷 반도체 코어 → ⚡ 에너지·인프라·방산 → 🚀 신성장 프론티어 순서로 이동해요.</p>
-    </div>
-  `,
-  summary: `
-    <span class="eyebrow">오늘의 정리</span>
-    <h2 class="slide-title">테크트리를 읽는 3가지 축</h2>
-    <p class="slide-sub">같은 '미래 테마'라도 어디에 서 있느냐가 전부입니다. 병목을 쥐었는지, 실적이 이미 따라오는지, 미래가 주가에 얼마나 선반영됐는지로 나눠 보세요.</p>
-    <div class="matrix">
-      <div class="mtile"><h5>🟢 실적이 이미 강한 곳</h5>
-        <p><b>전력 인프라 · 방산 · 조선 · HBM 패키징</b> — 수주잔고와 이익이 실적에 찍히는 구간. 변동성은 상대적으로 낮지만 일부는 밸류에이션 부담.</p></div>
-      <div class="mtile"><h5>🟡 실적이 막 켜지는 곳</h5>
-        <p><b>원전·SMR · 비만치료제(한미)</b> — 수주·상용화가 매출로 전환되기 시작하는 변곡점. 이벤트(수주·허가) 트리거에 민감.</p></div>
-      <div class="mtile"><h5>🔴 미래가 먼저 온 곳</h5>
-        <p><b>유리기판 · 로봇 · 양자 · 비만 임상주</b> — 양산·임상 前 기대 선반영. 잠재력은 가장 크지만 변동성·실패 리스크도 가장 큼.</p></div>
-    </div>
-  `,
-  disclaimer: `
-    <span class="eyebrow">투자 유의사항</span>
-    <h2 class="slide-title">직언 · 데이터 정직성 고지</h2>
-    <p class="slide-sub">차트 공부든 산업 공부든, 결론은 항상 같습니다 — 확인하고, 분산하고, 스스로 판단하기.</p>
-    <div class="disc-box">
-      <ul>
-        <li>본 자료는 <b>교육·참고용 지도</b>입니다. 특정 종목의 매수·매도 추천이 아니며, 투자 책임은 본인에게 있습니다.</li>
-        <li>구체적인 <b>시가총액·PER·목표주가 수치는 의도적으로 배제</b>했습니다. 종목코드·재무·밸류에이션은 투자 전 반드시 직접 확인하세요.</li>
-        <li>'병목 강도'는 객관적 지표가 아닌 <b>에디터 정성 평가</b>이며, 실적 가시성 분류는 2026년 6월 시점 기준입니다. 시점이 지나면 변할 수 있습니다.</li>
-        <li>🔴 라벨(유리기판·로봇·양자·비만 임상주)은 <b>실적 前 기대 선반영</b> 구간으로, 단일 종목 집중보다 분산·소액·이벤트 확인이 합리적입니다.</li>
-      </ul>
-    </div>
-  `,
-  nextweek: `
-    <span class="eyebrow">다음 시간 미리보기</span>
-    <h2 class="slide-title">5주차 예고</h2>
-    <p class="slide-sub">오늘 익힌 '병목 프레임워크'를 이제 차트 위에 직접 얹어볼 시간입니다.</p>
-    <div class="grid2">
-      <div class="card"><span class="num">①</span><h4>오늘 배운 종목을 차트로 확인</h4><p>병목을 쥔 종목이 실제 차트에서 어떤 수급·추세를 보이는지 함께 살펴봅니다.</p></div>
-      <div class="card"><span class="num">②</span><h4>나만의 섹터 지도 만들기 실습</h4><p>오늘 배운 3가지 체크포인트로 직접 관심 섹터를 분석해보는 실습을 진행합니다.</p></div>
-    </div>
-  `,
-  closing: `
-    <div class="closing-box">
-      <div class="emoji">👏</div>
-      <h2 class="slide-title" style="justify-content:center;">수고하셨습니다!</h2>
-      <p class="slide-sub" style="margin:0 auto;text-align:center;">
-        차트의 '언제'만큼 중요한 건 '왜'예요. 오늘 익힌 병목·실적가시성 렌즈로<br>
-        앞으로 어떤 종목을 만나든 스스로 이유를 설명해보세요.
-      </p>
-      <div class="qa-grid">
-        <div class="qa-card"><h5>Q. 병목 강도는 어디서 확인하나요?</h5><p>공시·증권사 리포트의 점유율·기술 진입장벽 언급을 꾸준히 체크하는 습관이 가장 정확해요.</p></div>
-        <div class="qa-card"><h5>Q. 🔴 라벨 종목은 피해야 하나요?</h5><p>피할 필요는 없지만, 분산·소액·이벤트 확인 없이 몰빵하는 건 위험해요.</p></div>
-        <div class="qa-card"><h5>Q. 이 지도는 얼마나 자주 바뀌나요?</h5><p>실적 발표·수주 뉴스마다 실적 가시성 라벨은 바뀔 수 있어요. 주기적 업데이트가 필요해요.</p></div>
-      </div>
-    </div>
-  `
-};
+function buildDots(){
+  const dotsWrap = document.getElementById('dots');
+  dotsWrap.innerHTML = '';
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===current ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  }
+}
 
-/* =========================================================
-   슬라이드 리스트 조립
-========================================================= */
-const slides = [];
-slides.push({title:'표지', html:staticSlides.cover});
-slides.push({title:'학습목표', html:staticSlides.objectives});
-slides.push({title:'병목 개념', html:staticSlides.lens});
-slides.push({title:'3대 체크포인트', html:staticSlides.framework});
-clusters.forEach(cl=>{
-  slides.push({title:cl.name+' 소개', html:clusterIntroHTML(cl)});
-  cl.sectors.forEach(s=>{
-    slides.push({title:s.num+' '+s.title, html:sectorSlideHTML(cl,s)});
-  });
-});
-slides.push({title:'핵심 정리', html:staticSlides.summary});
-slides.push({title:'투자 유의사항', html:staticSlides.disclaimer});
-slides.push({title:'다음시간 예고', html:staticSlides.nextweek});
-slides.push({title:'마무리 Q&A', html:staticSlides.closing});
-
-/* =========================================================
-   렌더링 & 네비게이션
-========================================================= */
-const stage = document.getElementById('stage');
-const dotsWrap = document.getElementById('dots');
-let current = 0;
-
-slides.forEach((sl,i)=>{
-  const div = document.createElement('section');
-  div.className = 'slide' + (i===0?' active':'');
-  div.dataset.index = i;
-  div.innerHTML = sl.html;
-  stage.appendChild(div);
-
-  const dot = document.createElement('button');
-  dot.className = 'dot-btn' + (i===0?' on':'');
-  dot.title = sl.title;
-  dot.addEventListener('click', ()=>goTo(i));
-  dotsWrap.appendChild(dot);
-});
-
-const slideEls = Array.from(stage.querySelectorAll('.slide'));
-const dotEls = Array.from(dotsWrap.querySelectorAll('.dot-btn'));
-const counterEl = document.getElementById('slideCounter');
-const progressFill = document.getElementById('progressFill');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+function updateProgress(){
+  const pct = ((current+1)/total)*100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
 
 function goTo(i){
-  if(i<0||i>=slides.length) return;
-  slideEls[current].classList.remove('active');
-  dotEls[current].classList.remove('on');
+  if(i < 0) i = 0;
+  if(i > total-1) i = total-1;
   current = i;
-  slideEls[current].classList.add('active');
-  dotEls[current].classList.add('on');
-  slideEls[current].scrollTop = 0;
-  counterEl.textContent = (current+1)+' / '+slides.length;
-  progressFill.style.width = (((current+1)/slides.length)*100)+'%';
-  prevBtn.disabled = current===0;
-  nextBtn.textContent = current===slides.length-1 ? '처음으로 ↺' : '다음 ›';
+  render();
+  buildDots();
+  updateProgress();
 }
 
-prevBtn.addEventListener('click', ()=>goTo(current-1));
-nextBtn.addEventListener('click', ()=>{
-  if(current===slides.length-1){ goTo(0); } else { goTo(current+1); }
-});
-document.addEventListener('keydown', (e)=>{
-  if(e.key==='ArrowRight') goTo(Math.min(current+1, slides.length-1));
-  if(e.key==='ArrowLeft') goTo(Math.max(current-1, 0));
+function next(){ goTo(current+1); }
+function prev(){ goTo(current-1); }
+
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); next(); }
+  if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+  if(e.key === 'Home'){ goTo(0); }
+  if(e.key === 'End'){ goTo(total-1); }
 });
 
-/* 종목 카드 펼치기/접기 */
-stage.addEventListener('click', (e)=>{
-  const head = e.target.closest('.node-head');
-  if(!head) return;
-  const node = head.closest('.node');
-  const wasOpen = node.classList.contains('open');
-  node.closest('.tree').querySelectorAll('.node.open').forEach(n=>{ if(n!==node) n.classList.remove('open'); });
-  node.classList.toggle('open', !wasOpen);
+// 터치 스와이프
+let touchStartX = 0;
+document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', (e) => {
+  const touchEndX = e.changedTouches[0].screenX;
+  const diff = touchStartX - touchEndX;
+  if(Math.abs(diff) > 50){
+    if(diff > 0) next(); else prev();
+  }
 });
 
-goTo(0);
+render();
+buildDots();
+updateProgress();
+
 </script>
 </body>
 </html>

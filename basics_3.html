@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1.0">
+<title>주식 초급반 3차시 · 매매 도구와 기초 상식</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Georgia&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FEFCF8;
+    --ink:#2B2A26;
+    --ink-soft:#5C5A54;
+    --line:#E8E2D5;
+    --card:#FFFFFF;
+    --gold:#D4A853;
+    --gold-soft:#F5E8C7;
+    --coral:#E87461;
+    --coral-soft:#FADCD5;
+    --sage:#7BA68C;
+    --sage-soft:#D9E7DE;
+    --ink-cream:#FAF6EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'Noto Serif KR',serif;overflow:hidden;height:100vh}
+  .georgia{font-family:'Georgia',serif}
+
+  /* ==== deck frame ==== */
+  .deck{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .slide{
+    position:absolute;top:0;left:0;width:100%;height:100%;
+    padding:56px 88px 72px;
+    opacity:0;pointer-events:none;
+    transition:opacity .4s ease;
+    display:flex;flex-direction:column;
+  }
+  .slide.active{opacity:1;pointer-events:auto}
+
+  /* ==== progress bar ==== */
+  .progress{
+    position:fixed;top:0;left:0;height:3px;background:var(--gold);
+    z-index:100;transition:width .4s ease;
+  }
+
+  /* ==== nav dots ==== */
+  .nav{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    display:flex;gap:6px;z-index:50;
+    background:rgba(255,255,255,.7);padding:8px 14px;border-radius:20px;
+    backdrop-filter:blur(6px);
+  }
+  .nav .dot{width:7px;height:7px;border-radius:50%;background:var(--line);cursor:pointer;transition:.2s}
+  .nav .dot.active{background:var(--gold);width:22px;border-radius:4px}
+
+  /* ==== arrows ==== */
+  .arrow{
+    position:fixed;top:50%;transform:translateY(-50%);
+    width:44px;height:44px;border-radius:50%;
+    background:rgba(255,255,255,.85);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:20px;color:var(--ink-soft);
+    z-index:50;transition:.2s;
+  }
+  .arrow:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .arrow.prev{left:16px}
+  .arrow.next{right:16px}
+
+  /* ==== page badge (top-left) ==== */
+  .page-badge{
+    position:absolute;top:32px;left:56px;
+    display:flex;align-items:center;gap:10px;
+    font-family:'Georgia',serif;color:var(--ink-soft);font-size:13px;letter-spacing:.1em;
+  }
+  .page-badge .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:32px;height:32px;border-radius:50%;background:var(--gold);color:#fff;
+    font-weight:700;font-size:14px;
+  }
+
+  /* ==== page footer (bottom-right) ==== */
+  .page-foot{
+    position:absolute;bottom:28px;right:88px;
+    font-family:'Georgia',serif;font-size:12px;color:var(--ink-soft);letter-spacing:.15em;
+  }
+
+  /* ==== headings ==== */
+  h1.slide-title{
+    font-size:38px;font-weight:700;color:var(--ink);
+    margin-top:32px;letter-spacing:-.02em;
+    display:flex;align-items:baseline;gap:16px;
+  }
+  h1.slide-title::before{
+    content:'';display:inline-block;width:6px;height:32px;background:var(--gold);border-radius:2px;
+  }
+  .slide-sub{color:var(--ink-soft);font-size:16px;margin-top:8px;margin-left:22px;font-weight:400}
+
+  /* ==== cards ==== */
+  .card{
+    background:var(--card);border-left:4px solid var(--gold);
+    padding:24px 28px;border-radius:6px;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+  }
+  .card.coral{border-left-color:var(--coral)}
+  .card.sage{border-left-color:var(--sage)}
+
+  /* ==== cover ==== */
+  .cover{
+    background:linear-gradient(135deg,#FEFCF8 0%,#FAF3E4 100%);
+    justify-content:center;align-items:flex-start;padding:80px 120px;
+  }
+  .cover .chapter{font-family:'Georgia',serif;font-size:16px;letter-spacing:.4em;color:var(--gold);margin-bottom:16px}
+  .cover .lecnum{font-family:'Georgia',serif;font-size:180px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:24px;letter-spacing:-.05em}
+  .cover .subject{font-size:32px;font-weight:600;color:var(--ink);margin-bottom:12px}
+  .cover .detail{font-size:18px;color:var(--ink-soft);line-height:1.7;max-width:640px}
+  .cover .stamp{
+    position:absolute;bottom:80px;left:120px;
+    display:flex;align-items:center;gap:14px;color:var(--ink-soft);font-size:14px;
+  }
+  .cover .stamp .line{width:40px;height:1px;background:var(--gold)}
+
+  /* ==== part cover ==== */
+  .part-cover{
+    background:linear-gradient(135deg,#FAF6EC 0%,#FEFCF8 100%);
+    justify-content:center;align-items:flex-start;padding:80px 120px;
+  }
+  .part-cover .lab{font-family:'Georgia',serif;font-size:15px;letter-spacing:.4em;color:var(--gold);margin-bottom:24px}
+  .part-cover .pn{font-family:'Georgia',serif;font-size:120px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:12px;letter-spacing:-.03em}
+  .part-cover .pt{font-size:34px;font-weight:700;color:var(--ink);margin-bottom:16px}
+  .part-cover .pd{font-size:17px;color:var(--ink-soft);line-height:1.8;max-width:620px}
+  .part-cover .divider{width:80px;height:3px;background:var(--gold);margin:28px 0}
+
+  /* ==== grids ==== */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  .grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+  .grid-5{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:12px}
+
+  /* ==== big number card ==== */
+  .num-card{
+    background:var(--card);border-left:4px solid var(--gold);
+    padding:22px 24px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.04);
+  }
+  .num-card .n{font-family:'Georgia',serif;font-size:36px;font-weight:700;color:var(--gold);line-height:1}
+  .num-card .t{font-size:19px;font-weight:700;margin:10px 0 6px}
+  .num-card .d{font-size:14px;color:var(--ink-soft);line-height:1.65}
+
+  /* ==== emphasis (metaphor) box ==== */
+  .emph{
+    background:var(--gold-soft);border-radius:6px;padding:20px 26px;
+    display:flex;align-items:center;gap:20px;margin-top:20px;
+  }
+  .emph .lbl{font-family:'Georgia',serif;font-size:13px;letter-spacing:.2em;color:var(--gold);font-weight:700;white-space:nowrap}
+  .emph .msg{font-size:17px;color:var(--ink);line-height:1.6;font-weight:500}
+
+  /* ==== table ==== */
+  table.tt{width:100%;border-collapse:collapse;background:var(--card);border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);margin-top:16px}
+  table.tt th{
+    background:var(--ink-cream);color:var(--ink);
+    font-size:15px;font-weight:700;padding:14px 16px;text-align:left;
+    border-bottom:2px solid var(--gold);
+  }
+  table.tt td{
+    padding:14px 16px;font-size:14px;color:var(--ink);
+    border-bottom:1px solid var(--line);vertical-align:top;line-height:1.65;
+  }
+  table.tt tr:nth-child(even) td{background:#FBF9F3}
+  table.tt tr:last-child td{border-bottom:none}
+  table.tt td.tag{font-family:'Georgia',serif;font-weight:700;color:var(--gold);width:80px}
+
+  /* ==== hoga (order book) ==== */
+  .hoga{
+    background:var(--card);border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.04);
+    padding:18px;font-family:'Georgia',serif;
+  }
+  .hoga-row{display:grid;grid-template-columns:1fr 100px 1fr;align-items:center;padding:5px 8px;font-size:14px;border-radius:3px}
+  .hoga-row.sell{background:#F5E9E5}
+  .hoga-row.buy{background:#E5EEE7}
+  .hoga-row.current{background:var(--gold-soft);font-weight:700;margin:6px 0;padding:8px}
+  .hoga-row .qty{text-align:left;color:var(--ink-soft)}
+  .hoga-row .qtyR{text-align:right;color:var(--ink-soft)}
+  .hoga-row .price{text-align:center;font-weight:700;color:var(--ink)}
+  .hoga-lbl{display:grid;grid-template-columns:1fr 100px 1fr;font-size:11px;color:var(--ink-soft);letter-spacing:.15em;padding:4px 8px;margin-bottom:4px}
+  .hoga-lbl .l{text-align:left}
+  .hoga-lbl .c{text-align:center}
+  .hoga-lbl .r{text-align:right}
+
+  /* ==== calendar (D+2) ==== */
+  .cal{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+  .cal .day{
+    background:var(--card);border-radius:6px;padding:16px 12px;text-align:center;
+    box-shadow:0 2px 6px rgba(0,0,0,.03);border-top:3px solid var(--line);
+  }
+  .cal .day.d0{border-top-color:var(--coral)}
+  .cal .day.d1{border-top-color:var(--gold)}
+  .cal .day.d2{border-top-color:var(--sage);background:var(--sage-soft)}
+  .cal .day .lbl{font-family:'Georgia',serif;font-size:14px;color:var(--ink-soft);letter-spacing:.15em;font-weight:700}
+  .cal .day .tit{font-size:15px;font-weight:700;margin:6px 0}
+  .cal .day .desc{font-size:12px;color:var(--ink-soft);line-height:1.5}
+
+  /* ==== check list ==== */
+  .checkbox{
+    display:flex;align-items:flex-start;gap:14px;
+    background:var(--card);padding:18px 20px;border-radius:6px;
+    box-shadow:0 2px 6px rgba(0,0,0,.04);border-left:4px solid var(--sage);
+  }
+  .checkbox .ck{
+    width:24px;height:24px;border:2px solid var(--sage);border-radius:4px;
+    display:flex;align-items:center;justify-content:center;color:var(--sage);font-weight:700;flex-shrink:0;
+  }
+  .checkbox .txt{font-size:14px;color:var(--ink);line-height:1.65}
+  .checkbox .txt strong{color:var(--sage);font-weight:700}
+
+  /* ==== warn ==== */
+  .warn{
+    background:var(--coral-soft);border-left:4px solid var(--coral);
+    padding:18px 24px;border-radius:6px;margin-top:16px;
+  }
+  .warn .wl{font-family:'Georgia',serif;font-size:12px;letter-spacing:.2em;color:var(--coral);font-weight:700;margin-bottom:6px}
+  .warn .wt{font-size:16px;color:var(--ink);line-height:1.65}
+
+  /* ==== screen mock (HTS/MTS/NAVER) ==== */
+  .screen{
+    background:#2B2A26;border-radius:8px;padding:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+  }
+  .screen .bar{display:flex;gap:6px;margin-bottom:10px}
+  .screen .bar span{width:10px;height:10px;border-radius:50%;background:#5C5A54}
+  .screen .win{background:var(--card);border-radius:5px;padding:16px;min-height:220px}
+  .screen .win .head{font-size:12px;color:var(--ink-soft);border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:10px}
+  .screen .win ul{list-style:none;font-size:12px;color:var(--ink-soft);line-height:1.9}
+  .screen .win ul li{padding:3px 0;border-bottom:1px dotted var(--line)}
+  .screen .win ul li::before{content:'▸ ';color:var(--gold);font-weight:700}
+
+  /* ==== key message ==== */
+  .keymsg{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:24px;
+  }
+  .keymsg .box{
+    background:var(--card);padding:26px 24px;border-radius:6px;
+    box-shadow:0 3px 10px rgba(0,0,0,.05);text-align:center;
+    border-top:4px solid var(--gold);
+  }
+  .keymsg .box:nth-child(2){border-top-color:var(--coral)}
+  .keymsg .box:nth-child(3){border-top-color:var(--sage)}
+  .keymsg .box .n{font-family:'Georgia',serif;font-size:42px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:14px}
+  .keymsg .box:nth-child(2) .n{color:var(--coral)}
+  .keymsg .box:nth-child(3) .n{color:var(--sage)}
+  .keymsg .box .t{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:10px}
+  .keymsg .box .d{font-size:14px;color:var(--ink-soft);line-height:1.7}
+
+  /* ==== Q&A ==== */
+  .qna{
+    background:var(--ink-cream);padding:22px 26px;border-radius:6px;margin-bottom:14px;
+    border-left:4px solid var(--gold);
+  }
+  .qna .q{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px}
+  .qna .q::before{content:'Q. ';color:var(--gold);font-family:'Georgia',serif}
+  .qna .a{font-size:14px;color:var(--ink-soft);line-height:1.7}
+  .qna .a::before{content:'A. ';color:var(--coral);font-family:'Georgia',serif;font-weight:700}
+
+  /* ==== closing ==== */
+  .closing{
+    background:linear-gradient(135deg,#FEFCF8 0%,#FAF3E4 100%);
+    justify-content:center;align-items:center;text-align:center;
+  }
+  .closing .greeting{font-family:'Georgia',serif;font-size:16px;letter-spacing:.4em;color:var(--gold);margin-bottom:20px}
+  .closing .title{font-size:52px;font-weight:700;color:var(--ink);margin-bottom:36px;letter-spacing:-.02em}
+  .closing .lines{font-size:18px;color:var(--ink-soft);line-height:2.1;max-width:640px}
+  .closing .sign{margin-top:44px;font-family:'Georgia',serif;font-size:14px;color:var(--gold);letter-spacing:.3em}
+
+  /* ==== small helpers ==== */
+  .mt-12{margin-top:12px}.mt-16{margin-top:16px}.mt-20{margin-top:20px}.mt-24{margin-top:24px}.mt-28{margin-top:28px}.mt-32{margin-top:32px}
+  .content{flex:1;display:flex;flex-direction:column;margin-top:20px}
+
+  /* ==== compare box (2 col) ==== */
+  .vs{
+    display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:stretch;margin-top:20px;
+  }
+  .vs .side{background:var(--card);padding:24px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .vs .side.left{border-top:4px solid var(--gold)}
+  .vs .side.right{border-top:4px solid var(--coral)}
+  .vs .mid{display:flex;align-items:center;justify-content:center;font-family:'Georgia',serif;font-size:24px;color:var(--ink-soft);font-weight:700}
+  .vs .side .h{font-size:22px;font-weight:700;margin-bottom:14px}
+  .vs .side.left .h{color:var(--gold)}
+  .vs .side.right .h{color:var(--coral)}
+  .vs .side .row{font-size:14px;color:var(--ink);line-height:1.9;padding:4px 0;border-bottom:1px dotted var(--line)}
+  .vs .side .row:last-child{border-bottom:none}
+  .vs .side .row strong{color:var(--ink);font-weight:700}
+
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="arrow prev" onclick="prev()">‹</div>
+<div class="arrow next" onclick="next()">›</div>
+<div class="nav" id="nav"></div>
+
+<div class="deck" id="deck">
+
+<!-- ============ SLIDE 1: 표지 ============ -->
+<section class="slide cover active">
+  <div class="chapter">STOCK BASIC · SESSION 03</div>
+  <div class="lecnum">03</div>
+  <div class="subject">매매의 창(窓)을 여는 시간</div>
+  <div class="detail">
+    HTS·MTS·NAVER증권 화면을 손에 익히고,<br>
+    호가창·주문 방식·예수금·증거금까지 —<br>
+    실전 매매 전에 반드시 알아야 할 기초 상식.
+  </div>
+  <div class="stamp">
+    <span class="line"></span>
+    <span>춘천여성인력개발센터 · 주식 초급반 · 3차시</span>
+  </div>
+</section>
+
+<!-- ============ SLIDE 2: 지난 시간 복습 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">02</span> REVIEW</div>
+  <h1 class="slide-title">지난 시간, 우리가 배운 것</h1>
+  <div class="slide-sub">2차시 · 주식시장의 구조, 계좌 개설, 주문의 종류</div>
+
+  <div class="content">
+    <div class="grid-4">
+      <div class="num-card">
+        <div class="n">01</div>
+        <div class="t">코스피 vs 코스닥</div>
+        <div class="d">대기업 중심 시장과 성장·기술주 중심 시장. 성격이 다르니 접근도 다르게.</div>
+      </div>
+      <div class="num-card">
+        <div class="n">02</div>
+        <div class="t">계좌 개설</div>
+        <div class="d">한국투자증권 앱으로 5단계면 완성. 위탁·ISA·CMA·IRP 계좌의 쓰임.</div>
+      </div>
+      <div class="num-card">
+        <div class="n">03</div>
+        <div class="t">주문의 종류</div>
+        <div class="d">시장가와 지정가, 그리고 체결 우선순위(가격 → 시간).</div>
+      </div>
+      <div class="num-card">
+        <div class="n">04</div>
+        <div class="t">첫 매매 체크리스트</div>
+        <div class="d">종목 확인, 수량, 가격, 주문 방식 — 실수 없이 한 번에.</div>
+      </div>
+    </div>
+    <div class="emph">
+      <div class="lbl">BRIDGE</div>
+      <div class="msg">이제 계좌는 열렸고 이론은 알았습니다. 오늘은 그 이론을 <b>실제로 움직이는 도구</b> — HTS·MTS·NAVER증권을 열어봅니다.</div>
+    </div>
+  </div>
+  <div class="page-foot">02 / 30</div>
+</section>
+
+<!-- ============ SLIDE 3: 학습 목표 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">03</span> OBJECTIVES</div>
+  <h1 class="slide-title">오늘, 이 세 가지가 익숙해집니다</h1>
+  <div class="slide-sub">2시간이 끝나면 처음 화면을 열었을 때 낯설지 않도록</div>
+
+  <div class="content">
+    <div class="grid-3 mt-24">
+      <div class="num-card" style="border-left-color:var(--gold)">
+        <div class="n">01</div>
+        <div class="t">매매 도구 3총사</div>
+        <div class="d">HTS·MTS·NAVER증권 — 각각 언제 쓰는지, 화면 어디를 봐야 하는지 감을 잡습니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--coral)">
+        <div class="n">02</div>
+        <div class="t">호가창과 주문 방식</div>
+        <div class="d">호가창 읽는 법, 지정가와 시장가의 차이 — 실제 화면을 함께 뜯어봅니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--sage)">
+        <div class="n">03</div>
+        <div class="t">예수금과 증거금</div>
+        <div class="d">내 돈이 언제 얼마나 움직이는지, D+2 결제와 증거금률의 원리를 짚습니다.</div>
+      </div>
+    </div>
+    <div class="emph" style="background:var(--sage-soft)">
+      <div class="lbl" style="color:var(--sage)">TODAY</div>
+      <div class="msg">이론은 어제, 실전은 오늘. 화면을 두려워하지 않는 것 — 그것이 오늘의 목표입니다.</div>
+    </div>
+  </div>
+  <div class="page-foot">03 / 30</div>
+</section>
+
+<!-- ============ SLIDE 4: PART 01 표지 ============ -->
+<section class="slide part-cover">
+  <div class="lab">PART ONE</div>
+  <div class="pn">01</div>
+  <div class="divider"></div>
+  <div class="pt">매매의 창 세 개 — HTS · MTS · NAVER증권</div>
+  <div class="pd">
+    같은 시장, 다른 도구.<br>
+    책상 앞에서는 HTS로 넓게, 이동 중에는 MTS로 가볍게,<br>
+    관심만 있을 땐 NAVER증권으로 자유롭게.<br>
+    세 창을 상황에 맞게 여닫는 법을 익힙니다.
+  </div>
+  <div class="page-foot">04 / 30</div>
+</section>
+
+<!-- ============ SLIDE 5: HTS란 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">05</span> HTS</div>
+  <h1 class="slide-title">HTS — 컴퓨터에 설치하는 '트레이딩 작업실'</h1>
+  <div class="slide-sub">Home Trading System · 집(Home)에서 매매(Trading)하는 시스템</div>
+
+  <div class="content" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px">
+    <div>
+      <div class="num-card">
+        <div class="n">특징</div>
+        <div class="t">화면을 여러 개 띄울 수 있음</div>
+        <div class="d">호가창, 차트, 뉴스, 재무제표를 <b>한 화면에 나란히</b> — 정보를 겹쳐서 보기 좋습니다.</div>
+      </div>
+      <div class="num-card mt-16">
+        <div class="n">쓸 때</div>
+        <div class="t">집중해서 매매하거나 공부할 때</div>
+        <div class="d">차트를 크게 보며 흐름을 읽거나, 여러 종목을 한꺼번에 관찰하고 싶을 때 유리합니다.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--coral)">
+        <div class="n">주의</div>
+        <div class="t">PC에서만 실행 · 최초 설치 필요</div>
+        <div class="d">증권사 홈페이지에서 다운로드 → 공동인증서 등록 → 첫 로그인. 처음이 조금 번거로울 수 있어요.</div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="bar"><span></span><span></span><span></span></div>
+      <div class="win">
+        <div class="head">한국투자증권 HTS · 종합 화면 (예시)</div>
+        <ul>
+          <li>현재가 창 (호가·시세)</li>
+          <li>차트 창 (일봉·주봉·월봉)</li>
+          <li>관심종목 리스트</li>
+          <li>뉴스·공시 창</li>
+          <li>주문 창 (매수·매도·정정)</li>
+        </ul>
+        <div class="head" style="margin-top:14px">한 화면에 4~6개 창을 동시에</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">05 / 30</div>
+</section>
+
+<!-- ============ SLIDE 6: MTS란 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">06</span> MTS</div>
+  <h1 class="slide-title">MTS — 손안의 '이동식 매매 창구'</h1>
+  <div class="slide-sub">Mobile Trading System · 스마트폰 앱으로 매매하는 시스템</div>
+
+  <div class="content" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px">
+    <div class="screen" style="background:#2B2A26;padding:14px">
+      <div class="win" style="min-height:280px;padding:14px">
+        <div class="head">한국투자증권 앱 · 홈</div>
+        <ul>
+          <li>내 계좌 · 자산 현황</li>
+          <li>관심종목 (터치 한 번으로 이동)</li>
+          <li>차트 · 호가 · 뉴스</li>
+          <li>매수 / 매도 버튼</li>
+          <li>ETF · 해외주식 탭</li>
+        </ul>
+        <div class="head" style="margin-top:14px">한 화면에 하나씩, 탭으로 전환</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="num-card">
+        <div class="n">특징</div>
+        <div class="t">언제 어디서든, 손가락 하나로</div>
+        <div class="d">지문·얼굴 인식으로 로그인, 몇 번 터치면 매매 완료. <b>속도와 접근성</b>이 최대 장점.</div>
+      </div>
+      <div class="num-card mt-16">
+        <div class="n">쓸 때</div>
+        <div class="t">외출 중, 짧게 확인·주문할 때</div>
+        <div class="d">이미 관찰 중인 종목을 <b>사고팔 때</b>, 빠른 판단이 필요할 때 가장 자주 쓰게 됩니다.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--coral)">
+        <div class="n">주의</div>
+        <div class="t">작은 화면 · 실수 유의</div>
+        <div class="d">숫자 하나 잘못 눌러 <b>0을 더 붙이는</b> 실수가 가장 흔합니다. 주문 전 수량·가격 재확인 필수.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">06 / 30</div>
+</section>
+
+<!-- ============ SLIDE 7: NAVER증권 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">07</span> NAVER</div>
+  <h1 class="slide-title">NAVER증권 — 부담 없이 열어보는 '시장 전망대'</h1>
+  <div class="slide-sub">finance.naver.com · 계좌 없어도 볼 수 있는 시세 · 정보 포털</div>
+
+  <div class="content" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px">
+    <div>
+      <div class="num-card">
+        <div class="n">특징</div>
+        <div class="t">매매는 못하지만, 정보는 풍부</div>
+        <div class="d">시세 · 뉴스 · 재무제표 · <b>애널리스트 리포트 요약</b>까지 — 종합 정보가 무료로 정리되어 있어요.</div>
+      </div>
+      <div class="num-card mt-16">
+        <div class="n">쓸 때</div>
+        <div class="t">종목 조사, 뉴스 훑기, 시세 확인</div>
+        <div class="d">"이 종목 뭐 하는 회사지?" 궁금할 때 가장 편합니다. <b>매매 결정 전 사전 조사</b>에 특히 유용.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--sage)">
+        <div class="n">활용 팁</div>
+        <div class="t">MY종목 · 컨센서스 · 종목분석</div>
+        <div class="d">로그인하면 관심종목 저장 가능. '컨센서스'에서 애널리스트들의 <b>목표주가 평균</b>도 볼 수 있어요.</div>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="bar"><span></span><span></span><span></span></div>
+      <div class="win">
+        <div class="head">NAVER증권 · 종목 상세 페이지</div>
+        <ul>
+          <li>현재가 · 등락률 · 거래량</li>
+          <li>차트 (일·주·월·분봉)</li>
+          <li>종목뉴스 · 공시</li>
+          <li>기업개요 · 재무제표</li>
+          <li>컨센서스 (목표주가 · 투자의견)</li>
+          <li>종목토론실 (참고만)</li>
+        </ul>
+        <div class="head" style="margin-top:14px">계좌 없이도 열람 가능</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">07 / 30</div>
+</section>
+
+<!-- ============ SLIDE 8: 세 가지 비교표 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">08</span> COMPARE</div>
+  <h1 class="slide-title">언제 무엇을 열까 — 상황별 도구 지도</h1>
+  <div class="slide-sub">한 가지만 고집할 필요 없어요. 상황에 따라 자유롭게 오가는 것</div>
+
+  <div class="content">
+    <table class="tt mt-16">
+      <thead>
+        <tr>
+          <th style="width:110px">구분</th>
+          <th style="width:180px">HTS (PC)</th>
+          <th style="width:180px">MTS (앱)</th>
+          <th>NAVER증권 (웹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tag">설치</td>
+          <td>PC에 다운로드 · 인증서</td>
+          <td>앱 스토어에서 설치</td>
+          <td>웹사이트 접속만 하면 끝</td>
+        </tr>
+        <tr>
+          <td class="tag">매매</td>
+          <td>가능 · 여러 창 동시</td>
+          <td>가능 · 간편 주문</td>
+          <td>불가능 (조회 전용)</td>
+        </tr>
+        <tr>
+          <td class="tag">화면</td>
+          <td>크고 정보 풍부 · 다창</td>
+          <td>작지만 직관적 · 단일</td>
+          <td>깔끔한 정보 페이지</td>
+        </tr>
+        <tr>
+          <td class="tag">특기</td>
+          <td>깊이 있는 분석 · 차트</td>
+          <td>빠른 확인 · 즉시 매매</td>
+          <td>사전 조사 · 뉴스 · 리포트</td>
+        </tr>
+        <tr>
+          <td class="tag">추천 상황</td>
+          <td>집·사무실에서 진지하게</td>
+          <td>이동 중, 급한 주문</td>
+          <td>종목 처음 알아볼 때</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="emph">
+      <div class="lbl">TIP</div>
+      <div class="msg">보통은 <b>NAVER로 조사 → MTS로 매매 → HTS로 복기</b>의 흐름을 많이 씁니다. 하나만 쓰기보다 흐름을 만드는 것.</div>
+    </div>
+  </div>
+  <div class="page-foot">08 / 30</div>
+</section>
+
+<!-- ============ SLIDE 9: PART 02 표지 ============ -->
+<section class="slide part-cover">
+  <div class="lab">PART TWO</div>
+  <div class="pn">02</div>
+  <div class="divider"></div>
+  <div class="pt">관심종목과 필수 메뉴 — 매일 여는 다섯 개의 창</div>
+  <div class="pd">
+    매매 도구는 메뉴가 수십 개지만, 매일 여는 건 정해져 있습니다.<br>
+    관심종목을 잘 정리해 두는 것,<br>
+    현재가·차트·뉴스·재무·공시를 흐름으로 읽는 것 —<br>
+    이 다섯 창의 순서를 몸에 익히는 시간입니다.
+  </div>
+  <div class="page-foot">09 / 30</div>
+</section>
+
+<!-- ============ SLIDE 10: 관심종목의 힘 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">10</span> WATCHLIST</div>
+  <h1 class="slide-title">관심종목 — 매매의 시작이자 끝</h1>
+  <div class="slide-sub">눈에 자주 담아둔 종목만이 결정 순간에 판단이 섭니다</div>
+
+  <div class="content">
+    <div class="grid-3 mt-16">
+      <div class="num-card">
+        <div class="n">왜</div>
+        <div class="t">시야를 좁혀 준다</div>
+        <div class="d">전체 2,500여 종목을 다 볼 수는 없어요. 관심종목은 <b>내가 관찰할 대상만</b> 남기는 필터입니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--coral)">
+        <div class="n">언제</div>
+        <div class="t">기다림의 도구</div>
+        <div class="d">"이 가격이 오면 사고 싶다"를 <b>매일 눈에 담는 것</b>이 관심종목의 본질. 감정이 아닌 관찰로.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--sage)">
+        <div class="n">어떻게</div>
+        <div class="t">그룹으로 나누기</div>
+        <div class="d">'보유'·'관찰중'·'공부용'·'배당주' 같은 <b>주머니를 만들어</b> 종목을 성격별로 담아두세요.</div>
+      </div>
+    </div>
+    <div class="emph" style="background:var(--coral-soft)">
+      <div class="lbl" style="color:var(--coral)">METAPHOR</div>
+      <div class="msg">관심종목은 <b>냉장고의 재료</b>와 같습니다. 무엇이 들어있는지 알아야, 요리(매매) 시간에 헤매지 않아요.</div>
+    </div>
+  </div>
+  <div class="page-foot">10 / 30</div>
+</section>
+
+<!-- ============ SLIDE 11: 관심종목 등록 & 관리 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">11</span> REGISTER</div>
+  <h1 class="slide-title">관심종목 등록하고, 그룹으로 나누기</h1>
+  <div class="slide-sub">한국투자증권 앱 기준 · HTS/NAVER증권도 유사한 흐름</div>
+
+  <div class="content">
+    <table class="tt mt-16">
+      <thead>
+        <tr>
+          <th style="width:60px">단계</th>
+          <th style="width:200px">동작</th>
+          <th>화면 위치 · 팁</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tag">①</td>
+          <td>종목 검색</td>
+          <td>돋보기 아이콘 → 종목명 또는 종목코드 입력 (예: 삼성전자 / 005930)</td>
+        </tr>
+        <tr>
+          <td class="tag">②</td>
+          <td>별표(☆) 누르기</td>
+          <td>종목 상세 화면 우측 상단 별 표시. 노란색으로 채워지면 등록 완료</td>
+        </tr>
+        <tr>
+          <td class="tag">③</td>
+          <td>그룹 지정</td>
+          <td>'관심종목 편집' → '새 그룹 만들기' → <b>주머니 이름 지정</b> (예: 반도체·2차전지·배당주)</td>
+        </tr>
+        <tr>
+          <td class="tag">④</td>
+          <td>순서 재배열</td>
+          <td>드래그해서 순서 변경. <b>자주 보는 종목을 위로</b> 올려두면 매일 시선이 자연스럽게 갑니다.</td>
+        </tr>
+        <tr>
+          <td class="tag">⑤</td>
+          <td>메모 남기기</td>
+          <td>종목별 <b>매수·매도 목표 가격, 관찰 이유</b>를 짧게 메모. 나중에 되짚어 볼 때 기억을 살려줍니다.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="warn">
+      <div class="wl">HABIT</div>
+      <div class="wt">30개 이상은 관리가 어렵습니다. <b>10~20개 안</b>으로 유지하고, 관심이 식은 종목은 과감히 삭제하세요.</div>
+    </div>
+  </div>
+  <div class="page-foot">11 / 30</div>
+</section>
+
+<!-- ============ SLIDE 12: 필수 메뉴 5가지 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">12</span> MENU</div>
+  <h1 class="slide-title">매일 여는 다섯 개의 창 — 종목을 읽는 순서</h1>
+  <div class="slide-sub">현재가 → 차트 → 뉴스 → 재무 → 공시. 이 흐름이 몸에 배면 됩니다</div>
+
+  <div class="content">
+    <div class="grid-5 mt-16">
+      <div class="num-card">
+        <div class="n">①</div>
+        <div class="t">현재가</div>
+        <div class="d">지금 얼마인가. 호가·잔량·거래량으로 <b>매수·매도 힘</b>을 살핍니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--coral)">
+        <div class="n">②</div>
+        <div class="t">차트</div>
+        <div class="d">지금까지 어떻게 왔나. <b>추세와 흐름</b>을 눈으로 확인합니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--sage)">
+        <div class="n">③</div>
+        <div class="t">뉴스</div>
+        <div class="d">최근 무슨 일이 있었나. <b>가격 움직임의 이유</b>를 뉴스에서 찾습니다.</div>
+      </div>
+      <div class="num-card">
+        <div class="n">④</div>
+        <div class="t">재무</div>
+        <div class="d">회사 살림이 어떤가. 매출·영업이익·부채 — <b>기초 체력</b>을 봅니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--coral)">
+        <div class="n">⑤</div>
+        <div class="t">공시</div>
+        <div class="d">회사가 스스로 무슨 말을 했나. <b>공식 발표</b>는 뉴스보다 앞서옵니다.</div>
+      </div>
+    </div>
+    <div class="emph">
+      <div class="lbl">FLOW</div>
+      <div class="msg">"얼마인가 → 어떻게 왔나 → 왜 그런가 → 회사 상태는 → 공식 발표는?" — <b>다섯 물음</b>이 한 종목의 얼굴입니다.</div>
+    </div>
+  </div>
+  <div class="page-foot">12 / 30</div>
+</section>
+
+<!-- ============ SLIDE 13: NAVER증권 활용 팁 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">13</span> NAVER-TIP</div>
+  <h1 class="slide-title">NAVER증권, 이것만 봐도 반은 압니다</h1>
+  <div class="slide-sub">종목 조사할 때 가장 자주 여는 세 개의 탭</div>
+
+  <div class="content">
+    <div class="grid-3 mt-16">
+      <div class="card">
+        <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--gold);font-weight:700">TAB 01</div>
+        <div style="font-size:22px;font-weight:700;margin:8px 0 12px">종목분석</div>
+        <div style="font-size:14px;color:var(--ink-soft);line-height:1.75">
+          기업 개요·업종·매출 구성이 정리되어 있어요.<br>
+          <b>"이 회사가 뭐 하는 회사인지"</b> 30초에 파악 가능.
+        </div>
+      </div>
+      <div class="card coral">
+        <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--coral);font-weight:700">TAB 02</div>
+        <div style="font-size:22px;font-weight:700;margin:8px 0 12px">컨센서스</div>
+        <div style="font-size:14px;color:var(--ink-soft);line-height:1.75">
+          여러 증권사 애널리스트들의 <b>목표주가 평균</b>과 <b>투자의견</b> (매수·중립·매도)을 한눈에 볼 수 있어요.
+        </div>
+      </div>
+      <div class="card sage">
+        <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--sage);font-weight:700">TAB 03</div>
+        <div style="font-size:22px;font-weight:700;margin:8px 0 12px">종목뉴스</div>
+        <div style="font-size:14px;color:var(--ink-soft);line-height:1.75">
+          이 종목에 관한 뉴스만 모아놓았어요.<br>
+          <b>날짜순으로 훑기</b>만 해도 최근 이슈가 잡힙니다.
+        </div>
+      </div>
+    </div>
+    <div class="warn" style="background:var(--gold-soft);border-left-color:var(--gold)">
+      <div class="wl" style="color:var(--gold)">CAUTION</div>
+      <div class="wt">'종목토론실'은 <b>개인 의견</b>이 대부분이에요. 참고는 하되, 판단의 근거로 삼지 않는 편이 안전합니다.</div>
+    </div>
+  </div>
+  <div class="page-foot">13 / 30</div>
+</section>
+
+<!-- ============ SLIDE 14: PART 03 표지 ============ -->
+<section class="slide part-cover">
+  <div class="lab">PART THREE</div>
+  <div class="pn">03</div>
+  <div class="divider"></div>
+  <div class="pt">호가창 다시 읽기 — 숫자 뒤에 숨은 심리</div>
+  <div class="pd">
+    호가창은 그저 숫자가 아니라 <b>사람들의 마음이 만나는 광장</b>입니다.<br>
+    누가 얼마에 사고 싶어 하는지, 팔고 싶어 하는지 —<br>
+    호가창을 읽을 줄 알면 시장의 온도가 보입니다.
+  </div>
+  <div class="page-foot">14 / 30</div>
+</section>
+
+<!-- ============ SLIDE 15: 호가창 구조 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">15</span> ORDER-BOOK</div>
+  <h1 class="slide-title">호가창 뜯어보기 — 위는 매도, 아래는 매수</h1>
+  <div class="slide-sub">중앙의 현재가를 사이에 두고, 위와 아래로 대기 주문이 쌓입니다</div>
+
+  <div class="content" style="display:grid;grid-template-columns:1.1fr 1fr;gap:32px;margin-top:20px">
+    <div class="hoga">
+      <div class="hoga-lbl"><span class="l">매도 잔량</span><span class="c">호가</span><span class="r"></span></div>
+      <div class="hoga-row sell"><span class="qty">15,240</span><span class="price">72,500</span><span class="qtyR"></span></div>
+      <div class="hoga-row sell"><span class="qty">28,110</span><span class="price">72,400</span><span class="qtyR"></span></div>
+      <div class="hoga-row sell"><span class="qty">42,680</span><span class="price">72,300</span><span class="qtyR"></span></div>
+      <div class="hoga-row sell"><span class="qty">18,500</span><span class="price">72,200</span><span class="qtyR"></span></div>
+      <div class="hoga-row sell"><span class="qty">31,220</span><span class="price">72,100</span><span class="qtyR"></span></div>
+      <div class="hoga-row current"><span class="qty" style="color:var(--coral);font-size:12px">현재가</span><span class="price">72,000</span><span class="qtyR" style="color:var(--coral);font-size:12px">▲500</span></div>
+      <div class="hoga-row buy"><span class="qty"></span><span class="price">71,900</span><span class="qtyR">22,340</span></div>
+      <div class="hoga-row buy"><span class="qty"></span><span class="price">71,800</span><span class="qtyR">36,150</span></div>
+      <div class="hoga-row buy"><span class="qty"></span><span class="price">71,700</span><span class="qtyR">18,920</span></div>
+      <div class="hoga-row buy"><span class="qty"></span><span class="price">71,600</span><span class="qtyR">45,780</span></div>
+      <div class="hoga-row buy"><span class="qty"></span><span class="price">71,500</span><span class="qtyR">27,410</span></div>
+      <div class="hoga-lbl"><span class="l"></span><span class="c">호가</span><span class="r">매수 잔량</span></div>
+    </div>
+    <div>
+      <div class="num-card">
+        <div class="n">위</div>
+        <div class="t">매도 호가 (파는 사람들)</div>
+        <div class="d">"이 가격에 팔겠다"고 대기 중인 주문. <b>현재가보다 비싼 가격</b>이 위로 쌓입니다.</div>
+      </div>
+      <div class="num-card mt-12" style="border-left-color:var(--sage)">
+        <div class="n">아래</div>
+        <div class="t">매수 호가 (사는 사람들)</div>
+        <div class="d">"이 가격에 사겠다"고 대기 중인 주문. <b>현재가보다 싼 가격</b>이 아래로 쌓입니다.</div>
+      </div>
+      <div class="num-card mt-12" style="border-left-color:var(--coral)">
+        <div class="n">중앙</div>
+        <div class="t">현재가</div>
+        <div class="d">가장 최근 <b>실제 체결된 가격</b>. 매도자와 매수자가 만난 지점입니다.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">15 / 30</div>
+</section>
+
+<!-- ============ SLIDE 16: 호가 단위표 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">16</span> TICK</div>
+  <h1 class="slide-title">호가 단위 — 가격은 정해진 계단으로만 움직입니다</h1>
+  <div class="slide-sub">가격대에 따라 최소 변동 폭(틱)이 달라져요. 아무 숫자나 넣을 수 없습니다</div>
+
+  <div class="content">
+    <table class="tt mt-16">
+      <thead>
+        <tr>
+          <th style="width:60px">단계</th>
+          <th style="width:280px">가격대 (원)</th>
+          <th style="width:180px">호가 단위</th>
+          <th>예시</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="tag">①</td><td>2,000 미만</td><td>1원</td><td>1,235 → 1,236 → 1,237</td></tr>
+        <tr><td class="tag">②</td><td>2,000 이상 ~ 5,000 미만</td><td>5원</td><td>3,120 → 3,125 → 3,130</td></tr>
+        <tr><td class="tag">③</td><td>5,000 이상 ~ 20,000 미만</td><td>10원</td><td>12,500 → 12,510 → 12,520</td></tr>
+        <tr><td class="tag">④</td><td>20,000 이상 ~ 50,000 미만</td><td>50원</td><td>32,500 → 32,550 → 32,600</td></tr>
+        <tr><td class="tag">⑤</td><td>50,000 이상 ~ 200,000 미만</td><td>100원</td><td>72,000 → 72,100 → 72,200</td></tr>
+        <tr><td class="tag">⑥</td><td>200,000 이상 ~ 500,000 미만</td><td>500원</td><td>320,000 → 320,500 → 321,000</td></tr>
+        <tr><td class="tag">⑦</td><td>500,000 이상</td><td>1,000원</td><td>820,000 → 821,000 → 822,000</td></tr>
+      </tbody>
+    </table>
+    <div class="emph">
+      <div class="lbl">WHY</div>
+      <div class="msg">호가 단위가 없으면 <b>1원 단위로 무한한 주문</b>이 몰려 시스템이 마비됩니다. 가격대별 계단은 시장의 질서를 지키는 장치.</div>
+    </div>
+  </div>
+  <div class="page-foot">16 / 30</div>
+</section>
+
+<!-- ============ SLIDE 17: 잔량의 심리 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">17</span> BALANCE</div>
+  <h1 class="slide-title">잔량이 보여주는 것 — 시장의 온도계</h1>
+  <div class="slide-sub">숫자 크기의 균형이 그 순간 매수·매도 힘의 무게를 말해줍니다</div>
+
+  <div class="content">
+    <div class="grid-3 mt-20">
+      <div class="num-card" style="border-left-color:var(--sage)">
+        <div class="n">유형 1</div>
+        <div class="t">매수 잔량이 훨씬 많다</div>
+        <div class="d" style="margin-top:8px">"사고 싶은 사람이 줄 서 있다" — 가격이 오를 가능성에 기대감. 다만 <b>큰 잔량 = 반드시 상승은 아님</b>. 참고 신호.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--coral)">
+        <div class="n">유형 2</div>
+        <div class="t">매도 잔량이 훨씬 많다</div>
+        <div class="d" style="margin-top:8px">"팔고 싶은 사람이 많다" — 위에서 저항이 있다는 뜻. 상승세가 이 벽을 뚫어야 다음 단계로 갑니다.</div>
+      </div>
+      <div class="num-card">
+        <div class="n">유형 3</div>
+        <div class="t">양쪽 잔량이 비슷하다</div>
+        <div class="d" style="margin-top:8px">"팽팽한 균형" — 방향성 없이 좁게 움직일 확률. <b>거래량과 함께 봐야</b> 진짜 힘의 방향을 알 수 있어요.</div>
+      </div>
+    </div>
+    <div class="warn">
+      <div class="wl">CAUTION</div>
+      <div class="wt">호가창은 <b>순간의 사진</b>일 뿐입니다. 큰 잔량은 <b>거짓 주문(허수 호가)</b>일 수도 있어요. 잔량만 보고 매매 결정하지 마세요.</div>
+    </div>
+  </div>
+  <div class="page-foot">17 / 30</div>
+</section>
+
+<!-- ============ SLIDE 18: PART 04 표지 ============ -->
+<section class="slide part-cover">
+  <div class="lab">PART FOUR</div>
+  <div class="pn">04</div>
+  <div class="divider"></div>
+  <div class="pt">지정가와 시장가 — 두 가지 주문의 성격</div>
+  <div class="pd">
+    지정가는 <b>내가 원하는 가격</b>을 기다리는 주문,<br>
+    시장가는 <b>지금 이 순간</b>의 가격을 받아들이는 주문.<br>
+    두 방식의 차이를 확실히 아는 것이 실전의 첫걸음입니다.
+  </div>
+  <div class="page-foot">18 / 30</div>
+</section>
+
+<!-- ============ SLIDE 19: 지정가 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">19</span> LIMIT</div>
+  <h1 class="slide-title">지정가 주문 — "이 가격이 오면 사겠다"</h1>
+  <div class="slide-sub">가격을 내가 정하고, 시장이 도달할 때까지 기다리는 방식</div>
+
+  <div class="content" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px">
+    <div>
+      <div class="num-card">
+        <div class="n">원리</div>
+        <div class="t">가격을 지정하고 대기</div>
+        <div class="d">"72,000원에 100주 매수" 하고 주문. 시장가가 <b>72,000원 이하로 내려오면</b> 그때 체결됩니다.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--sage)">
+        <div class="n">장점</div>
+        <div class="t">원하는 가격에 체결</div>
+        <div class="d">감정에 휘둘리지 않고 <b>계획한 가격</b>에 사거나 팔 수 있어요. 기다림의 무기.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--coral)">
+        <div class="n">단점</div>
+        <div class="t">체결되지 않을 수 있음</div>
+        <div class="d">가격이 <b>원하는 지점까지 오지 않으면</b> 주문은 그대로 남아 있다가 장 마감 후 취소됩니다.</div>
+      </div>
+    </div>
+    <div class="card" style="background:var(--sage-soft);border-left-color:var(--sage);padding:28px">
+      <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--sage);font-weight:700;margin-bottom:12px">SCENARIO · 지정가</div>
+      <div style="font-size:15px;line-height:1.9;color:var(--ink)">
+        <b>상황:</b> 현재가 72,000원인 삼성전자.<br>
+        나는 조금 더 싸게 71,500원에 사고 싶다.<br><br>
+        <b>주문:</b> 71,500원 · 100주 · 매수 (지정가)<br><br>
+        <b>결과 A:</b> 오후에 71,500원까지 내려오면 → 체결 ✓<br>
+        <b>결과 B:</b> 하루 종일 72,000원 위에 머물면 → 미체결. 다음날 다시 주문하거나 전략 수정.
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">19 / 30</div>
+</section>
+
+<!-- ============ SLIDE 20: 시장가 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">20</span> MARKET</div>
+  <h1 class="slide-title">시장가 주문 — "지금 이 가격에 바로 사겠다"</h1>
+  <div class="slide-sub">가격은 지정하지 않고, 현재 시장에서 가장 좋은 가격에 즉시 체결</div>
+
+  <div class="content" style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:24px">
+    <div class="card" style="background:var(--coral-soft);border-left-color:var(--coral);padding:28px">
+      <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--coral);font-weight:700;margin-bottom:12px">SCENARIO · 시장가</div>
+      <div style="font-size:15px;line-height:1.9;color:var(--ink)">
+        <b>상황:</b> 급등하고 있는 종목. 놓치면 안 될 것 같다.<br><br>
+        <b>주문:</b> 100주 · 매수 (시장가)<br><br>
+        <b>결과:</b> 클릭 즉시 <b>현재 매도호가 중 가장 낮은 가격</b>부터 순서대로 체결. 100주가 다 채워질 때까지 위로 올라가며 매수됩니다.<br><br>
+        <b>주의:</b> 예상보다 <b>비싼 평균가</b>로 체결될 수 있어요. 매도잔량이 얇으면 더더욱.
+      </div>
+    </div>
+    <div>
+      <div class="num-card">
+        <div class="n">원리</div>
+        <div class="t">즉시 체결이 목적</div>
+        <div class="d">가격은 상관없이 <b>지금 있는 매도 호가부터 즉시 사들이는</b> 방식. 클릭과 동시에 완료.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--sage)">
+        <div class="n">장점</div>
+        <div class="t">확실한 체결</div>
+        <div class="d">놓치기 싫은 상승 흐름, <b>급하게 팔아야 할 때</b> 유용. 미체결 걱정이 없습니다.</div>
+      </div>
+      <div class="num-card mt-16" style="border-left-color:var(--coral)">
+        <div class="n">단점</div>
+        <div class="t">비싸게 살 수 있음</div>
+        <div class="d">호가창이 얇으면 <b>여러 호가를 훑고</b> 체결되어 <b>평균 체결가가 예상보다 높아질 수</b> 있어요.</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">20 / 30</div>
+</section>
+
+<!-- ============ SLIDE 21: 지정가 vs 시장가 비교 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">21</span> VS</div>
+  <h1 class="slide-title">언제 지정가, 언제 시장가?</h1>
+  <div class="slide-sub">상황을 먼저 읽고, 주문 방식을 선택하는 습관</div>
+
+  <div class="content">
+    <div class="vs">
+      <div class="side left">
+        <div class="h">지정가 (Limit)</div>
+        <div class="row"><b>여유가 있을 때</b><br>급하지 않고 관찰 중인 종목</div>
+        <div class="row"><b>계획한 매수·매도 가격</b>이 있을 때</div>
+        <div class="row"><b>호가창이 얇을 때</b> — 시장가로 사면 손해</div>
+        <div class="row"><b>장 마감 근처</b>에 예약 주문</div>
+        <div class="row" style="color:var(--gold);font-weight:700;margin-top:8px">→ 대부분의 상황 (기본값)</div>
+      </div>
+      <div class="mid">vs</div>
+      <div class="side right">
+        <div class="h">시장가 (Market)</div>
+        <div class="row"><b>즉시 체결이 반드시 필요</b>할 때</div>
+        <div class="row"><b>손절매</b> — 빨리 빠져나와야 할 때</div>
+        <div class="row"><b>거래량 매우 많은 대형주</b> — 호가창 두꺼움</div>
+        <div class="row"><b>가격보다 속도가 우선</b>인 순간</div>
+        <div class="row" style="color:var(--coral);font-weight:700;margin-top:8px">→ 특수 상황 (예외적으로)</div>
+      </div>
+    </div>
+    <div class="emph" style="margin-top:24px">
+      <div class="lbl">HABIT</div>
+      <div class="msg">초보일수록 <b>기본은 지정가</b>. 시장가는 감정이 앞설 때 특히 위험 — 급할 때일수록 한 번 더 생각하기.</div>
+    </div>
+  </div>
+  <div class="page-foot">21 / 30</div>
+</section>
+
+<!-- ============ SLIDE 22: PART 05 표지 ============ -->
+<section class="slide part-cover">
+  <div class="lab">PART FIVE</div>
+  <div class="pn">05</div>
+  <div class="divider"></div>
+  <div class="pt">예수금과 증거금 — 내 돈이 움직이는 시간표</div>
+  <div class="pd">
+    주식을 사는 순간 돈이 바로 빠져나갈까요?<br>
+    답은 <b>아니오</b>. 결제까지는 이틀의 여유가 있고,<br>
+    그 안에서 예수금과 증거금이라는 두 얼굴이 나타납니다.<br>
+    내 돈이 언제 어떻게 움직이는지, 흐름을 알면 실수가 줄어듭니다.
+  </div>
+  <div class="page-foot">22 / 30</div>
+</section>
+
+<!-- ============ SLIDE 23: 예수금이란 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">23</span> DEPOSIT</div>
+  <h1 class="slide-title">예수금 — 계좌 안의 '내 지갑 속 현금'</h1>
+  <div class="slide-sub">預受金 · 증권사에 맡겨둔, 언제든 주식을 살 수 있는 현금</div>
+
+  <div class="content">
+    <div class="grid-3 mt-20">
+      <div class="num-card">
+        <div class="n">정의</div>
+        <div class="t">증권 계좌에 넣어둔 현금</div>
+        <div class="d">은행 계좌에서 <b>증권 계좌로 이체한 금액</b>이 예수금. 아직 어떤 종목도 사지 않은 상태의 현금입니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--coral)">
+        <div class="n">종류</div>
+        <div class="t">D+0 · D+1 · D+2</div>
+        <div class="d">결제일에 따라 <b>오늘 쓸 수 있는 돈</b>과 <b>이틀 뒤에 실제 인출 가능한 돈</b>이 나뉘어 표시됩니다.</div>
+      </div>
+      <div class="num-card" style="border-left-color:var(--sage)">
+        <div class="n">확인</div>
+        <div class="t">앱 홈 · 잔고 화면</div>
+        <div class="d">MTS 로그인 후 <b>'예수금'</b> 항목을 열면 D+0/D+1/D+2 세 줄이 함께 표시. 이 셋의 차이를 아는 것이 핵심.</div>
+      </div>
+    </div>
+    <div class="emph" style="background:var(--sage-soft)">
+      <div class="lbl" style="color:var(--sage)">METAPHOR</div>
+      <div class="msg">예수금은 <b>냉장고 안 재료</b>가 아니라 <b>지갑 속 현금</b>입니다. 주식은 이 돈으로만 살 수 있어요.</div>
+    </div>
+  </div>
+  <div class="page-foot">23 / 30</div>
+</section>
+
+<!-- ============ SLIDE 24: D+2 결제 시스템 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">24</span> T+2</div>
+  <h1 class="slide-title">D+2 결제 — 사고팔면, 실제 정산은 이틀 뒤</h1>
+  <div class="slide-sub">한국 주식 시장의 결제 시스템. 오늘 매매하면 이틀 뒤에 돈이 실제로 오갑니다</div>
+
+  <div class="content">
+    <div class="cal">
+      <div class="day d0">
+        <div class="lbl">D+0</div>
+        <div class="tit">매매 당일 (월요일)</div>
+        <div class="desc">주문 → 체결.<br>잔고에 주식 표시.<br>돈은 아직 안 빠짐.</div>
+      </div>
+      <div class="day d1">
+        <div class="lbl">D+1</div>
+        <div class="tit">다음 영업일 (화요일)</div>
+        <div class="desc">결제 준비 단계.<br>실제 인출 아직 아님.</div>
+      </div>
+      <div class="day d2">
+        <div class="lbl">D+2</div>
+        <div class="tit">결제일 (수요일)</div>
+        <div class="desc">이 날 <b>실제로 돈이 오갑니다.</b><br>매도 대금 인출 가능.</div>
+      </div>
+      <div class="day" style="opacity:.5">
+        <div class="lbl">D+3</div>
+        <div class="tit">-</div>
+        <div class="desc">정상 자금 흐름.</div>
+      </div>
+      <div class="day" style="opacity:.5">
+        <div class="lbl">D+4</div>
+        <div class="tit">-</div>
+        <div class="desc">-</div>
+      </div>
+    </div>
+
+    <div class="grid-2 mt-24">
+      <div class="card">
+        <div style="font-size:14px;font-family:'Georgia',serif;color:var(--gold);letter-spacing:.15em;font-weight:700">CASE · 매도 후 출금</div>
+        <div style="font-size:15px;margin-top:8px;line-height:1.75">월요일에 주식을 팔았다면 <b>수요일(D+2)에</b> 매도 대금이 실제 인출 가능한 상태가 됩니다. 그 전에는 계좌에 있어도 은행 이체 불가.</div>
+      </div>
+      <div class="card coral">
+        <div style="font-size:14px;font-family:'Georgia',serif;color:var(--coral);letter-spacing:.15em;font-weight:700">CASE · 매도 후 재매수</div>
+        <div style="font-size:15px;margin-top:8px;line-height:1.75">월요일에 판 돈으로 <b>월요일에 다시 다른 종목을 살 수는 있어요</b>. 은행 이체만 D+2 이후 가능. (증권사 내부에서는 즉시 사용 가능한 '가매수 자금' 처리)</div>
+      </div>
+    </div>
+    <div class="warn" style="margin-top:16px">
+      <div class="wl">NOTE</div>
+      <div class="wt">공휴일·주말은 영업일에서 제외됩니다. 금요일 매매의 결제일은 <b>다음 주 화요일</b>이에요.</div>
+    </div>
+  </div>
+  <div class="page-foot">24 / 30</div>
+</section>
+
+<!-- ============ SLIDE 25: 증거금 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">25</span> MARGIN</div>
+  <h1 class="slide-title">증거금 — 예약을 위한 '보증금'</h1>
+  <div class="slide-sub">證據金 · 주문 시 미리 잡히는 계약금 성격의 금액</div>
+
+  <div class="content">
+    <table class="tt mt-16">
+      <thead>
+        <tr>
+          <th style="width:120px">개념</th>
+          <th style="width:130px">증거금률</th>
+          <th>의미와 예시</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tag">A</td>
+          <td><b>100% 종목</b></td>
+          <td><b>주문금액 전액</b>을 예수금으로 보유해야 매수 가능. 대부분의 종목이 여기에 해당. <b>안전한 방식</b>이며 초보자 기본 설정.</td>
+        </tr>
+        <tr>
+          <td class="tag">B</td>
+          <td><b>40% 종목</b></td>
+          <td>주문금액의 40%만 있어도 주문 가능. 나머지 60%는 <b>D+2까지 채워야 함</b>. 못 채우면 '미수'가 발생 → 강제 매도(반대매매) 가능.</td>
+        </tr>
+        <tr>
+          <td class="tag">C</td>
+          <td><b>50%, 30% 등</b></td>
+          <td>종목별로 다르게 지정. 증거금률이 낮을수록 <b>레버리지 효과</b> — 위험도 그만큼 높아집니다.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="grid-2 mt-20">
+      <div class="card">
+        <div style="font-size:14px;font-family:'Georgia',serif;color:var(--gold);letter-spacing:.15em;font-weight:700">예시 · 100% 종목</div>
+        <div style="font-size:14px;margin-top:8px;line-height:1.75">72,000원 × 100주 = <b>720만 원</b> 필요<br>예수금 720만 원 있어야 매수 가능</div>
+      </div>
+      <div class="card coral">
+        <div style="font-size:14px;font-family:'Georgia',serif;color:var(--coral);letter-spacing:.15em;font-weight:700">예시 · 40% 종목</div>
+        <div style="font-size:14px;margin-top:8px;line-height:1.75">720만 원 × 40% = <b>288만 원</b>만 있어도 주문 가능<br>단, D+2까지 나머지 <b>432만 원</b>을 채우지 않으면 미수 발생</div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">25 / 30</div>
+</section>
+
+<!-- ============ SLIDE 26: 미수·신용 주의 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">26</span> WARNING</div>
+  <h1 class="slide-title">미수 · 신용거래 — 초보자에게 가장 위험한 두 단어</h1>
+  <div class="slide-sub">'내 돈이 아닌 돈'으로 매수하는 방식. 원리를 반드시 알아두세요</div>
+
+  <div class="content">
+    <div class="grid-2 mt-16">
+      <div class="card coral">
+        <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--coral);font-weight:700">未收 · 미수</div>
+        <div style="font-size:22px;font-weight:700;margin:8px 0 12px">돈이 부족한데 산 상태</div>
+        <div style="font-size:14px;color:var(--ink-soft);line-height:1.75">
+          증거금 40%만 내고 매수한 뒤 <b>D+2까지 나머지 60%</b>를 채우지 못한 경우.<br>
+          → 증권사가 <b>강제로 매도</b>(반대매매)합니다. 손실이 확정되는 순간.
+        </div>
+      </div>
+      <div class="card coral">
+        <div style="font-family:'Georgia',serif;font-size:14px;letter-spacing:.2em;color:var(--coral);font-weight:700">信用 · 신용거래</div>
+        <div style="font-size:22px;font-weight:700;margin:8px 0 12px">증권사에서 돈을 빌려 매수</div>
+        <div style="font-size:14px;color:var(--ink-soft);line-height:1.75">
+          신용대출로 주식을 삽니다. <b>이자 부담</b>이 있고, 주가가 일정 수준 하락하면 <b>반대매매</b>가 발동.<br>
+          → 하락장에서 손실이 눈덩이처럼 커질 수 있어요.
+        </div>
+      </div>
+    </div>
+    <div class="warn" style="margin-top:20px">
+      <div class="wl">RULE</div>
+      <div class="wt">계좌 개설 시 <b>'증거금률 100% 고정'</b> 설정을 강력 권장합니다. 미수·신용은 <b>충분한 경험을 쌓은 후에</b> — 초보자에게는 절대적으로 피해야 할 영역.</div>
+    </div>
+    <div class="emph" style="margin-top:14px;background:var(--sage-soft)">
+      <div class="lbl" style="color:var(--sage)">SETTING</div>
+      <div class="msg">MTS → 설정 → 주문설정 → <b>'증거금률 100% 고정'</b>. 이 하나만 해두면 미수 걱정 없이 매매할 수 있습니다.</div>
+    </div>
+  </div>
+  <div class="page-foot">26 / 30</div>
+</section>
+
+<!-- ============ SLIDE 27: 핵심 정리 3가지 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">27</span> KEY MESSAGE</div>
+  <h1 class="slide-title">오늘 꼭 가져가야 할 세 가지</h1>
+  <div class="slide-sub">복잡했던 것 같지만, 결국 이 세 문장으로 정리됩니다</div>
+
+  <div class="keymsg">
+    <div class="box">
+      <div class="n">01</div>
+      <div class="t">도구는 나눠 쓴다</div>
+      <div class="d">HTS는 분석용, MTS는 매매용, NAVER는 조사용. 한 가지에 얽매이지 않고 <b>흐름으로 오갑니다</b>.</div>
+    </div>
+    <div class="box">
+      <div class="n">02</div>
+      <div class="t">호가창은 심리다</div>
+      <div class="d">지정가는 기본, 시장가는 예외. <b>급할 때일수록</b> 한 번 더 생각하고 클릭.</div>
+    </div>
+    <div class="box">
+      <div class="n">03</div>
+      <div class="t">D+2 · 증거금 100%</div>
+      <div class="d">내 돈은 이틀 뒤에 정산. 증거금률은 <b>반드시 100% 고정</b>. 이 두 가지로 실수를 줄입니다.</div>
+    </div>
+  </div>
+  <div class="page-foot">27 / 30</div>
+</section>
+
+<!-- ============ SLIDE 28: 다음 시간 미리보기 ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">28</span> NEXT</div>
+  <h1 class="slide-title">다음 시간 · 4차시 미리보기</h1>
+  <div class="slide-sub">이제 도구를 손에 쥐었으니, 종목을 '읽는' 눈을 배웁니다</div>
+
+  <div class="content" style="display:grid;grid-template-columns:auto 1fr;gap:60px;margin-top:24px;align-items:center">
+    <div style="font-family:'Georgia',serif;font-size:180px;font-weight:900;color:var(--gold);line-height:1;letter-spacing:-.05em">04</div>
+    <div>
+      <div style="font-size:30px;font-weight:700;margin-bottom:20px">차트와 기업 정보 함께 읽기</div>
+      <div class="grid-2" style="gap:14px">
+        <div class="card">
+          <div style="font-family:'Georgia',serif;color:var(--gold);font-size:13px;letter-spacing:.15em;font-weight:700">TOPIC 01</div>
+          <div style="font-size:16px;font-weight:700;margin-top:6px">캔들과 이동평균선의 기초</div>
+        </div>
+        <div class="card">
+          <div style="font-family:'Georgia',serif;color:var(--gold);font-size:13px;letter-spacing:.15em;font-weight:700">TOPIC 02</div>
+          <div style="font-size:16px;font-weight:700;margin-top:6px">거래량이 알려주는 신호</div>
+        </div>
+        <div class="card">
+          <div style="font-family:'Georgia',serif;color:var(--gold);font-size:13px;letter-spacing:.15em;font-weight:700">TOPIC 03</div>
+          <div style="font-size:16px;font-weight:700;margin-top:6px">재무제표에서 무엇을 볼까</div>
+        </div>
+        <div class="card">
+          <div style="font-family:'Georgia',serif;color:var(--gold);font-size:13px;letter-spacing:.15em;font-weight:700">TOPIC 04</div>
+          <div style="font-size:16px;font-weight:700;margin-top:6px">뉴스와 공시 해석하기</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-foot">28 / 30</div>
+</section>
+
+<!-- ============ SLIDE 29: Q&A ============ -->
+<section class="slide">
+  <div class="page-badge"><span class="num">29</span> Q &amp; A</div>
+  <h1 class="slide-title">자주 받는 세 가지 질문</h1>
+  <div class="slide-sub">궁금한 점 자유롭게 물어봐 주세요</div>
+
+  <div class="content mt-20">
+    <div class="qna">
+      <div class="q">HTS와 MTS 중 어떤 걸 먼저 익혀야 하나요?</div>
+      <div class="a">MTS를 먼저 익히는 걸 권합니다. 스마트폰 앱이 더 직관적이고 실전 매매의 90%는 MTS에서 이뤄져요. HTS는 <b>분석·복기용</b>으로 나중에 열어봐도 충분합니다.</div>
+    </div>
+    <div class="qna">
+      <div class="q">지정가로 주문했는데 하루가 지나면 어떻게 되나요?</div>
+      <div class="a">한국 주식은 <b>당일 미체결 주문은 장 마감 후 자동 취소</b>됩니다. 다음날에도 유효하지 않아요. 예약 주문(다음 영업일 유효)을 활용하면 자동 재주문이 가능합니다.</div>
+    </div>
+    <div class="qna">
+      <div class="q">증거금 100% 설정을 안 하면 어떻게 되나요?</div>
+      <div class="a">기본값은 종목별 증거금률이 적용됩니다. 40% 종목을 자기도 모르게 40%만 내고 사면 <b>D+2까지 나머지를 채워야</b> 해요. 그렇지 않으면 반대매매. 초보라면 <b>반드시 100% 고정</b>을 해두세요.</div>
+    </div>
+  </div>
+  <div class="page-foot">29 / 30</div>
+</section>
+
+<!-- ============ SLIDE 30: 마무리 ============ -->
+<section class="slide closing">
+  <div class="greeting">END OF SESSION 03</div>
+  <div class="title">수고하셨습니다 👏</div>
+  <div class="lines">
+    오늘은 매매의 도구를 손에 쥔 날이에요.<br>
+    화면이 익숙해지면 시장이 훨씬 가깝게 느껴집니다.<br><br>
+    한 번에 다 외우지 마시고,<br>
+    앱을 열어 <b>관심종목 하나만 등록</b>해 보시는 것부터 시작해 보세요.
+  </div>
+  <div class="sign">— 도아쌤과 함께, 다음 시간에 —</div>
+</section>
+
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const nav = document.getElementById('nav');
+  const progress = document.getElementById('progress');
+  let cur = 0;
+  const total = slides.length;
+
+  // build dots
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===0?' active':'');
+    d.onclick = ()=> goTo(i);
+    nav.appendChild(d);
+  }
+
+  function goTo(i){
+    if(i<0||i>=total) return;
+    slides[cur].classList.remove('active');
+    nav.children[cur].classList.remove('active');
+    cur = i;
+    slides[cur].classList.add('active');
+    nav.children[cur].classList.add('active');
+    progress.style.width = ((cur+1)/total*100) + '%';
+  }
+  function next(){ goTo(cur+1); }
+  function prev(){ goTo(cur-1); }
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key===' ') next();
+    if(e.key==='ArrowLeft') prev();
+    if(e.key==='Home') goTo(0);
+    if(e.key==='End') goTo(total-1);
+  });
+
+  // touch swipe
+  let startX = 0;
+  document.addEventListener('touchstart', e=> startX = e.touches[0].clientX);
+  document.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - startX;
+    if(dx>50) prev();
+    if(dx<-50) next();
+  });
+
+  progress.style.width = (1/total*100) + '%';
+</script>
+
+</body>
+</html>

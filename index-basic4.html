@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4차시 · 한국투자증권 HTS·MTS 첫 만남</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FEFCF8;
+    --ink:#2B2419;
+    --sub:#6B5F52;
+    --line:#E8DFD1;
+    --gold:#D4A853;
+    --coral:#E87461;
+    --sage:#7BA68C;
+    --card:#FFFFFF;
+    --soft:#FAF4E8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Noto Serif KR', serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .num,.eng{font-family:Georgia,'Noto Serif KR',serif;font-feature-settings:"lnum" 1}
+
+  .deck{position:relative;width:100vw;height:100vh}
+  .slide{
+    position:absolute;inset:0;
+    padding:6vh 7vw;
+    display:none;
+    flex-direction:column;
+    animation:fade .35s ease;
+  }
+  .slide.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* header */
+  .chapter-tag{
+    display:inline-block;
+    font-family:Georgia,serif;
+    font-size:1.85vw;
+    letter-spacing:.4em;
+    color:var(--gold);
+    border-bottom:2px solid var(--gold);
+    padding-bottom:.4em;
+    margin-bottom:1.5vh;
+    text-transform:uppercase;
+  }
+  h1.title{
+    font-size:4.15vw;
+    font-weight:700;
+    line-height:1.25;
+    margin-bottom:1.2vh;
+    letter-spacing:-.01em;
+  }
+  h2.sub{
+    font-size:2.15vw;
+    font-weight:400;
+    color:var(--sub);
+    margin-bottom:4vh;
+  }
+
+  /* footer */
+  .footer{
+    position:absolute;left:7vw;right:7vw;bottom:3vh;
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.95vw;color:var(--sub);
+    border-top:1px solid var(--line);
+    padding-top:1.4vh;
+  }
+  .footer .brand{letter-spacing:.15em}
+  .footer .count{font-family:Georgia,serif;letter-spacing:.1em}
+
+  /* cover */
+  .cover{justify-content:center;align-items:center;text-align:center;background:linear-gradient(180deg,var(--bg) 0%,var(--soft) 100%)}
+  .cover .big-num{
+    font-family:Georgia,serif;
+    font-size:22.75vw;
+    font-weight:400;
+    color:var(--gold);
+    line-height:.9;
+    letter-spacing:-.04em;
+  }
+  .cover .chap{
+    font-family:Georgia,serif;
+    letter-spacing:.6em;
+    font-size:2.05vw;
+    color:var(--coral);
+    margin-bottom:2vh;
+  }
+  .cover .maintitle{
+    font-size:5.35vw;font-weight:700;line-height:1.2;margin-top:2vh;
+  }
+  .cover .school{
+    margin-top:5vh;font-size:2.15vw;color:var(--sub);letter-spacing:.05em;
+  }
+  .cover .divider{width:80px;height:2px;background:var(--gold);margin:3vh auto}
+
+  /* cards */
+  .grid{display:grid;gap:2.2vh 2.4vw;flex:1;align-content:start}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g2-3{grid-template-columns:1.1fr .9fr}
+  .card{
+    background:var(--card);
+    border-radius:12px;
+    padding:3.2vh 2.2vw;
+    border-left:5px solid var(--gold);
+    box-shadow:0 4px 22px rgba(80,60,30,.06);
+    display:flex;flex-direction:column;
+  }
+  .card.coral{border-left-color:var(--coral)}
+  .card.sage{border-left-color:var(--sage)}
+  .card .cnum{
+    font-family:Georgia,serif;
+    font-size:4.15vw;
+    color:var(--gold);
+    line-height:1;
+    margin-bottom:1.2vh;
+    font-weight:400;
+  }
+  .card.coral .cnum{color:var(--coral)}
+  .card.sage .cnum{color:var(--sage)}
+  .card h3{
+    font-size:2.45vw;
+    font-weight:700;
+    margin-bottom:1vh;
+    line-height:1.3;
+  }
+  .card p{
+    font-size:1.9vw;
+    color:var(--sub);
+    line-height:1.6;
+  }
+  .card .huge{
+    font-family:Georgia,serif;
+    font-size:6.25vw;
+    color:var(--gold);
+    font-weight:400;
+    line-height:1;
+  }
+  .card.coral .huge{color:var(--coral)}
+  .card.sage .huge{color:var(--sage)}
+
+  /* part cover */
+  .part{justify-content:center;align-items:center;text-align:center;background:var(--soft)}
+  .part .label{font-family:Georgia,serif;letter-spacing:.6em;color:var(--coral);font-size:2.05vw;margin-bottom:1vh}
+  .part .num-huge{font-family:Georgia,serif;font-size:20.75vw;color:var(--gold);line-height:.9;font-weight:400}
+  .part .part-title{font-size:3.95vw;font-weight:700;margin-top:2vh}
+  .part .part-sub{font-size:2.15vw;color:var(--sub);margin-top:1vh}
+
+  /* full-width big keyword */
+  .keyword-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+  .keyword-wrap .k-eng{font-family:Georgia,serif;font-size:2.25vw;letter-spacing:.4em;color:var(--gold);margin-bottom:2vh}
+  .keyword-wrap .k-main{font-size:5.75vw;font-weight:900;line-height:1.15;margin-bottom:3vh}
+  .keyword-wrap .k-explain{font-size:2.35vw;color:var(--sub);max-width:70vw;line-height:1.6}
+
+  /* HTS mock screen */
+  .screen{
+    background:#1c2733;
+    border-radius:8px;
+    padding:1.4vh 1vw;
+    color:#E8E4D8;
+    font-family:'Noto Sans KR',sans-serif;
+    box-shadow:0 8px 28px rgba(0,0,0,.15);
+    flex:1;display:flex;flex-direction:column;
+  }
+  .screen-top{
+    display:flex;gap:.5vw;font-size:.85vw;
+    padding-bottom:1vh;border-bottom:1px solid #34404f;margin-bottom:1vh;
+  }
+  .screen-top .tab{padding:.3vh .8vw;background:#2a3644;border-radius:4px;color:#B8C4D0}
+  .screen-top .tab.on{background:var(--gold);color:#1c2733;font-weight:700}
+  .screen-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:1vw}
+  .screen-panel{background:#243040;border-radius:4px;padding:1vh .8vw;font-size:.9vw}
+  .screen-panel h4{font-size:.9vw;color:var(--gold);margin-bottom:.5vh;font-weight:700;letter-spacing:.05em}
+  .screen-panel table{width:100%;font-size:.85vw;color:#D4CFC0}
+  .screen-panel td{padding:.25vh 0}
+  .screen-panel .up{color:#E87461}
+  .screen-panel .dn{color:#5FA0E8}
+
+  /* order book (호가창) */
+  .hoga{
+    background:var(--card);
+    border-radius:12px;
+    padding:2vh 1.6vw;
+    box-shadow:0 4px 22px rgba(80,60,30,.06);
+    width:100%;
+    font-family:'Noto Sans KR',sans-serif;
+  }
+  .hoga h4{font-size:2.15vw;text-align:center;margin-bottom:1.2vh;color:var(--sub);letter-spacing:.1em;font-family:'Noto Serif KR',serif}
+  .hoga-row{
+    display:grid;grid-template-columns:1fr 1.2fr 1fr;
+    align-items:center;padding:.7vh 0;
+    font-size:1.95vw;font-weight:500;
+    border-bottom:1px solid #F0EAD8;
+  }
+  .hoga-row:last-child{border-bottom:none}
+  .hoga-row .qty-sell{text-align:right;color:#4A6DA6;padding-right:1vw}
+  .hoga-row .qty-buy{text-align:left;color:#C55B48;padding-left:1vw}
+  .hoga-row .price-sell{text-align:center;background:#EAF2FB;padding:.6vh 0;border-radius:4px;color:#3A5A8A;font-weight:700}
+  .hoga-row .price-buy{text-align:center;background:#FBEBE7;padding:.6vh 0;border-radius:4px;color:#B4432E;font-weight:700}
+  .hoga-row .price-now{text-align:center;background:var(--gold);color:#fff;padding:.9vh 0;border-radius:6px;font-weight:900;font-size:2.1vw;box-shadow:0 4px 12px rgba(212,168,83,.35)}
+  .hoga-legend{display:flex;justify-content:space-around;font-size:1.75vw;color:var(--sub);margin-top:1.2vh;padding-top:1vh;border-top:1px dashed var(--line)}
+  .hoga-legend .sell{color:#4A6DA6;font-weight:700}
+  .hoga-legend .buy{color:#C55B48;font-weight:700}
+
+  /* MTS phone mock */
+  .phone{
+    width:22vw;
+    background:#111;
+    border-radius:32px;
+    padding:1.5vh .6vw;
+    box-shadow:0 12px 40px rgba(0,0,0,.2);
+  }
+  .phone-screen{
+    background:#F5F1E8;
+    border-radius:20px;
+    padding:2vh 1vw;
+    height:66vh;
+    display:flex;flex-direction:column;
+    font-family:'Noto Sans KR',sans-serif;
+  }
+  .phone-header{display:flex;justify-content:space-between;font-size:.8vw;color:#666;margin-bottom:1vh}
+  .phone-body{flex:1;display:flex;flex-direction:column;gap:.8vh}
+  .phone-tile{background:#fff;padding:1vh .8vw;border-radius:8px;font-size:.95vw;display:flex;justify-content:space-between;border-left:3px solid var(--gold)}
+  .phone-tile.coral{border-left-color:var(--coral)}
+  .phone-tile.sage{border-left-color:var(--sage)}
+  .phone-tile b{font-weight:700}
+  .phone-tile .val{font-family:Georgia,serif;color:var(--coral);font-weight:700}
+  .phone-nav{display:flex;justify-content:space-around;font-size:.75vw;padding-top:1vh;border-top:1px solid #E5DFD0;color:#888}
+
+  /* comparison table */
+  .cmp-table{
+    background:var(--card);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 22px rgba(80,60,30,.06);
+    width:100%;
+  }
+  .cmp-table table{width:100%;border-collapse:collapse}
+  .cmp-table th{
+    background:var(--gold);color:#fff;
+    padding:2vh 1.2vw;
+    font-size:2.15vw;font-weight:700;
+    text-align:center;
+    font-family:'Noto Serif KR',serif;
+  }
+  .cmp-table th:first-child{background:#B08A3E}
+  .cmp-table td{
+    padding:2vh 1.2vw;
+    font-size:2.05vw;
+    border-top:1px solid var(--line);
+    text-align:center;
+    line-height:1.5;
+  }
+  .cmp-table td:first-child{background:var(--soft);font-weight:700;color:var(--ink);text-align:left;padding-left:2vw}
+  .cmp-table tr:hover td{background:#FAF4E8}
+  .cmp-table tr:hover td:first-child{background:#F2E8CE}
+
+  /* checklist */
+  .checklist{display:flex;flex-direction:column;gap:1.6vh;flex:1;justify-content:center}
+  .check-item{
+    display:flex;align-items:center;gap:2vw;
+    background:var(--card);
+    padding:2.4vh 2vw;
+    border-radius:10px;
+    box-shadow:0 3px 14px rgba(80,60,30,.06);
+    border-left:5px solid var(--sage);
+  }
+  .check-item .num-box{
+    font-family:Georgia,serif;
+    font-size:4.15vw;color:var(--sage);
+    line-height:1;min-width:5vw;
+  }
+  .check-item .txt{font-size:2.65vw;font-weight:500;line-height:1.4}
+  .check-item .txt small{display:block;font-size:1.85vw;color:var(--sub);font-weight:400;margin-top:.4vh}
+
+  /* nav */
+  .nav{position:fixed;bottom:2.5vh;right:2vw;display:flex;gap:.8vw;align-items:center;z-index:100}
+  .nav button{
+    background:var(--card);
+    border:1px solid var(--line);
+    color:var(--ink);
+    width:3vw;height:3vw;min-width:44px;min-height:44px;
+    border-radius:50%;
+    font-size:2.05vw;cursor:pointer;
+    box-shadow:0 3px 10px rgba(80,60,30,.08);
+    transition:all .2s;
+    font-family:Georgia,serif;
+  }
+  .nav button:hover{background:var(--gold);color:#fff;transform:translateY(-2px)}
+  .nav .counter{font-family:Georgia,serif;color:var(--sub);font-size:1.75vw;padding:0 .5vw}
+
+  /* home menu */
+  .home-btn{
+    position:fixed;top:2.5vh;left:2vw;
+    background:transparent;border:none;
+    font-family:Georgia,serif;letter-spacing:.15em;color:var(--sub);
+    font-size:.9vw;cursor:pointer;padding:.5vh 1vw;
+    border-bottom:1px solid transparent;transition:all .2s;
+  }
+  .home-btn:hover{color:var(--coral);border-bottom-color:var(--coral)}
+
+  /* index/menu view */
+  .menu{padding:6vh 7vw;overflow-y:auto;height:100%}
+  .menu h1{font-size:3.15vw;margin-bottom:1vh}
+  .menu p.sub{font-size:1.85vw;color:var(--sub);margin-bottom:4vh}
+  .menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vh 1.4vw}
+  .menu-item{
+    background:var(--card);padding:1.6vh 1vw;border-radius:8px;
+    box-shadow:0 2px 8px rgba(80,60,30,.05);
+    border-left:4px solid var(--line);
+    cursor:pointer;display:flex;gap:1vw;align-items:center;
+    transition:all .2s;
+  }
+  .menu-item:hover{border-left-color:var(--gold);transform:translateX(4px);background:var(--soft)}
+  .menu-item .mn{font-family:Georgia,serif;color:var(--gold);font-size:2.15vw;min-width:2.5vw}
+  .menu-item .mt{font-size:1.75vw;font-weight:500;line-height:1.4}
+
+  /* two-column w/ visual */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:3vw;flex:1;align-items:center}
+  .split-l h3{font-size:3.15vw;margin-bottom:2vh;font-weight:700}
+  .split-l p{font-size:2.15vw;color:var(--sub);line-height:1.7;margin-bottom:1.5vh}
+  .split-l .tag{
+    display:inline-block;background:var(--soft);color:var(--coral);
+    padding:.5vh 1vw;border-radius:20px;font-size:1.75vw;font-weight:700;
+    letter-spacing:.1em;margin-bottom:2vh;
+  }
+
+  /* calc example */
+  .calc{
+    background:var(--card);border-radius:12px;padding:3vh 2.4vw;
+    box-shadow:0 4px 22px rgba(80,60,30,.06);
+    font-family:'Noto Sans KR',sans-serif;
+  }
+  .calc-row{
+    display:grid;grid-template-columns:1fr auto 1fr;gap:1.5vw;
+    padding:1.4vh 0;font-size:2.15vw;align-items:center;
+    border-bottom:1px dashed var(--line);
+  }
+  .calc-row:last-child{border-bottom:none;background:var(--soft);padding:2vh 1vw;border-radius:8px;margin-top:1vh;font-weight:700}
+  .calc-row .lbl{color:var(--sub)}
+  .calc-row .val{text-align:right;font-family:Georgia,serif;font-size:2.45vw;font-weight:700;color:var(--ink)}
+  .calc-row .op{text-align:center;color:var(--gold);font-size:2.35vw;font-family:Georgia,serif}
+  .calc-row:last-child .val{color:var(--coral);font-size:2.95vw}
+
+  /* mission list */
+  .mission{display:flex;flex-direction:column;gap:2vh;flex:1;justify-content:center}
+  .m-item{
+    display:flex;gap:2vw;align-items:center;
+    background:var(--card);padding:2.6vh 2vw;
+    border-radius:10px;box-shadow:0 3px 14px rgba(80,60,30,.06);
+    border-left:5px solid var(--coral);
+  }
+  .m-item .m-chk{
+    font-family:Georgia,serif;color:var(--coral);
+    font-size:3.75vw;line-height:1;min-width:4vw;
+  }
+  .m-item .m-txt{font-size:2.75vw;font-weight:600}
+  .m-item .m-txt small{display:block;font-size:1.9vw;color:var(--sub);font-weight:400;margin-top:.5vh}
+
+  /* Q&A */
+  .qa{display:flex;flex-direction:column;justify-content:center;align-items:center;flex:1}
+  .qa .q-huge{font-family:Georgia,serif;font-size:14.75vw;color:var(--gold);line-height:.9;margin-bottom:3vh;font-weight:400}
+  .qa .q-txt{font-size:2.95vw;font-weight:700;margin-bottom:1vh}
+  .qa .q-sub{font-size:2.15vw;color:var(--sub);text-align:center;max-width:60vw;line-height:1.6}
+
+  /* ending */
+  .end{justify-content:center;align-items:center;text-align:center;background:linear-gradient(180deg,var(--soft) 0%,var(--bg) 100%)}
+  .end .heart{font-size:6.75vw;margin-bottom:2vh}
+  .end .msg{font-size:4.55vw;font-weight:700;margin-bottom:2vh;line-height:1.3}
+  .end .msg2{font-size:2.25vw;color:var(--sub);line-height:1.8;max-width:60vw}
+
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- =========== 0: 표지 =========== -->
+<section class="slide cover active">
+  <div class="chap">CHAPTER · FOUR</div>
+  <div class="big-num num">04</div>
+  <div class="divider"></div>
+  <div class="maintitle">한국투자증권 HTS·MTS<br>첫 만남</div>
+  <div class="school">춘천여성인력개발센터 · 주식초급반 · 도아쌤</div>
+</section>
+
+<!-- =========== 3: 오늘의 목표 =========== -->
+<section class="slide">
+  <div class="chapter-tag">GOALS · 오늘의 학습 목표</div>
+  <h1 class="title">오늘 이 세 가지를 손에 익힙니다</h1>
+  <h2 class="sub">눈으로만 보지 말고, 집에서 꼭 한 번씩 눌러보세요</h2>
+  <div class="grid g3" style="align-items:stretch">
+    <div class="card">
+      <div class="huge num">01</div>
+      <h3 style="margin-top:2vh">HTS 화면 익히기</h3>
+      <p>차트 · 기업분석 · 수급 ·<br>투자자별 매매동향</p>
+    </div>
+    <div class="card coral">
+      <div class="huge num">02</div>
+      <h3 style="margin-top:2vh">관심종목 & 호가창</h3>
+      <p>내 종목 등록하기<br>호가창 읽어내는 법</p>
+    </div>
+    <div class="card sage">
+      <div class="huge num">03</div>
+      <h3 style="margin-top:2vh">예수금·증거금·MTS</h3>
+      <p>주문 전에 꼭 알아야 할<br>돈의 흐름과 MTS 체크</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">02 · 21</span></div>
+</section>
+
+<!-- =========== 4: PART 01 =========== -->
+<section class="slide part">
+  <div class="label">PART · ONE</div>
+  <div class="num-huge num">01</div>
+  <div class="part-title">HTS 살펴보기</div>
+  <div class="part-sub">Home Trading System · 컴퓨터로 만나는 주식 시장</div>
+</section>
+
+<!-- =========== 7: 5대 화면 =========== -->
+<section class="slide">
+  <div class="chapter-tag">MENU · 꼭 알아야 할 5가지 화면</div>
+  <h1 class="title">이 다섯 개면 초급 단계는 충분해요</h1>
+  <h2 class="sub">화면번호를 위 검색창에 치면 어디서든 바로 열립니다</h2>
+  <div class="grid" style="grid-template-columns:repeat(5,1fr);gap:1.4vh 1.2vw">
+    <div class="card"><div class="cnum num">차트</div><h3>종합차트</h3><p>가격 흐름을<br>한눈에</p></div>
+    <div class="card coral"><div class="cnum num">0614</div><h3>기업분석</h3><p>재무 · 실적 ·<br>사업 요약</p></div>
+    <div class="card sage"><div class="cnum num">수급</div><h3>매매동향</h3><p>누가 사고<br>누가 파는가</p></div>
+    <div class="card"><div class="cnum num">0614</div><h3>종목별<br>일별동향</h3><p>기관·외국인·<br>개인 흐름</p></div>
+    <div class="card coral"><div class="cnum num">0161</div><h3>관심종목</h3><p>내가 지켜볼<br>종목 모음</p></div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">04 · 21</span></div>
+</section>
+
+<!-- =========== 8: 차트 화면 =========== -->
+<section class="slide">
+  <div class="chapter-tag">CHART · 종합차트</div>
+  <div class="split">
+    <div class="split-l">
+      <span class="tag">차트 화면</span>
+      <h3>가격의 이야기,<br>차트로 듣기</h3>
+      <p>가격이 오르내린 <b>흐름과 리듬</b>을 시각적으로 확인하는 창구</p>
+      <p>초급 단계에서 볼 것은 딱 세 가지</p>
+      <p style="color:var(--ink);font-weight:700;font-size:2.25vw;margin-top:2vh">① 봉 색깔 &nbsp;&nbsp; ② 이동평균선 &nbsp;&nbsp; ③ 거래량</p>
+    </div>
+    <div class="split-r">
+      <svg viewBox="0 0 400 260" style="width:100%;height:auto;background:#1c2733;border-radius:8px;padding:10px">
+        <line x1="20" y1="30" x2="20" y2="200" stroke="#556" stroke-width="1"/>
+        <line x1="20" y1="200" x2="380" y2="200" stroke="#556" stroke-width="1"/>
+        <!-- candles -->
+        <g>
+          <line x1="45" y1="80" x2="45" y2="140" stroke="#E87461" stroke-width="1"/>
+          <rect x="40" y="95" width="10" height="35" fill="#E87461"/>
+          <line x1="70" y1="70" x2="70" y2="130" stroke="#E87461" stroke-width="1"/>
+          <rect x="65" y="85" width="10" height="30" fill="#E87461"/>
+          <line x1="95" y1="90" x2="95" y2="150" stroke="#5FA0E8" stroke-width="1"/>
+          <rect x="90" y="100" width="10" height="35" fill="#5FA0E8"/>
+          <line x1="120" y1="60" x2="120" y2="120" stroke="#E87461" stroke-width="1"/>
+          <rect x="115" y="70" width="10" height="35" fill="#E87461"/>
+          <line x1="145" y1="55" x2="145" y2="110" stroke="#E87461" stroke-width="1"/>
+          <rect x="140" y="65" width="10" height="30" fill="#E87461"/>
+          <line x1="170" y1="75" x2="170" y2="140" stroke="#5FA0E8" stroke-width="1"/>
+          <rect x="165" y="90" width="10" height="35" fill="#5FA0E8"/>
+          <line x1="195" y1="45" x2="195" y2="95" stroke="#E87461" stroke-width="1"/>
+          <rect x="190" y="55" width="10" height="30" fill="#E87461"/>
+          <line x1="220" y1="50" x2="220" y2="85" stroke="#E87461" stroke-width="1"/>
+          <rect x="215" y="60" width="10" height="20" fill="#E87461"/>
+          <line x1="245" y1="65" x2="245" y2="120" stroke="#5FA0E8" stroke-width="1"/>
+          <rect x="240" y="75" width="10" height="35" fill="#5FA0E8"/>
+          <line x1="270" y1="40" x2="270" y2="90" stroke="#E87461" stroke-width="1"/>
+          <rect x="265" y="50" width="10" height="30" fill="#E87461"/>
+          <line x1="295" y1="35" x2="295" y2="75" stroke="#E87461" stroke-width="1"/>
+          <rect x="290" y="45" width="10" height="25" fill="#E87461"/>
+          <line x1="320" y1="55" x2="320" y2="100" stroke="#5FA0E8" stroke-width="1"/>
+          <rect x="315" y="65" width="10" height="30" fill="#5FA0E8"/>
+          <line x1="345" y1="30" x2="345" y2="80" stroke="#E87461" stroke-width="1"/>
+          <rect x="340" y="40" width="10" height="30" fill="#E87461"/>
+        </g>
+        <!-- moving avg -->
+        <polyline points="45,110 70,105 95,105 120,95 145,90 170,95 195,80 220,75 245,80 270,70 295,60 320,65 345,55" fill="none" stroke="#D4A853" stroke-width="2"/>
+        <!-- volume bars -->
+        <g>
+          <rect x="40" y="215" width="10" height="15" fill="#556"/>
+          <rect x="65" y="210" width="10" height="20" fill="#556"/>
+          <rect x="90" y="220" width="10" height="10" fill="#556"/>
+          <rect x="115" y="205" width="10" height="25" fill="#D4A853"/>
+          <rect x="140" y="212" width="10" height="18" fill="#556"/>
+          <rect x="165" y="216" width="10" height="14" fill="#556"/>
+          <rect x="190" y="208" width="10" height="22" fill="#D4A853"/>
+          <rect x="215" y="214" width="10" height="16" fill="#556"/>
+          <rect x="240" y="211" width="10" height="19" fill="#556"/>
+          <rect x="265" y="202" width="10" height="28" fill="#D4A853"/>
+          <rect x="290" y="200" width="10" height="30" fill="#D4A853"/>
+          <rect x="315" y="215" width="10" height="15" fill="#556"/>
+          <rect x="340" y="205" width="10" height="25" fill="#D4A853"/>
+        </g>
+        <text x="360" y="60" fill="#D4A853" font-size="10" font-family="Georgia">MA20</text>
+        <text x="25" y="225" fill="#888" font-size="9">거래량</text>
+      </svg>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">05 · 21</span></div>
+</section>
+
+<!-- =========== 9: 기업분석 =========== -->
+<section class="slide">
+  <div class="chapter-tag">COMPANY · 0614 기업분석</div>
+  <div class="split">
+    <div class="split-l">
+      <span class="tag">화면번호 · 0614</span>
+      <h3>차트가 감정이라면<br>기업분석은 이성</h3>
+      <p>이 회사가 <b>돈을 잘 벌고 있는지</b> 확인하는 화면</p>
+      <p>초급자가 처음 볼 항목</p>
+      <p style="font-size:2.15vw;color:var(--ink);font-weight:700;margin-top:2vh;line-height:1.8">
+        · 매출액 · 영업이익 (최근 3년)<br>
+        · PER · PBR (비교 지표)<br>
+        · 배당수익률
+      </p>
+    </div>
+    <div class="split-r">
+      <div class="card sage" style="border-left-width:6px">
+        <div class="cnum num" style="color:var(--sage)">EX</div>
+        <h3 style="font-size:2.75vw">삼성전자 · 요약</h3>
+        <table style="width:100%;margin-top:2vh;font-size:2.05vw;font-family:'Noto Sans KR',sans-serif">
+          <tr style="border-bottom:1px solid var(--line)"><td style="padding:1.2vh 0;color:var(--sub)">매출액(24년)</td><td style="text-align:right;font-weight:700;font-family:Georgia,serif">300조</td></tr>
+          <tr style="border-bottom:1px solid var(--line)"><td style="padding:1.2vh 0;color:var(--sub)">영업이익</td><td style="text-align:right;font-weight:700;font-family:Georgia,serif">32조</td></tr>
+          <tr style="border-bottom:1px solid var(--line)"><td style="padding:1.2vh 0;color:var(--sub)">PER</td><td style="text-align:right;font-weight:700;font-family:Georgia,serif">12.4</td></tr>
+          <tr><td style="padding:1.2vh 0;color:var(--sub)">배당수익률</td><td style="text-align:right;font-weight:700;font-family:Georgia,serif;color:var(--coral)">2.1%</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">06 · 21</span></div>
+</section>
+
+<!-- =========== NEW: 기업분석 필수 지표 체크 =========== -->
+<section class="slide">
+  <div class="chapter-tag">CHECKLIST · 기업분석 필수 지표</div>
+  <h1 class="title">이 <span class="eng">7</span>가지 숫자로 · 회사의 체력을 읽어요</h1>
+  <div class="cmp-table" style="margin-top:2vh">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%">지표</th>
+          <th>무엇을 보는가</th>
+          <th style="width:36%">초급자 체크 포인트</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>매출액</td><td>회사가 판매한 상품·서비스의 총액</td><td>매년 늘고 있는가?</td></tr>
+        <tr><td>영업이익</td><td>매출에서 비용을 뺀 · 실제 번 돈</td><td>꾸준히 흑자인가?</td></tr>
+        <tr><td>영업이익률</td><td>영업이익 ÷ 매출액 × 100</td><td>10% 이상이면 양호</td></tr>
+        <tr><td>유보율</td><td>회사에 쌓아둔 이익의 여유분</td><td>높을수록 재무 안정</td></tr>
+        <tr><td>부채비율</td><td>자본 대비 빚의 비중</td><td>200% 이하가 안전</td></tr>
+        <tr><td>PER</td><td>주가 ÷ 주당순이익</td><td>낮을수록 저평가 · 업종 비교</td></tr>
+        <tr><td>PBR</td><td>주가 ÷ 주당순자산</td><td>1 미만이면 저평가 신호</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">07 · 21</span></div>
+</section>
+
+<!-- =========== 10: 수급 + 투자자별 =========== -->
+<section class="slide">
+  <div class="chapter-tag">FLOW · 매매동향 & 종목별 일별동향</div>
+  <h1 class="title">누가 사고, 누가 팔고 있나</h1>
+  <h2 class="sub">가격보다 <b>돈의 방향</b>이 먼저 움직입니다</h2>
+  <div class="grid g3" style="align-items:stretch">
+    <div class="card">
+      <div class="huge num">👤</div>
+      <h3 style="margin-top:1vh">개인</h3>
+      <p>우리 같은 일반 투자자<br>변동성이 큰 편</p>
+    </div>
+    <div class="card coral">
+      <div class="huge num">🌐</div>
+      <h3 style="margin-top:1vh">외국인</h3>
+      <p>해외 기관·펀드<br>글로벌 흐름을 반영</p>
+    </div>
+    <div class="card sage">
+      <div class="huge num">🏛️</div>
+      <h3 style="margin-top:1vh">기관</h3>
+      <p>연기금·자산운용사<br>장기 자금이 많음</p>
+    </div>
+  </div>
+  <div style="background:var(--soft);padding:2vh 2vw;border-radius:10px;margin-top:2vh;font-size:2.05vw;color:var(--ink);text-align:center;font-weight:500">
+    💡 <b>외국인 + 기관</b>이 같은 방향으로 움직이면 · 흐름이 강해지는 신호로 봅니다
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">08 · 21</span></div>
+</section>
+
+<!-- =========== 11: PART 02 =========== -->
+<section class="slide part">
+  <div class="label">PART · TWO</div>
+  <div class="num-huge num">02</div>
+  <div class="part-title">관심종목 & 호가창</div>
+  <div class="part-sub">내가 지켜볼 종목을 담고 · 가격의 대기줄을 읽는다</div>
+</section>
+
+<!-- =========== 12: 관심종목 등록 =========== -->
+<section class="slide">
+  <div class="chapter-tag">WATCHLIST · 0161 관심종목 등록</div>
+  <h1 class="title">관심종목 등록 · 3단계</h1>
+  <h2 class="sub">한 번 등록해두면 로그인할 때마다 자동으로 열립니다</h2>
+  <div class="grid g3" style="align-items:stretch">
+    <div class="card">
+      <div class="huge num">1</div>
+      <h3 style="margin-top:1vh;font-size:2.65vw">화면번호 <span class="eng">0161</span></h3>
+      <p style="font-size:1.95vw">상단 검색창에 0161 입력<br>또는 [관심종목] 메뉴 클릭</p>
+    </div>
+    <div class="card coral">
+      <div class="huge num">2</div>
+      <h3 style="margin-top:1vh;font-size:2.65vw">그룹 만들기</h3>
+      <p style="font-size:1.95vw">"AI 반도체" · "배당주"<br>주제별로 그룹을 나누세요</p>
+    </div>
+    <div class="card sage">
+      <div class="huge num">3</div>
+      <h3 style="margin-top:1vh;font-size:2.65vw">종목 추가</h3>
+      <p style="font-size:1.95vw">종목명 검색 → 드래그<br>또는 [+] 버튼으로 추가</p>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">10 · 21</span></div>
+</section>
+
+<!-- =========== 13: 호가창 시각화 =========== -->
+<section class="slide">
+  <div class="chapter-tag">ORDER BOOK · 호가창 살펴보기</div>
+  <h1 class="title">호가창 · 지금 이 순간의 대기줄</h1>
+  <h2 class="sub">사려는 사람과 팔려는 사람의 줄이 마주 서 있는 모습</h2>
+  <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:3vw;align-items:center">
+    <div class="hoga">
+      <h4>삼성전자 · 호가</h4>
+      <div class="hoga-row"><span class="qty-sell">12,340</span><span class="price-sell">74,700</span><span></span></div>
+      <div class="hoga-row"><span class="qty-sell">8,921</span><span class="price-sell">74,600</span><span></span></div>
+      <div class="hoga-row"><span class="qty-sell">15,203</span><span class="price-sell">74,500</span><span></span></div>
+      <div class="hoga-row" style="background:#FFFBEE"><span></span><span class="price-now">74,400 · 현재가</span><span></span></div>
+      <div class="hoga-row"><span></span><span class="price-buy">74,300</span><span class="qty-buy">10,552</span></div>
+      <div class="hoga-row"><span></span><span class="price-buy">74,200</span><span class="qty-buy">13,807</span></div>
+      <div class="hoga-row"><span></span><span class="price-buy">74,100</span><span class="qty-buy">7,414</span></div>
+      <div class="hoga-legend"><span><span class="sell">■</span> 매도 잔량 (팔려는 줄)</span><span><span class="buy">■</span> 매수 잔량 (사려는 줄)</span></div>
+    </div>
+    <div>
+      <div style="background:var(--card);border-radius:10px;padding:2.4vh 2vw;box-shadow:0 3px 14px rgba(80,60,30,.06);border-left:5px solid var(--coral)">
+        <div style="font-family:Georgia,serif;font-size:2.35vw;color:var(--coral);margin-bottom:1vh">읽는 순서</div>
+        <div style="font-size:2.25vw;line-height:1.8;font-weight:500">
+          ① 가운데 <b>현재가</b> 확인<br>
+          ② 위쪽 · <b>매도 물량</b> 얼마?<br>
+          ③ 아래쪽 · <b>매수 물량</b> 얼마?<br>
+          ④ <b>어느 쪽이 두꺼운지</b> 비교
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">11 · 21</span></div>
+</section>
+
+<!-- =========== 14: 호가창 포인트 =========== -->
+<section class="slide">
+  <div class="chapter-tag">READING · 호가창에서 얻는 3가지 신호</div>
+  <h1 class="title">이 세 가지만 눈에 익히세요</h1>
+  <div class="grid g3" style="align-items:stretch;margin-top:2vh">
+    <div class="card">
+      <div class="huge num">A</div>
+      <h3 style="margin-top:1vh">현재가</h3>
+      <p style="font-size:2.05vw">방금 <b>체결된 가격</b><br>거래가 실제로 이루어진 값</p>
+    </div>
+    <div class="card coral">
+      <div class="huge num">B</div>
+      <h3 style="margin-top:1vh">잔량 두께</h3>
+      <p style="font-size:2.05vw">매수·매도 대기 수량<br>많은 쪽이 <b>지지·저항</b></p>
+    </div>
+    <div class="card sage">
+      <div class="huge num">C</div>
+      <h3 style="margin-top:1vh">호가 간격</h3>
+      <p style="font-size:2.05vw">가격이 <b>얼마씩</b> 움직이는지<br>1원·10원·100원·500원 단위</p>
+    </div>
+  </div>
+  <div style="background:var(--soft);padding:2vh 2vw;border-radius:10px;margin-top:3vh;font-size:2.1vw;text-align:center;color:var(--ink);font-weight:500">
+    ⚠️ 매수 잔량이 많다고 <b>반드시 오르는 건 아니에요</b> · 참고 신호일 뿐
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">12 · 21</span></div>
+</section>
+
+<!-- =========== 15: PART 03 =========== -->
+<section class="slide part">
+  <div class="label">PART · THREE</div>
+  <div class="num-huge num">03</div>
+  <div class="part-title">예수금 & 증거금</div>
+  <div class="part-sub">주문 버튼을 누르기 전에 · 꼭 알아야 하는 두 단어</div>
+</section>
+
+<!-- =========== 16: 예수금 =========== -->
+<section class="slide">
+  <div class="chapter-tag">DEPOSIT · 예수금이란</div>
+  <div class="keyword-wrap">
+    <div class="k-eng">DEPOSIT</div>
+    <div class="k-main">예수금 = 내 계좌에<br>지금 들어 있는 <span style="color:var(--coral)">현금</span></div>
+    <div class="k-explain">주식을 사려면 이 예수금이 있어야 합니다<br>주식을 팔면 <b>2영업일 뒤(D+2)</b>에 이 예수금으로 들어와요</div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">14 · 21</span></div>
+</section>
+
+<!-- =========== 17: 증거금 =========== -->
+<section class="slide">
+  <div class="chapter-tag">MARGIN · 증거금이란</div>
+  <div class="keyword-wrap">
+    <div class="k-eng">MARGIN</div>
+    <div class="k-main">증거금 = 매수할 때 미리 내는<br><span style="color:var(--gold)">계약금</span></div>
+    <div class="k-explain">종목마다 <b>증거금률(20%·30%·40%·100%)</b>이 정해져 있어요<br>계약금만 있어도 주문은 가능하지만 · <b>부족분은 D+2까지 채워야</b> 합니다</div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">15 · 21</span></div>
+</section>
+
+<!-- =========== 18: 계산 예시 =========== -->
+<section class="slide">
+  <div class="chapter-tag">EXAMPLE · 예수금·증거금 계산 예시</div>
+  <h1 class="title">100만원으로 삼성전자를 산다면?</h1>
+  <h2 class="sub">삼성전자 증거금률 · 20%로 가정</h2>
+  <div class="calc" style="margin-top:2vh">
+    <div class="calc-row"><span class="lbl">예수금 (내 현금)</span><span class="op">=</span><span class="val">1,000,000 원</span></div>
+    <div class="calc-row"><span class="lbl">증거금률</span><span class="op">×</span><span class="val">20 %</span></div>
+    <div class="calc-row"><span class="lbl">주문 가능 금액</span><span class="op">→</span><span class="val">5,000,000 원</span></div>
+    <div class="calc-row"><span class="lbl">D+2까지 채워야 할 잔금</span><span class="op">!</span><span class="val">4,000,000 원</span></div>
+  </div>
+  <div style="background:#FBEBE7;padding:1.6vh 2vw;border-radius:8px;margin-top:2vh;font-size:2.05vw;color:#B4432E;font-weight:600;text-align:center">
+    💡 초급 단계에서는 · <b>증거금 100% (내 현금만큼만)</b> 주문을 권합니다
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">16 · 21</span></div>
+</section>
+
+<!-- =========== 19: PART 04 =========== -->
+<section class="slide part">
+  <div class="label">PART · FOUR</div>
+  <div class="num-huge num">04</div>
+  <div class="part-title">MTS 필수 체크</div>
+  <div class="part-sub">스마트폰에서도 · 이 다섯 가지는 꼭 확인하세요</div>
+</section>
+
+<!-- =========== 20: MTS 5가지 체크 =========== -->
+<section class="slide">
+  <div class="chapter-tag">MTS · 스마트폰에서 꼭 볼 것</div>
+  <div class="split">
+    <div class="split-l">
+      <span class="tag">한국투자 · MTS</span>
+      <h3>외출 중에도<br>이 다섯 개는 확인</h3>
+      <p style="font-size:2.05vw">화면이 작을수록 · <b>확인할 것만 확인</b>하는 습관</p>
+    </div>
+    <div class="split-r" style="display:flex;justify-content:center">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-header"><span>한국투자증권</span><span>🔔 ⚙️</span></div>
+          <div class="phone-body">
+            <div class="phone-tile"><b>① 예수금</b><span class="val">1,240,500</span></div>
+            <div class="phone-tile coral"><b>② 주문 가능</b><span class="val">4,850,000</span></div>
+            <div class="phone-tile sage"><b>③ 보유 종목</b><span>3 종목</span></div>
+            <div class="phone-tile"><b>④ 관심종목</b><span>AI 반도체 · 배당</span></div>
+            <div class="phone-tile coral"><b>⑤ 체결 · 미체결</b><span>1건 대기중</span></div>
+          </div>
+          <div class="phone-nav"><span>홈</span><span>시세</span><span>주문</span><span>계좌</span><span>메뉴</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">18 · 21</span></div>
+</section>
+
+<!-- =========== 21: HTS vs MTS =========== -->
+<section class="slide">
+  <div class="chapter-tag">COMPARE · HTS vs MTS</div>
+  <h1 class="title">언제 <span class="eng">HTS</span>? 언제 <span class="eng">MTS</span>?</h1>
+  <div class="cmp-table" style="margin-top:2vh">
+    <table>
+      <thead>
+        <tr><th>구분</th><th>HTS · PC</th><th>MTS · 스마트폰</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>화면 크기</td><td>넓다 (여러 창 동시)</td><td>작다 (한 화면씩)</td></tr>
+        <tr><td>사용 상황</td><td>집·사무실 · 깊이 분석할 때</td><td>이동 중 · 빠르게 확인·주문</td></tr>
+        <tr><td>추천 용도</td><td>차트·기업분석·수급</td><td>예수금·체결·간단 주문</td></tr>
+        <tr><td>초급자 팁</td><td>주 1회 정독</td><td>매일 · 자산 5개 항목 체크</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">19 · 21</span></div>
+</section>
+
+<!-- =========== 22: 오늘의 미션 =========== -->
+<section class="slide">
+  <div class="chapter-tag">MISSION · 오늘의 실습 과제</div>
+  <h1 class="title">집에서 · 이 세 가지만 해보세요</h1>
+  <div class="mission">
+    <div class="m-item">
+      <div class="m-chk num">✓ 01</div>
+      <div class="m-txt">HTS에서 <b>0601 종합차트</b> 열고 관심 있는 종목 1개 검색<small>봉 색깔·거래량만 눈에 익혀보세요</small></div>
+    </div>
+    <div class="m-item">
+      <div class="m-chk num">✓ 02</div>
+      <div class="m-txt">관심종목 그룹 만들고 · <b>3~5개 종목</b> 담기<small>주제별로 · 예: "배당주", "AI", "제약"</small></div>
+    </div>
+    <div class="m-item">
+      <div class="m-chk num">✓ 03</div>
+      <div class="m-txt">MTS 로그인 · <b>예수금·주문가능금액</b> 확인<small>실제로 눌러봐야 손에 익어요</small></div>
+    </div>
+  </div>
+  <div class="footer"><span class="brand">DOA · Beginner Stock</span><span class="count">20 · 21</span></div>
+</section>
+
+<!-- =========== 25: 마무리 =========== -->
+<section class="slide end">
+  <div class="heart">🌿</div>
+  <div class="msg">오늘도 · 한 걸음 나아가셨어요</div>
+  <div class="msg2">주식은 지식이 아니라 <b>습관</b>이 만드는 일입니다<br>오늘 배운 화면을 · 이번 한 주 동안 매일 한 번씩만 눌러보세요<br><br>다음 시간에 · 더 반갑게 뵙겠습니다 🙏</div>
+</section>
+
+</div>
+
+<!-- navigation -->
+<div class="nav">
+  <button onclick="prev()" title="이전 (←)">‹</button>
+  <span class="counter" id="counter">01 / 26</span>
+  <button onclick="next()" title="다음 (→)">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let idx = 0;
+
+  // Build the menu grid from titles
+  function show(n){
+    idx = Math.max(0, Math.min(total-1, n));
+    slides.forEach((s,i)=>s.classList.toggle('active', i===idx));
+    document.getElementById('counter').textContent =
+      String(idx).padStart(2,'0') + ' / ' + String(total-1).padStart(2,'0');
+  }
+  function next(){ show(idx+1) }
+  function prev(){ show(idx-1) }
+  function goto(n){ show(n) }
+  window.goto = goto;
+  window.next = next;
+  window.prev = prev;
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight' || e.key===' ' || e.key==='PageDown') next();
+    else if(e.key==='ArrowLeft' || e.key==='PageUp') prev();
+    else if(e.key==='Home') show(0);
+    else if(e.key==='End') show(total-1);
+  });
+
+  // click on slide (not on nav) advances
+  document.querySelectorAll('.slide').forEach((s,i)=>{
+    s.addEventListener('click', (e)=>{
+      if(e.target.closest('.nav')) return;
+      next();
+    });
+  });
+</script>
+</body>
+</html>

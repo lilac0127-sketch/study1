@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>도아쌤 강의실</title>
+<meta name="description" content="함께 배우는 주식 · 도아쌤의 강의 자료 모음">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/[email protected]/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root {
+  --bg: #FCF5EB;
+  --card: #FFFFFF;
+  --border: #EDD9BF;
+  --accent: #E58A55;
+  --accent-deep: #B85E2E;
+  --text: #2A2419;
+  --muted: #8B7B67;
+  --serif: 'Nanum Myeongjo', serif;
+  --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  padding: 60px 24px 80px;
+  min-height: 100vh;
+  font-feature-settings: "palt" 1;
+}
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.masthead {
+  margin-bottom: 72px;
+}
+.logotype {
+  font-family: var(--serif);
+  font-weight: 800;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+.brush {
+  display: block;
+  width: 168px;
+  height: 12px;
+  margin: 2px 0 24px;
+}
+.tagline {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.subtag {
+  font-size: 14px;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+}
+
+.section {
+  margin-bottom: 56px;
+}
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid var(--border);
+}
+.section-num {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--accent-deep);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+.section-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+.item:hover {
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+.item-tag {
+  flex-shrink: 0;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent-deep);
+  min-width: 48px;
+  letter-spacing: 0;
+}
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+.item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.015em;
+  margin-bottom: 2px;
+}
+.item-desc {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+}
+.item-arrow {
+  color: var(--muted);
+  font-size: 18px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.item:hover .item-arrow {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+.foot {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 0.5px solid var(--border);
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  letter-spacing: -0.005em;
+}
+
+@media (max-width: 640px) {
+  body { padding: 40px 20px 60px; }
+  .logotype { font-size: 40px; }
+  .brush { width: 130px; }
+  .tagline { font-size: 17px; }
+  .subtag { font-size: 13px; }
+  .masthead { margin-bottom: 52px; }
+  .section { margin-bottom: 40px; }
+  .section-title { font-size: 19px; }
+  .item { padding: 16px; gap: 14px; }
+  .item-tag { min-width: 44px; font-size: 12px; }
+  .item-title { font-size: 15px; }
+  .item-desc { font-size: 12px; }
+  .item:hover { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="masthead">
+    <div class="logotype">도아쌤</div>
+    <svg class="brush" viewBox="0 0 168 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M2 6 Q 40 2, 80 5 T 166 7" fill="none" stroke="#E58A55" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div class="tagline">함께 배우는 주식 · 강의실</div>
+    <div class="subtag">천천히, 자기 것으로 · 도아쌤의 강의 자료 모음</div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div class="section-title">주차별 강의</div>
+    </div>
+    <div class="list">
+      <a href="week1_2026_stock_basics.html" class="item">
+        <div class="item-tag">1주차</div>
+        <div class="item-body">
+          <div class="item-title">주식, 처음 시작하기</div>
+          <div class="item-desc">주식이 뭔지, 왜 배우는지</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+      <a href="week1_2026_stock_basics_titan.html" class="item">
+        <div class="item-tag">1주차</div>
+        <div class="item-body">
+          <div class="item-title">주식, 처음 시작하기 (심화)</div>
+          <div class="item-desc">확장 정리 버전</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div class="section-title">기초 다지기</div>
+    </div>
+    <div class="list">
+      <a href="basics_3.html" class="item">
+        <div class="item-tag">기초</div>
+        <div class="item-body">
+          <div class="item-title">기초 3강</div>
+          <div class="item-desc">개념 정리</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+      <a href="index-basic4.html" class="item">
+        <div class="item-tag">기초</div>
+        <div class="item-body">
+          <div class="item-title">기초 4강</div>
+          <div class="item-desc">한 걸음 더</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+      <a href="index4.html" class="item">
+        <div class="item-tag">기초</div>
+        <div class="item-body">
+          <div class="item-title">4강 참고 자료</div>
+          <div class="item-desc">보충 학습</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div class="section-title">실전으로</div>
+    </div>
+    <div class="list">
+      <a href="index-chartbasic.html" class="item">
+        <div class="item-tag">차트</div>
+        <div class="item-body">
+          <div class="item-title">차트 기초</div>
+          <div class="item-desc">차트를 어떻게 볼까</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+      <a href="index-company_analysis.html" class="item">
+        <div class="item-tag">분석</div>
+        <div class="item-body">
+          <div class="item-title">기업 분석</div>
+          <div class="item-desc">좋은 기업 알아보는 눈</div>
+        </div>
+        <span class="item-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="foot">
+    도아쌤 강의실 · 함께 성장하는 투자 공부
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5차시 · 기업분석 쉽게 이해하기 | 도아쌤</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-warm: #FFF3E4;
+    --bg-warm-deep: #FFE5D0;
+    --card-white: #FFFFFF;
+    --card-cream: #FFF8EE;
+    --gold: #D4A853;
+    --coral: #E87461;
+    --coral-deep: #C85A47;
+    --sage: #7BA68C;
+    --text-dark: #2B2620;
+    --text-muted: #7A6E5F;
+    --shadow: 0 8px 24px rgba(139, 90, 43, 0.12);
+    --shadow-deep: 0 12px 32px rgba(139, 90, 43, 0.18);
+  }
+
+  body {
+    background: var(--bg-warm);
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-dark);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 3vh 4vw;
+    display: none;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .slide.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Page number badge (top-left) */
+  .page-badge {
+    position: absolute;
+    top: 3vh;
+    left: 4vw;
+    width: 4.5vw;
+    height: 4.5vw;
+    max-width: 70px;
+    max-height: 70px;
+    min-width: 50px;
+    min-height: 50px;
+    background: var(--coral);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: 2.3vw;
+    box-shadow: 0 4px 12px rgba(232, 116, 97, 0.4);
+    z-index: 5;
+  }
+
+  /* Footer */
+  .footer {
+    position: absolute;
+    bottom: 2vh;
+    right: 3vw;
+    font-size: 1.4vw;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .brand {
+    position: absolute;
+    bottom: 2vh;
+    left: 4vw;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.45vw;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+  }
+
+  /* ============ SLIDE 1: COVER ============ */
+  .cover {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(212, 168, 83, 0.15), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(232, 116, 97, 0.12), transparent 40%),
+      var(--bg-warm);
+  }
+
+  .cover-chapter {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.8vw;
+    color: var(--coral);
+    letter-spacing: 0.5em;
+    margin-bottom: 2vh;
+    font-weight: 500;
+  }
+
+  .cover-number {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 12.5vw;
+    font-weight: 900;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 1vh;
+    letter-spacing: -0.05em;
+  }
+
+  .cover-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 5vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2vh;
+    letter-spacing: -0.02em;
+  }
+
+  .cover-subtitle {
+    font-size: 1.9vw;
+    color: var(--text-muted);
+    margin-bottom: 5vh;
+    font-weight: 400;
+  }
+
+  .cover-tag {
+    display: inline-block;
+    background: var(--card-white);
+    padding: 1.2vh 2.5vw;
+    border-radius: 100px;
+    box-shadow: var(--shadow);
+    font-size: 1.6vw;
+    color: var(--text-dark);
+    font-weight: 500;
+  }
+
+  .cover-tag strong { color: var(--coral); font-weight: 700; }
+
+  /* ============ SLIDE 2: LEARNING GOALS ============ */
+  .goals-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 3.5vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+    text-align: center;
+  }
+
+  .goals-sub {
+    font-size: 1.7vw;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 4vh;
+  }
+
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2vh 2vw;
+    flex: 1;
+    padding: 0 2vw;
+    align-content: center;
+  }
+
+  .goal-card {
+    background: var(--card-white);
+    border-radius: 20px;
+    padding: 2.5vh 1.5vw;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-left: 6px solid var(--coral);
+  }
+
+  .goal-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 4vw;
+    font-weight: 900;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 1vh;
+  }
+
+  .goal-label {
+    font-size: 1.8vw;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  /* ============ INDICATOR SLIDES (3-11) ============ */
+  .indicator-slide {
+    padding: 4vh 5vw 6vh 5vw;
+  }
+
+  .indicator-header {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+    margin-top: 2vh;
+    margin-bottom: 3vh;
+  }
+
+  .big-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 10.5vw;
+    font-weight: 900;
+    color: var(--coral);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+  }
+
+  .header-text { flex: 1; }
+
+  .indicator-eng {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.8vw;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    font-weight: 600;
+    margin-bottom: 0.8vh;
+  }
+
+  .indicator-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 5.5vw;
+    font-weight: 900;
+    color: var(--text-dark);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .indicator-body {
+    display: flex;
+    gap: 3vw;
+    flex: 1;
+    align-items: stretch;
+  }
+
+  .indicator-left {
+    flex: 1.2;
+    background: var(--card-white);
+    border-radius: 24px;
+    padding: 3vh 2.5vw;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 8px solid var(--coral);
+  }
+
+  .indicator-right {
+    flex: 1;
+    background: var(--card-cream);
+    border-radius: 24px;
+    padding: 3vh 2.5vw;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 2px dashed var(--gold);
+  }
+
+  .concept-label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.6vw;
+    color: var(--coral);
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    margin-bottom: 1.5vh;
+  }
+
+  .concept-text {
+    font-size: 2.5vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.4;
+    margin-bottom: 2vh;
+  }
+
+  .concept-text .hl { color: var(--coral); }
+
+  .formula {
+    background: var(--bg-warm-deep);
+    padding: 2vh 1.5vw;
+    border-radius: 16px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2.3vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+    letter-spacing: -0.01em;
+  }
+
+  .formula .op { color: var(--coral); margin: 0 0.5vw; }
+
+  .example-label {
+    font-size: 1.6vw;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    font-weight: 700;
+    margin-bottom: 1.5vh;
+  }
+
+  .example-text {
+    font-size: 2vw;
+    color: var(--text-dark);
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .example-text .hl {
+    color: var(--coral-deep);
+    font-weight: 700;
+  }
+
+  .example-text .big-hl {
+    display: block;
+    font-size: 2.5vw;
+    font-weight: 900;
+    color: var(--coral);
+    margin-top: 1vh;
+    font-family: 'Noto Serif KR', serif;
+  }
+
+  /* Emphasis banner at bottom */
+  .emphasis-banner {
+    margin-top: 2vh;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-deep) 100%);
+    color: white;
+    padding: 2vh 3vw;
+    border-radius: 16px;
+    font-size: 2vw;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: var(--shadow-deep);
+    letter-spacing: -0.01em;
+  }
+
+  .emphasis-banner .star { font-size: 2.3vw; margin: 0 0.5vw; }
+
+  /* ============ SLIDE 6: 3-YEAR GROWTH ============ */
+  .growth-container {
+    display: flex;
+    gap: 3vw;
+    flex: 1;
+    align-items: stretch;
+    margin-top: 2vh;
+  }
+
+  .growth-chart {
+    flex: 1;
+    background: var(--card-white);
+    border-radius: 24px;
+    padding: 3vh 2vw;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .chart-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2.3vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2vh;
+    text-align: center;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 30vh;
+    gap: 1vw;
+    padding: 0 1vw;
+  }
+
+  .bar-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1vh;
+  }
+
+  .bar {
+    width: 100%;
+    background: linear-gradient(180deg, var(--coral) 0%, var(--coral-deep) 100%);
+    border-radius: 12px 12px 0 0;
+    position: relative;
+    box-shadow: 0 -4px 8px rgba(232, 116, 97, 0.2);
+  }
+
+  .bar-year {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.8vw;
+    font-weight: 700;
+    color: var(--text-dark);
+  }
+
+  .bar-value {
+    position: absolute;
+    top: -3.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.9vw;
+    font-weight: 900;
+    color: var(--coral-deep);
+    white-space: nowrap;
+  }
+
+  /* ============ SLIDE 10: PER/PBR ============ */
+  .split-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5vw;
+    flex: 1;
+    margin-top: 2vh;
+  }
+
+  .split-card {
+    background: var(--card-white);
+    border-radius: 24px;
+    padding: 3vh 2vw;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-top: 8px solid var(--coral);
+  }
+
+  .split-eng {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 5vw;
+    font-weight: 900;
+    color: var(--coral);
+    line-height: 1;
+    margin-bottom: 1.5vh;
+  }
+
+  .split-kor {
+    font-size: 2vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2vh;
+  }
+
+  .split-formula {
+    background: var(--bg-warm-deep);
+    padding: 1.5vh 2vw;
+    border-radius: 12px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.9vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 2vh;
+  }
+
+  .split-desc {
+    font-size: 1.8vw;
+    color: var(--text-dark);
+    line-height: 1.5;
+  }
+
+  .split-desc .hl {
+    color: var(--coral-deep);
+    font-weight: 700;
+  }
+
+  /* ============ SLIDE 12: WRAP-UP ============ */
+  .wrap-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 4vw;
+    font-weight: 900;
+    color: var(--text-dark);
+    text-align: center;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+  }
+
+  .wrap-sub {
+    font-size: 1.7vw;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 4vh;
+  }
+
+  .wrap-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2vh 2vw;
+    flex: 1;
+    padding: 0 3vw;
+  }
+
+  .wrap-card {
+    background: var(--card-white);
+    border-radius: 20px;
+    padding: 2.5vh 1.5vw;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    border-left: 6px solid var(--gold);
+  }
+
+  .wrap-icon {
+    font-size: 3.5vw;
+    margin-bottom: 1vh;
+  }
+
+  .wrap-label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2vw;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.8vh;
+  }
+
+  .wrap-desc {
+    font-size: 1.6vw;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .wrap-desc .hl { color: var(--coral); font-weight: 700; }
+
+  .next-preview {
+    background: linear-gradient(135deg, var(--sage) 0%, #5A8A6E 100%);
+    color: white;
+    padding: 2.5vh 3vw;
+    border-radius: 20px;
+    text-align: center;
+    margin-top: 3vh;
+    box-shadow: var(--shadow-deep);
+  }
+
+  .next-label {
+    font-size: 1.5vw;
+    letter-spacing: 0.3em;
+    opacity: 0.9;
+    margin-bottom: 0.8vh;
+    font-weight: 500;
+  }
+
+  .next-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 2.5vw;
+    font-weight: 700;
+  }
+
+  /* ============ NAVIGATION ============ */
+  .nav {
+    position: fixed;
+    bottom: 3vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1.5vw;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1vh 2vw;
+    border-radius: 100px;
+    box-shadow: var(--shadow-deep);
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .nav button {
+    background: var(--coral);
+    color: white;
+    border: none;
+    width: 3vw;
+    height: 3vw;
+    max-width: 45px;
+    max-height: 45px;
+    min-width: 35px;
+    min-height: 35px;
+    border-radius: 50%;
+    font-size: 1.7vw;
+    cursor: pointer;
+    font-weight: 700;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav button:hover { transform: scale(1.1); }
+  .nav button:disabled { background: #D0C4B4; cursor: not-allowed; }
+
+  .page-info {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.6vw;
+    letter-spacing: 0.05em;
+  }
+
+  .page-info .current { color: var(--coral); font-size: 1.8vw; }
+
+  /* Hide nav on print */
+  @media print {
+    .nav { display: none; }
+    .slide { display: flex !important; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ============ SLIDE 1: COVER ============ -->
+  <div class="slide cover active" data-slide="1">
+    <div class="cover-chapter">CHAPTER · 05</div>
+    <div class="cover-number">05</div>
+    <div class="cover-title">기업분석 쉽게 이해하기</div>
+    <div class="cover-subtitle">숫자만 봐도 좋은 회사가 보인다</div>
+    <div class="cover-tag">여성인력개발센터 · <strong>도아쌤</strong></div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">01 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 2: LEARNING GOALS ============ -->
+  <div class="slide" data-slide="2">
+    <div class="page-badge">02</div>
+    <div class="goals-title">오늘 배울 <span style="color:var(--coral);">8가지</span> 지표</div>
+    <div class="goals-sub">이것만 알면 좋은 회사, 나쁜 회사가 한눈에!</div>
+    <div class="goals-grid">
+      <div class="goal-card"><div class="goal-num">01</div><div class="goal-label">매출액</div></div>
+      <div class="goal-card"><div class="goal-num">02</div><div class="goal-label">영업이익</div></div>
+      <div class="goal-card"><div class="goal-num">03</div><div class="goal-label">영업이익률</div></div>
+      <div class="goal-card"><div class="goal-num">04</div><div class="goal-label">3년 성장</div></div>
+      <div class="goal-card"><div class="goal-num">05</div><div class="goal-label">부채비율</div></div>
+      <div class="goal-card"><div class="goal-num">06</div><div class="goal-label">유보율</div></div>
+      <div class="goal-card"><div class="goal-num">07</div><div class="goal-label">배당률</div></div>
+      <div class="goal-card"><div class="goal-num">08</div><div class="goal-label">PER · PBR</div></div>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">02 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 3: 매출액 ============ -->
+  <div class="slide indicator-slide" data-slide="3">
+    <div class="page-badge">03</div>
+    <div class="indicator-header">
+      <div class="big-num">01</div>
+      <div class="header-text">
+        <div class="indicator-eng">REVENUE</div>
+        <div class="indicator-title">매출액</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">한 줄 정의</div>
+        <div class="concept-text">회사가 물건이나 서비스를 팔아서<br><span class="hl">벌어들인 총 금액</span></div>
+        <div class="formula">판매수량 <span class="op">×</span> 가격</div>
+      </div>
+      <div class="indicator-right">
+        <div class="example-label">EXAMPLE</div>
+        <div class="example-text">
+          삼성전자가 스마트폰을<br>
+          1,000만대 × 100만원에 판다면?
+          <span class="big-hl">매출 10조 원</span>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 매출이 <u>매년 늘어야</u> 성장하는 회사예요 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">03 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 4: 영업이익 ============ -->
+  <div class="slide indicator-slide" data-slide="4">
+    <div class="page-badge">04</div>
+    <div class="indicator-header">
+      <div class="big-num">02</div>
+      <div class="header-text">
+        <div class="indicator-eng">OPERATING PROFIT</div>
+        <div class="indicator-title">영업이익</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">한 줄 정의</div>
+        <div class="concept-text">매출에서 원가·비용을 빼고<br><span class="hl">진짜로 남은 이익</span></div>
+        <div class="formula">매출 <span class="op">-</span> 원가 <span class="op">-</span> 판관비</div>
+      </div>
+      <div class="indicator-right">
+        <div class="example-label">EXAMPLE</div>
+        <div class="example-text">
+          매출 10조 원 회사가<br>
+          원가·비용 <b>9조</b>를 쓰면?
+          <span class="big-hl">영업이익 1조 원</span>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 매출보다 <u>영업이익 증가</u>가 더 중요해요 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">04 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 5: 영업이익률 (KEY SLIDE) ============ -->
+  <div class="slide indicator-slide" data-slide="5">
+    <div class="page-badge">05</div>
+    <div class="indicator-header">
+      <div class="big-num">03</div>
+      <div class="header-text">
+        <div class="indicator-eng">OPERATING MARGIN</div>
+        <div class="indicator-title">영업이익률</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">한 줄 정의</div>
+        <div class="concept-text">100원 팔아서<br><span class="hl">얼마나 남기는가?</span></div>
+        <div class="formula">영업이익 <span class="op">÷</span> 매출 <span class="op">×</span> 100</div>
+      </div>
+      <div class="indicator-right" style="background:linear-gradient(135deg,#FFE5D0 0%,#FFD0B0 100%);border:none;">
+        <div class="example-label" style="color:var(--coral-deep);">★ 핵심 포인트 ★</div>
+        <div class="example-text" style="font-size: 2vw;">
+          영업이익률이<br>
+          <b style="color:var(--coral-deep);font-size: 2.7vw;">한 자리 → 두 자리</b><br>
+          로 바뀌는 순간!
+          <span class="big-hl" style="font-size: 2.3vw;">9% → 12% 회사 주목!</span>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      💡 &nbsp; 5% 회사보다 <u>12% 회사</u>가 훨씬 좋은 회사예요 &nbsp; 💡
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">05 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 6: 3년 연속 성장 ============ -->
+  <div class="slide indicator-slide" data-slide="6">
+    <div class="page-badge">06</div>
+    <div class="indicator-header">
+      <div class="big-num">04</div>
+      <div class="header-text">
+        <div class="indicator-eng">3-YEAR GROWTH</div>
+        <div class="indicator-title">3년 연속 성장</div>
+      </div>
+    </div>
+    <div class="growth-container">
+      <div class="growth-chart">
+        <div class="chart-title">📈 매출액 <span style="color:var(--coral);">3년 연속 증가</span></div>
+        <div class="bars">
+          <div class="bar-item">
+            <div class="bar" style="height:40%;"><div class="bar-value">80억</div></div>
+            <div class="bar-year">2023</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar" style="height:65%;"><div class="bar-value">120억</div></div>
+            <div class="bar-year">2024</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar" style="height:95%;"><div class="bar-value">180억</div></div>
+            <div class="bar-year">2025</div>
+          </div>
+        </div>
+      </div>
+      <div class="growth-chart">
+        <div class="chart-title">📊 영업이익 <span style="color:var(--coral);">3년 연속 증가</span></div>
+        <div class="bars">
+          <div class="bar-item">
+            <div class="bar" style="height:35%;background:linear-gradient(180deg,var(--sage) 0%,#5A8A6E 100%);"><div class="bar-value">8억</div></div>
+            <div class="bar-year">2023</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar" style="height:60%;background:linear-gradient(180deg,var(--sage) 0%,#5A8A6E 100%);"><div class="bar-value">14억</div></div>
+            <div class="bar-year">2024</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar" style="height:90%;background:linear-gradient(180deg,var(--sage) 0%,#5A8A6E 100%);"><div class="bar-value">22억</div></div>
+            <div class="bar-year">2025</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 우량기업의 <u>첫 번째 조건</u> · 꾸준한 성장 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">06 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 7: 부채비율 ============ -->
+  <div class="slide indicator-slide" data-slide="7">
+    <div class="page-badge">07</div>
+    <div class="indicator-header">
+      <div class="big-num">05</div>
+      <div class="header-text">
+        <div class="indicator-eng">DEBT RATIO</div>
+        <div class="indicator-title">부채비율</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">한 줄 정의</div>
+        <div class="concept-text">회사의 <span class="hl">빚 부담</span>이<br>얼마나 큰지 보는 지표</div>
+        <div class="formula">부채 <span class="op">÷</span> 자기자본 <span class="op">×</span> 100</div>
+      </div>
+      <div class="indicator-right">
+        <div class="example-label">기준선</div>
+        <div class="example-text" style="line-height:2;">
+          <b style="color:var(--sage);font-size: 2.3vw;">✓ 100% 이하</b> · 안전 👍<br>
+          <b style="color:var(--gold);font-size: 2.3vw;">△ 100~200%</b> · 보통<br>
+          <b style="color:var(--coral-deep);font-size: 2.3vw;">✗ 200% 초과</b> · 위험 ⚠️
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 부채비율은 <u>낮을수록</u> 좋은 회사예요 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">07 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 8: 유보율 ============ -->
+  <div class="slide indicator-slide" data-slide="8">
+    <div class="page-badge">08</div>
+    <div class="indicator-header">
+      <div class="big-num">06</div>
+      <div class="header-text">
+        <div class="indicator-eng">RESERVE RATIO</div>
+        <div class="indicator-title">유보율</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">한 줄 정의</div>
+        <div class="concept-text">회사가 그동안 벌어서<br><span class="hl">쌓아둔 곳간</span>의 크기</div>
+        <div class="formula">잉여금 <span class="op">÷</span> 자본금 <span class="op">×</span> 100</div>
+      </div>
+      <div class="indicator-right">
+        <div class="example-label">쉬운 비유</div>
+        <div class="example-text">
+          집안 <b>비상금 통장</b>이라고<br>
+          생각하면 쉬워요 🏦
+          <span class="big-hl">높을수록 든든!</span>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 유보율 <u>1,000% 이상</u>이면 재무가 튼튼한 회사 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">08 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 9: 배당률 ============ -->
+  <div class="slide indicator-slide" data-slide="9">
+    <div class="page-badge">09</div>
+    <div class="indicator-header">
+      <div class="big-num">07</div>
+      <div class="header-text">
+        <div class="indicator-eng">DIVIDEND YIELD</div>
+        <div class="indicator-title">배당률</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">한 줄 정의</div>
+        <div class="concept-text">회사가 주주에게<br><span class="hl">나눠주는 이익 비율</span></div>
+        <div class="formula">1주당 배당금 <span class="op">÷</span> 주가 <span class="op">×</span> 100</div>
+      </div>
+      <div class="indicator-right">
+        <div class="example-label">EXAMPLE</div>
+        <div class="example-text">
+          주가 10만원 · 배당 5천원이면?
+          <span class="big-hl">배당률 5%</span>
+          은행 이자보다 높으면 매력적 💰
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 매년 꾸준한 배당 = <u>재무가 안정적인 우량주</u> 신호 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">09 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 10: PER · PBR ============ -->
+  <div class="slide" data-slide="10">
+    <div class="page-badge">10</div>
+    <div class="indicator-header" style="margin-top:1vh;">
+      <div class="big-num">08</div>
+      <div class="header-text">
+        <div class="indicator-eng">VALUATION · 저평가 지표</div>
+        <div class="indicator-title">저 PER · 저 PBR</div>
+      </div>
+    </div>
+    <div class="split-two">
+      <div class="split-card">
+        <div class="split-eng">PER</div>
+        <div class="split-kor">주가수익비율</div>
+        <div class="split-formula">주가 ÷ 주당순이익</div>
+        <div class="split-desc">
+          <b>낮을수록</b> 이익 대비<br>
+          <span class="hl">싸게 사는 것!</span><br>
+          <small style="color:var(--text-muted);">업종 평균 10배 → 우리 회사 6배면 저평가</small>
+        </div>
+      </div>
+      <div class="split-card">
+        <div class="split-eng">PBR</div>
+        <div class="split-kor">주가순자산비율</div>
+        <div class="split-formula">주가 ÷ 주당순자산</div>
+        <div class="split-desc">
+          <b>1배 미만</b>은<br>
+          <span class="hl">장부가치보다 싸다!</span><br>
+          <small style="color:var(--text-muted);">회사가 가진 자산보다 주가가 낮은 상태</small>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      💎 &nbsp; <u>업종 평균보다 낮으면</u> 저평가 · 상승 여력이 있어요 &nbsp; 💎
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">10 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 11: 목표주가 ============ -->
+  <div class="slide indicator-slide" data-slide="11">
+    <div class="page-badge">11</div>
+    <div class="indicator-header">
+      <div class="big-num">🎯</div>
+      <div class="header-text">
+        <div class="indicator-eng">TARGET PRICE</div>
+        <div class="indicator-title">목표주가 확인</div>
+      </div>
+    </div>
+    <div class="indicator-body">
+      <div class="indicator-left">
+        <div class="concept-label">어디서 볼까?</div>
+        <div class="concept-text" style="font-size: 2.2vw;">
+          ✓ 증권사 <span class="hl">리서치 리포트</span><br>
+          ✓ 네이버·다음 <span class="hl">종목 페이지</span><br>
+          ✓ HTS · MTS <span class="hl">기업정보</span>
+        </div>
+      </div>
+      <div class="indicator-right">
+        <div class="example-label">확인 포인트</div>
+        <div class="example-text" style="line-height:1.8;">
+          <b>컨센서스</b><br>
+          <small style="color:var(--text-muted);font-size: 1.6vw;">여러 증권사 목표주가의 평균값</small>
+          <span class="big-hl" style="font-size: 2.1vw;">현재가 vs 목표가<br>차이가 크면 기회!</span>
+        </div>
+      </div>
+    </div>
+    <div class="emphasis-banner">
+      <span class="star">★</span> 단, 목표주가는 <u>참고용</u>일 뿐 · 맹신하지 마세요 <span class="star">★</span>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">11 / 12</div>
+  </div>
+
+  <!-- ============ SLIDE 12: WRAP-UP ============ -->
+  <div class="slide" data-slide="12">
+    <div class="page-badge">12</div>
+    <div class="wrap-title">오늘의 <span style="color:var(--coral);">핵심 정리</span></div>
+    <div class="wrap-sub">좋은 회사 고를 때 이것만 기억하세요!</div>
+    <div class="wrap-grid">
+      <div class="wrap-card">
+        <div class="wrap-icon">📈</div>
+        <div class="wrap-label">3년 연속 성장</div>
+        <div class="wrap-desc">매출·영업이익이<br><span class="hl">꾸준히</span> 증가하는가</div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-icon">💰</div>
+        <div class="wrap-label">영업이익률</div>
+        <div class="wrap-desc"><span class="hl">두 자리</span>로<br>도약하는 시점</div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-icon">🏦</div>
+        <div class="wrap-label">재무 안정성</div>
+        <div class="wrap-desc">부채비율 <span class="hl">낮고</span><br>유보율 <span class="hl">높은</span> 회사</div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-icon">💎</div>
+        <div class="wrap-label">저평가 매력</div>
+        <div class="wrap-desc">PER · PBR이<br>업종 평균보다 <span class="hl">낮은</span> 회사</div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-icon">💵</div>
+        <div class="wrap-label">배당 매력</div>
+        <div class="wrap-desc">꾸준한 배당은<br><span class="hl">우량주 신호</span></div>
+      </div>
+      <div class="wrap-card">
+        <div class="wrap-icon">🎯</div>
+        <div class="wrap-label">목표주가 갭</div>
+        <div class="wrap-desc">현재가와의 차이가<br><span class="hl">상승 여력</span></div>
+      </div>
+    </div>
+    <div class="next-preview">
+      <div class="next-label">NEXT · 6차시 예고</div>
+      <div class="next-text">차트로 매수·매도 타이밍 잡기</div>
+    </div>
+    <div class="brand">DOA · WISE INVESTMENT</div>
+    <div class="footer">12 / 12</div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prev" onclick="prev()">‹</button>
+  <div class="page-info"><span class="current">1</span> / 12</div>
+  <button id="next" onclick="next()">›</button>
+</div>
+
+<script>
+  let current = 1;
+  const total = 12;
+
+  function show(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.querySelector(`.slide[data-slide="${n}"]`).classList.add('active');
+    document.querySelector('.page-info .current').textContent = n;
+    document.getElementById('prev').disabled = (n === 1);
+    document.getElementById('next').disabled = (n === total);
+  }
+
+  function next() { if (current < total) { current++; show(current); } }
+  function prev() { if (current > 1) { current--; show(current); } }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    if (e.key === 'Home') { current = 1; show(current); }
+    if (e.key === 'End') { current = total; show(current); }
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (diff < -50) next();
+    if (diff > 50) prev();
+  });
+
+  show(1);
+</script>
+
+</body>
+</html>

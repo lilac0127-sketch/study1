@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>차트 분석 기초편 · 도아쌤</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FDF6EF;
+  --bg-2: #F9EEDF;
+  --card: #FFFFFF;
+  --ink: #1F2937;
+  --ink-2: #4B5563;
+  --muted: #6B7280;
+  --blue: #2B6CB0;
+  --blue-2: #3B82F6;
+  --blue-soft: #DBEAFE;
+  --blue-ink: #1E40AF;
+  --apricot: #FEE0C7;
+  --apricot-2: #FFF1E0;
+  --apricot-ink: #C2410C;
+  --gold: #D4A853;
+  --red: #E63946;
+  --line: #E8DDD1;
+  --line-2: #F1E9DD;
+  --shadow: 0 4px 24px rgba(140, 100, 60, 0.10);
+  --shadow-hover: 0 8px 32px rgba(140, 100, 60, 0.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 20px 28px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.content { max-width: 1500px; margin: 0 auto; }
+
+/* ========== 상단 네비게이션 ========== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.toc-btn, .nav-btn {
+  padding: 10px 16px;
+  border: 1.5px solid var(--line);
+  background: white;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: 'Noto Sans KR', sans-serif;
+  transition: all 0.15s;
+}
+.toc-btn:hover, .nav-btn:hover { background: var(--bg-2); transform: translateY(-1px); }
+
+.chapter-num {
+  background: var(--blue);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 1.15rem;
+  font-family: Georgia, serif;
+  letter-spacing: 0.5px;
+}
+
+.chapter-title {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700;
+  font-size: 1.7rem;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.tabs { display: flex; gap: 8px; margin-left: 8px; }
+
+.tab {
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--line);
+  background: white;
+  border-radius: 12px;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.tab:hover { background: var(--bg-2); color: var(--ink); }
+.tab.active {
+  background: var(--blue);
+  color: white;
+  border-color: var(--blue);
+  box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
+}
+
+.nav-btn.icon {
+  width: 44px; height: 44px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95rem;
+}
+
+.topbar-right { display: flex; gap: 8px; }
+
+/* ========== 진행 표시 ========== */
+.progress-bar {
+  height: 3px;
+  background: var(--line-2);
+  border-radius: 3px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  position: absolute; left: 0; top: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--apricot-ink));
+  border-radius: 3px;
+  transition: width 0.35s ease;
+}
+
+/* ========== 페이지 · 카드 ========== */
+.pages { position: relative; }
+
+.page {
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  animation: fadeIn 0.35s ease;
+}
+.page.active { display: grid; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 42px 44px;
+  border-left: 5px solid var(--blue);
+  box-shadow: var(--shadow);
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.badge {
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 22px;
+  width: fit-content;
+  letter-spacing: -0.01em;
+}
+.badge.blue { background: var(--blue-soft); color: var(--blue-ink); }
+.badge.apricot { background: var(--apricot); color: var(--apricot-ink); }
+
+.card-title {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.card-sub {
+  font-size: 1.3rem;
+  color: var(--ink-2);
+  margin-bottom: 28px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* 불릿 리스트 */
+.bullets { list-style: none; padding: 0; margin-top: 8px; }
+.bullets li {
+  position: relative;
+  padding: 16px 0 16px 32px;
+  font-size: 1.5rem;
+  color: var(--ink);
+  line-height: 1.5;
+  border-bottom: 1px dashed var(--line-2);
+}
+.bullets li:last-child { border-bottom: none; }
+.bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 27px;
+  width: 12px; height: 12px;
+  background: var(--blue-2);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+}
+.bullets li strong { color: var(--blue-ink); font-weight: 700; }
+.bullets li .warn { color: var(--red); font-weight: 700; }
+
+/* 강조 박스 */
+.hl {
+  margin-top: 24px;
+  padding: 18px 22px;
+  background: var(--apricot-2);
+  border-radius: 14px;
+  font-size: 1.3rem;
+  color: var(--apricot-ink);
+  font-weight: 600;
+  line-height: 1.55;
+  border-left: 4px solid var(--gold);
+}
+.hl::before { content: "💡 "; margin-right: 4px; }
+
+/* 미니 테이블 */
+.mini-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 18px;
+  font-size: 1.35rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.mini-table th {
+  background: var(--apricot-2);
+  padding: 16px 18px;
+  text-align: left;
+  color: var(--apricot-ink);
+  font-weight: 700;
+  border-bottom: 2px solid var(--apricot);
+  font-size: 1.15rem;
+}
+.mini-table td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line-2);
+  color: var(--ink);
+}
+.mini-table tr:last-child td { border-bottom: none; }
+.mini-table td:first-child { width: 32%; }
+.mini-table td strong { color: var(--blue-ink); font-weight: 700; }
+
+/* 캔들 다이어그램 */
+.candle-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  margin: 24px 0 20px;
+  padding: 20px;
+  background: var(--bg-2);
+  border-radius: 16px;
+}
+.candle-box { text-align: center; }
+.candle-label {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.candle-label.red { color: var(--red); }
+.candle-label.blue { color: var(--blue); }
+
+/* TOC 오버레이 */
+.toc-overlay {
+  position: fixed;
+  top: 80px; left: 28px;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-hover);
+  z-index: 100;
+  min-width: 280px;
+  display: none;
+}
+.toc-overlay.open { display: block; animation: fadeIn 0.2s ease; }
+.toc-overlay h4 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.1rem;
+  color: var(--apricot-ink);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-2);
+}
+.toc-list { list-style: none; }
+.toc-list li {
+  padding: 12px 14px;
+  margin: 4px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.toc-list li:hover { background: var(--bg-2); }
+.toc-list li.active { background: var(--blue-soft); color: var(--blue-ink); }
+.toc-list li .num {
+  font-family: Georgia, serif;
+  font-weight: 700;
+  background: var(--apricot);
+  color: var(--apricot-ink);
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+.toc-list li.active .num { background: var(--blue); color: white; }
+
+/* 푸터 */
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  font-size: 1rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.footer .brand { color: var(--gold); font-weight: 700; }
+
+/* 반응형 */
+@media (max-width: 1000px) {
+  .page.active { grid-template-columns: 1fr; }
+  .card-title { font-size: 2rem; }
+  .card { padding: 28px; min-height: auto; }
+  .bullets li { font-size: 1.2rem; }
+  .mini-table { font-size: 1.1rem; }
+  .chapter-title { font-size: 1.3rem; }
+  .candle-wrap { gap: 40px; padding: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="content">
+
+  <!-- 상단 네비게이션 -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="toc-btn" onclick="toggleTOC()">≡ 목차</button>
+      <span class="chapter-num">06</span>
+      <span class="chapter-title">차트 분석 기초편</span>
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-page="1">1</button>
+        <button class="tab" data-page="2">2</button>
+        <button class="tab" data-page="3">3</button>
+        <button class="tab" data-page="4">4</button>
+        <button class="tab" data-page="5">5</button>
+        <button class="tab" data-page="6">6</button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="nav-btn icon" onclick="navigate(-1)" title="이전">◀</button>
+      <button class="nav-btn icon" onclick="navigate(1)" title="다음">▶</button>
+      <button class="nav-btn icon" onclick="toggleFullscreen()" title="전체화면">⛶</button>
+    </div>
+  </div>
+
+  <!-- 진행 바 -->
+  <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+  <!-- 목차 오버레이 -->
+  <div class="toc-overlay" id="tocOverlay">
+    <h4>📖 차트 분석 기초편</h4>
+    <ul class="toc-list" id="tocList">
+      <li data-page="1" class="active"><span class="num">01</span>추세 이해하기</li>
+      <li data-page="2"><span class="num">02</span>캔들 읽는 법</li>
+      <li data-page="3"><span class="num">03</span>이동평균선</li>
+      <li data-page="4"><span class="num">04</span>지지·저항</li>
+      <li data-page="5"><span class="num">05</span>거래량</li>
+      <li data-page="6"><span class="num">06</span>매물대</li>
+    </ul>
+  </div>
+
+  <!-- 페이지 -->
+  <div class="pages">
+
+    <!-- ============ 1. 추세 ============ -->
+    <div class="page active" data-page="1">
+      <div class="card">
+        <span class="badge apricot">제1원칙</span>
+        <h2 class="card-title">추세를 거스르지 마라</h2>
+        <p class="card-sub">시장은 세 방향으로만 움직인다 — 상승 · 하락 · 횡보</p>
+        <ul class="bullets">
+          <li>추세 = <strong>큰 흐름</strong>, 며칠짜리 흔들림이 아니다</li>
+          <li>"떨어지는 <span class="warn">칼날</span>은 잡지 마라"</li>
+          <li>추세와 <strong>싸우면 손실</strong>이 커진다</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge blue">왜 중요한가</span>
+        <h2 class="card-title">추세에 올라타기</h2>
+        <p class="card-sub">가장 편한 매매는 흐름을 따라가는 매매</p>
+        <ul class="bullets">
+          <li>상승장 → <strong>사는 게 유리</strong> / 하락장 → 쉬는 게 유리</li>
+          <li>추세를 알면 <strong>매수·매도 타이밍</strong>이 보인다</li>
+          <li>큰 흐름 위에서 작은 파도를 읽는다</li>
+        </ul>
+        <div class="hl">차트 분석의 시작은 <strong>"지금 어떤 추세인가?"</strong>를 묻는 것</div>
+      </div>
+    </div>
+
+    <!-- ============ 2. 캔들 ============ -->
+    <div class="page" data-page="2">
+      <div class="card">
+        <span class="badge blue">기본 원리</span>
+        <h2 class="card-title">캔들 하나 = <br>하루의 요약</h2>
+        <p class="card-sub">가격이 어디서 시작해 어디로 끝났는지 담는다</p>
+        <table class="mini-table">
+          <thead><tr><th>구분</th><th>의미</th></tr></thead>
+          <tbody>
+            <tr><td><strong>시가</strong></td><td>그날 첫 거래 가격</td></tr>
+            <tr><td><strong>종가</strong></td><td>그날 마감 가격</td></tr>
+            <tr><td><strong>고가</strong></td><td>그날 최고 가격</td></tr>
+            <tr><td><strong>저가</strong></td><td>그날 최저 가격</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <span class="badge apricot">양봉 vs 음봉</span>
+        <h2 class="card-title">몸통과 꼬리 읽기</h2>
+        <div class="candle-wrap">
+          <div class="candle-box">
+            <svg width="70" height="200" viewBox="0 0 70 200">
+              <line x1="35" y1="10" x2="35" y2="40" stroke="#E63946" stroke-width="3"/>
+              <rect x="12" y="40" width="46" height="120" fill="#E63946" rx="3"/>
+              <line x1="35" y1="160" x2="35" y2="190" stroke="#E63946" stroke-width="3"/>
+              <text x="35" y="35" fill="#6B7280" font-size="11" text-anchor="middle" font-weight="600">고가</text>
+              <text x="35" y="58" fill="white" font-size="12" text-anchor="middle" font-weight="700">종가</text>
+              <text x="35" y="152" fill="white" font-size="12" text-anchor="middle" font-weight="700">시가</text>
+              <text x="35" y="185" fill="#6B7280" font-size="11" text-anchor="middle" font-weight="600">저가</text>
+            </svg>
+            <div class="candle-label red">양봉 (상승)</div>
+          </div>
+          <div class="candle-box">
+            <svg width="70" height="200" viewBox="0 0 70 200">
+              <line x1="35" y1="10" x2="35" y2="40" stroke="#2B6CB0" stroke-width="3"/>
+              <rect x="12" y="40" width="46" height="120" fill="#2B6CB0" rx="3"/>
+              <line x1="35" y1="160" x2="35" y2="190" stroke="#2B6CB0" stroke-width="3"/>
+              <text x="35" y="35" fill="#6B7280" font-size="11" text-anchor="middle" font-weight="600">고가</text>
+              <text x="35" y="58" fill="white" font-size="12" text-anchor="middle" font-weight="700">시가</text>
+              <text x="35" y="152" fill="white" font-size="12" text-anchor="middle" font-weight="700">종가</text>
+              <text x="35" y="185" fill="#6B7280" font-size="11" text-anchor="middle" font-weight="600">저가</text>
+            </svg>
+            <div class="candle-label blue">음봉 (하락)</div>
+          </div>
+        </div>
+        <ul class="bullets">
+          <li><strong>양봉(빨강)</strong>: 종가 &gt; 시가 → 매수세 승</li>
+          <li><strong>음봉(파랑)</strong>: 종가 &lt; 시가 → 매도세 승</li>
+          <li><strong>긴 꼬리</strong> = 세력 간 힘겨루기 흔적</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============ 3. 이평선 ============ -->
+    <div class="page" data-page="3">
+      <div class="card">
+        <span class="badge blue">이평선이란</span>
+        <h2 class="card-title">최근 흐름의 <br>평균 곡선</h2>
+        <p class="card-sub">최근 N일 종가를 평균 낸 선 — 흔들림을 부드럽게 정리</p>
+        <ul class="bullets">
+          <li>가격이 <strong>이평선 위</strong> → 상승 흐름</li>
+          <li>가격이 <strong>이평선 아래</strong> → 하락 흐름</li>
+          <li>이평선의 <strong>기울기</strong> = 추세의 방향</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge apricot">5개의 이평선</span>
+        <h2 class="card-title">기간별로 다르게 본다</h2>
+        <table class="mini-table">
+          <thead><tr><th>이평선</th><th>기간 · 성격</th></tr></thead>
+          <tbody>
+            <tr><td><strong>5일선</strong></td><td>일주일 · 단기 심리선</td></tr>
+            <tr><td><strong>20일선</strong></td><td>한 달 · <strong>생명선</strong></td></tr>
+            <tr><td><strong>60일선</strong></td><td>분기 · <strong>수급선</strong></td></tr>
+            <tr><td><strong>120일선</strong></td><td>반기 · <strong>경기선</strong></td></tr>
+            <tr><td><strong>240일선</strong></td><td>1년 · <strong>대세선</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="hl">단기선이 장기선을 <strong>아래 → 위</strong>로 뚫으면 <strong>골든크로스</strong> 🚀</div>
+      </div>
+    </div>
+
+    <!-- ============ 4. 지지·저항 ============ -->
+    <div class="page" data-page="4">
+      <div class="card">
+        <span class="badge blue">지지선</span>
+        <h2 class="card-title">아래에서 <br>받쳐주는 가격</h2>
+        <p class="card-sub">떨어지다가 자꾸 "여기서 멈춘다" 하는 지점</p>
+        <ul class="bullets">
+          <li>그 가격대에 <strong>매수세</strong>가 몰려 있다</li>
+          <li>지지선을 지키면 → <strong>반등 기대</strong></li>
+          <li>지지선이 뚫리면 → <span class="warn">손절 신호</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge apricot">저항선</span>
+        <h2 class="card-title">위에서 <br>누르는 가격</h2>
+        <p class="card-sub">올라가다가 자꾸 "여기서 막힌다" 하는 지점</p>
+        <ul class="bullets">
+          <li>그 가격대에 <strong>매도세</strong>가 몰려 있다</li>
+          <li>저항선을 뚫으면 → <strong>새 상승 시작</strong></li>
+          <li>뚫린 저항선은 → <strong>새로운 지지선</strong>이 된다</li>
+        </ul>
+        <div class="hl">지지·저항은 <strong>역할이 바뀌는</strong> 관계</div>
+      </div>
+    </div>
+
+    <!-- ============ 5. 거래량 ============ -->
+    <div class="page" data-page="5">
+      <div class="card">
+        <span class="badge blue">거래량이란</span>
+        <h2 class="card-title">시장의 <br>관심 온도계</h2>
+        <p class="card-sub">그날 사고판 주식 수 — 얼마나 많은 사람이 움직였는가</p>
+        <ul class="bullets">
+          <li>거래량 = <strong>세력의 발자국</strong></li>
+          <li>가격은 속일 수 있어도 <strong>거래량은 못 속인다</strong></li>
+          <li>거래량 없는 가격 움직임은 <span class="warn">믿기 어렵다</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge apricot">거래량 신호</span>
+        <h2 class="card-title">가격과 함께 읽기</h2>
+        <table class="mini-table">
+          <thead><tr><th>패턴</th><th>해석</th></tr></thead>
+          <tbody>
+            <tr><td>상승 + 거래량 ↑</td><td>✅ <strong>강한 상승</strong></td></tr>
+            <tr><td>상승 + 거래량 ↓</td><td>⚠️ 힘 <strong>약해짐</strong></td></tr>
+            <tr><td>하락 + 거래량 ↑</td><td>🚨 <strong>매물 쏟아짐</strong></td></tr>
+            <tr><td>바닥권 + 거래량 ↑</td><td>💡 <strong>반등 신호</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============ 6. 매물대 ============ -->
+    <div class="page" data-page="6">
+      <div class="card">
+        <span class="badge blue">매물대란</span>
+        <h2 class="card-title">많이 거래된 <br>가격 구간</h2>
+        <p class="card-sub">특정 가격대에서 거래가 몰려 쌓인 흔적</p>
+        <ul class="bullets">
+          <li>과거에 <strong>많은 사람이 산 가격</strong>대</li>
+          <li>그들은 <strong>본전만 되면 팔고 싶어</strong>한다</li>
+          <li>그래서 매물대는 <span class="warn">넘기 힘든 벽</span>이 된다</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge apricot">매물대 활용</span>
+        <h2 class="card-title">저항이자 지지</h2>
+        <ul class="bullets">
+          <li>가격이 매물대 <strong>아래</strong>에 있을 때 → <strong>저항</strong></li>
+          <li>가격이 매물대 <strong>위</strong>에 있을 때 → <strong>지지</strong></li>
+          <li>큰 매물대를 <strong>거래량과 함께 돌파</strong>하면 → 강한 신호</li>
+        </ul>
+        <div class="hl">추세 + 캔들 + 이평선 + 지지저항 + 거래량 + 매물대 = <strong>차트 분석의 6대 축</strong> 🎯</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span class="brand">도아쌤</span> · 여성인력개발센터 주식 강의 · 차트 분석 기초편
+  </div>
+</div>
+
+<script>
+const tabs = document.querySelectorAll('.tab');
+const pages = document.querySelectorAll('.page');
+const tocItems = document.querySelectorAll('#tocList li');
+const progress = document.getElementById('progress');
+const tocOverlay = document.getElementById('tocOverlay');
+const totalPages = pages.length;
+let current = 1;
+
+function showPage(n) {
+  n = Math.max(1, Math.min(totalPages, n));
+  current = n;
+  tabs.forEach(t => t.classList.toggle('active', +t.dataset.page === n));
+  pages.forEach(p => p.classList.toggle('active', +p.dataset.page === n));
+  tocItems.forEach(i => i.classList.toggle('active', +i.dataset.page === n));
+  progress.style.width = (n / totalPages * 100) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+tabs.forEach(t => t.addEventListener('click', () => showPage(+t.dataset.page)));
+tocItems.forEach(i => i.addEventListener('click', () => {
+  showPage(+i.dataset.page);
+  tocOverlay.classList.remove('open');
+}));
+
+function navigate(dir) { showPage(current + dir); }
+function toggleTOC() { tocOverlay.classList.toggle('open'); }
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft') navigate(-1);
+  if (e.key === 'ArrowRight' || e.key === ' ') { navigate(1); e.preventDefault(); }
+  if (e.key === 'Escape') tocOverlay.classList.remove('open');
+});
+
+document.addEventListener('click', e => {
+  if (!tocOverlay.contains(e.target) && !e.target.classList.contains('toc-btn')) {
+    tocOverlay.classList.remove('open');
+  }
+});
+
+// 초기 진행 바
+showPage(1);
+</script>
+
+</body>
+</html>

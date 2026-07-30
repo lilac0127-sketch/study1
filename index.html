@@ -3,285 +3,1750 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>도아쌤 강의실</title>
-<meta name="description" content="함께 배우는 주식 · 도아쌤의 강의 자료 모음">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/[email protected]/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<title>6차시 - 기술적 분석의 핵심 | 도아쌤</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Black+Han+Sans&family=Do+Hyeon&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #FCF5EB;
-  --card: #FFFFFF;
-  --border: #EDD9BF;
-  --accent: #E58A55;
-  --accent-deep: #B85E2E;
-  --text: #2A2419;
-  --muted: #8B7B67;
-  --serif: 'Nanum Myeongjo', serif;
-  --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { -webkit-text-size-adjust: 100%; }
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.65;
-  padding: 60px 24px 80px;
-  min-height: 100vh;
-  font-feature-settings: "palt" 1;
-}
-.wrap {
-  max-width: 720px;
-  margin: 0 auto;
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: 'Noto Sans KR', sans-serif; background: #F5F1EA; }
 
-.masthead {
-  margin-bottom: 72px;
-}
-.logotype {
-  font-family: var(--serif);
-  font-weight: 800;
-  font-size: 52px;
-  line-height: 1;
-  color: var(--text);
-  letter-spacing: -0.03em;
-  margin-bottom: 4px;
-  display: inline-block;
-}
-.brush {
-  display: block;
-  width: 168px;
-  height: 12px;
-  margin: 2px 0 24px;
-}
-.tagline {
-  font-family: var(--serif);
-  font-size: 20px;
-  color: var(--text);
-  letter-spacing: -0.01em;
-  margin-bottom: 6px;
-}
-.subtag {
-  font-size: 14px;
-  color: var(--muted);
-  letter-spacing: -0.005em;
-}
+  /* 슬라이드 컨테이너 */
+  .slide-container {
+    width: 100vw; height: 100vh;
+    position: relative; overflow: hidden;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    background: #FFF5EE;
+    position: absolute; top: 0; left: 0;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 3vh 3vw;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .slide.active { opacity: 1; pointer-events: auto; }
 
-.section {
-  margin-bottom: 56px;
-}
-.section-head {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 0.5px solid var(--border);
-}
-.section-num {
-  font-family: var(--serif);
-  font-weight: 700;
-  color: var(--accent-deep);
-  font-size: 13px;
-  letter-spacing: 0.12em;
-}
-.section-title {
-  font-family: var(--serif);
-  font-weight: 700;
-  font-size: 22px;
-  color: var(--text);
-  letter-spacing: -0.02em;
-}
+  /* 네비게이션 */
+  .nav {
+    position: fixed;
+    bottom: 2vh; right: 3vw;
+    z-index: 100;
+    display: flex; gap: 1rem;
+    align-items: center;
+  }
+  .nav button {
+    background: #2C5AA0; color: white;
+    border: none; border-radius: 999px;
+    padding: 1rem 1.6rem;
+    font-size: 1.3rem; font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+    transition: all 0.2s;
+  }
+  .nav button:hover { background: #1F4680; transform: translateY(-2px); }
+  .nav button:disabled { background: #B8B0A5; cursor: not-allowed; transform: none; }
+  .page-indicator {
+    background: white; border: 2px solid #2C5AA0;
+    padding: 0.8rem 1.4rem; border-radius: 999px;
+    font-size: 1.3rem; font-weight: 700; color: #2C5AA0;
+    font-family: 'Do Hyeon', 'Noto Sans KR', sans-serif;
+  }
 
-.list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 18px 20px;
-  background: var(--card);
-  border: 0.5px solid var(--border);
-  border-radius: 12px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.2s ease;
-}
-.item:hover {
-  border-color: var(--accent);
-  transform: translateX(4px);
-}
-.item-tag {
-  flex-shrink: 0;
-  font-family: var(--serif);
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--accent-deep);
-  min-width: 48px;
-  letter-spacing: 0;
-}
-.item-body {
-  flex: 1;
-  min-width: 0;
-}
-.item-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -0.015em;
-  margin-bottom: 2px;
-}
-.item-desc {
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: -0.005em;
-}
-.item-arrow {
-  color: var(--muted);
-  font-size: 18px;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-.item:hover .item-arrow {
-  color: var(--accent);
-  transform: translateX(2px);
-}
+  /* 공통 요소 */
+  .page-num {
+    position: absolute;
+    top: 2.5vh; right: 3vw;
+    background: #E74C3C; color: white;
+    width: 5rem; height: 5rem;
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; font-weight: 900;
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+  }
 
-.foot {
-  margin-top: 80px;
-  padding-top: 32px;
-  border-top: 0.5px solid var(--border);
-  font-family: var(--serif);
-  font-size: 13px;
-  color: var(--muted);
-  text-align: center;
-  letter-spacing: -0.005em;
-}
+  .slide-title {
+    font-family: 'Black Han Sans', 'Noto Sans KR', sans-serif;
+    font-size: 5.5rem;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+  }
+  .title-blue { color: #2C5AA0; }
+  .title-red { color: #E74C3C; }
 
-@media (max-width: 640px) {
-  body { padding: 40px 20px 60px; }
-  .logotype { font-size: 40px; }
-  .brush { width: 130px; }
-  .tagline { font-size: 17px; }
-  .subtag { font-size: 13px; }
-  .masthead { margin-bottom: 52px; }
-  .section { margin-bottom: 40px; }
-  .section-title { font-size: 19px; }
-  .item { padding: 16px; gap: 14px; }
-  .item-tag { min-width: 44px; font-size: 12px; }
-  .item-title { font-size: 15px; }
-  .item-desc { font-size: 12px; }
-  .item:hover { transform: none; }
-}
+  .subtitle {
+    display: inline-block;
+    background: #2C5AA0; color: white;
+    padding: 0.6rem 2rem;
+    border-radius: 4px;
+    font-size: 1.9rem; font-weight: 700;
+    margin-top: 0.5rem;
+  }
+  .subtitle-line {
+    font-size: 2rem; font-weight: 700;
+    color: #444;
+    margin-top: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .subtitle-line::before, .subtitle-line::after {
+    content: ''; height: 2px; background: #999; flex: 1; max-width: 3rem;
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
-}
+  /* 핵심 박스 (우측 상단) */
+  .core-box {
+    position: absolute;
+    top: 3vh; right: 8vw;
+    background: white;
+    border: 3px solid #4A90E2;
+    border-radius: 12px;
+    padding: 1.2rem 1.8rem;
+    width: 26vw;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  .core-box-title {
+    background: #4A90E2; color: white;
+    padding: 0.4rem 1.2rem;
+    border-radius: 6px;
+    font-size: 1.4rem; font-weight: 900;
+    display: inline-block;
+    margin-bottom: 0.6rem;
+  }
+  .core-box-body {
+    font-size: 1.35rem; line-height: 1.5;
+    color: #333;
+  }
+  .core-box-body .highlight {
+    color: #E74C3C; font-weight: 700;
+  }
+
+  /* 메인 컨텐츠 영역 */
+  .main-content {
+    flex: 1;
+    display: flex;
+    margin-top: 1vh;
+    gap: 2vw;
+  }
+  .main-left {
+    flex: 2;
+    display: flex; flex-direction: column;
+    justify-content: center;
+  }
+  .main-right {
+    flex: 1;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* 캐릭터 */
+  .character {
+    display: flex; flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .character-svg { width: 14vw; max-width: 220px; }
+  .speech-bubble {
+    background: white;
+    border: 3px solid #444;
+    border-radius: 20px;
+    padding: 1.2rem 1.6rem;
+    font-size: 1.6rem; font-weight: 700;
+    line-height: 1.4;
+    color: #333;
+    position: relative;
+    margin-bottom: 1rem;
+    max-width: 22vw;
+    text-align: center;
+  }
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -18px; left: 50%;
+    transform: translateX(-50%);
+    border: 12px solid transparent;
+    border-top-color: #444;
+  }
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -13px; left: 50%;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: white;
+    z-index: 1;
+  }
+  .speech-bubble .em { color: #E74C3C; }
+
+  /* 5단계 요약 하단 */
+  .summary-strip {
+    background: white;
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.5vh;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .summary-strip-label {
+    font-size: 1.2rem; font-weight: 700;
+    color: #444;
+    background: #FFE5D0;
+    padding: 0.3rem 1rem;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+  }
+  .summary-steps {
+    display: flex; align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+  .summary-step {
+    flex: 1;
+    text-align: center;
+  }
+  .summary-step .num {
+    background: #E74C3C; color: white;
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+  .summary-step .label {
+    font-size: 1.3rem; font-weight: 700; color: #333;
+  }
+  .summary-arrow {
+    color: #999;
+    font-size: 2rem;
+    margin: 0 0.3rem;
+  }
+
+  /* 표지 */
+  .cover {
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #FFF5EE 0%, #FFE5D0 100%);
+    text-align: center;
+    padding: 5vh 5vw;
+  }
+  .cover-chapter {
+    font-family: 'Do Hyeon', sans-serif;
+    font-size: 3rem;
+    color: #2C5AA0;
+    letter-spacing: 8px;
+  }
+  .cover-num {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 18rem;
+    color: #E74C3C;
+    line-height: 1;
+    margin: -1rem 0;
+    text-shadow: 6px 6px 0 rgba(44, 90, 160, 0.15);
+  }
+  .cover-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 6rem;
+    color: #2C5AA0;
+    line-height: 1.15;
+    margin-top: 1rem;
+  }
+  .cover-title .red { color: #E74C3C; }
+  .cover-subtitle {
+    font-size: 2rem; font-weight: 500;
+    color: #666;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background: white;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .cover-teacher {
+    font-size: 1.8rem; font-weight: 700;
+    color: #444;
+    margin-top: 3rem;
+    letter-spacing: 2px;
+  }
+
+  /* 카드 요소 */
+  .card-row {
+    display: flex; gap: 1.5vw;
+    margin-top: 2vh;
+    flex-wrap: wrap;
+  }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    flex: 1;
+    min-width: 20rem;
+    border-left: 8px solid #E74C3C;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex; flex-direction: column;
+    gap: 0.6rem;
+  }
+  .card.blue { border-left-color: #2C5AA0; }
+  .card.green { border-left-color: #27AE60; }
+  .card.orange { border-left-color: #F39C12; }
+  .card-num {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 3.5rem;
+    color: #E74C3C;
+    line-height: 1;
+  }
+  .card.blue .card-num { color: #2C5AA0; }
+  .card.green .card-num { color: #27AE60; }
+  .card.orange .card-num { color: #F39C12; }
+  .card-title {
+    font-size: 2rem; font-weight: 900;
+    color: #2C3E50;
+    line-height: 1.3;
+  }
+  .card-desc {
+    font-size: 1.4rem; font-weight: 500;
+    color: #555;
+    line-height: 1.5;
+  }
+  .card-desc .em { color: #E74C3C; font-weight: 700; }
+  .card-desc .em-blue { color: #2C5AA0; font-weight: 700; }
+
+  /* 큰 표 */
+  .big-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-top: 1.5vh;
+    font-size: 1.5rem;
+  }
+  .big-table th {
+    background: #2C5AA0; color: white;
+    padding: 1.2rem;
+    font-size: 1.7rem; font-weight: 700;
+  }
+  .big-table td {
+    padding: 1.1rem 1.2rem;
+    border-bottom: 1px solid #EEE;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+  }
+  .big-table tr:nth-child(even) td { background: #FDF6ED; }
+  .big-table .strong { font-weight: 900; color: #2C5AA0; font-size: 1.7rem; }
+  .big-table .red { color: #E74C3C; font-weight: 700; }
+
+  /* 차트 컨테이너 */
+  .chart-box {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    flex: 1;
+    display: flex; flex-direction: column;
+    min-height: 45vh;
+  }
+  .chart-label {
+    background: #E74C3C; color: white;
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    border-radius: 6px;
+    font-size: 1.4rem; font-weight: 700;
+    margin-bottom: 0.8rem;
+    align-self: flex-start;
+  }
+  .chart-svg-wrap {
+    flex: 1; display: flex;
+    align-items: center; justify-content: center;
+    min-height: 30vh;
+  }
+  .chart-svg-wrap svg { width: 100%; height: 100%; max-height: 40vh; }
+
+  /* 라벨 태그 */
+  .tag-callout {
+    background: white;
+    border: 2px solid #E74C3C;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    font-size: 1.2rem; font-weight: 700;
+    color: #E74C3C;
+    display: inline-block;
+  }
+  .tag-callout.blue { border-color: #2C5AA0; color: #2C5AA0; }
+
+  /* 학습 목표 카드 */
+  .goal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vw;
+    margin-top: 3vh;
+  }
+  .goal-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    border-top: 10px solid #2C5AA0;
+  }
+  .goal-card.red { border-top-color: #E74C3C; }
+  .goal-card.green { border-top-color: #27AE60; }
+  .goal-card-num {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 5rem;
+    color: #2C5AA0;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .goal-card.red .goal-card-num { color: #E74C3C; }
+  .goal-card.green .goal-card-num { color: #27AE60; }
+  .goal-card-icon { font-size: 4rem; margin: 0.5rem 0; }
+  .goal-card-title {
+    font-size: 2.4rem; font-weight: 900;
+    color: #2C3E50;
+    margin: 0.8rem 0;
+  }
+  .goal-card-desc {
+    font-size: 1.5rem; font-weight: 500;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* 하단 핵심 한줄 */
+  .bottom-key {
+    background: #2C5AA0;
+    color: white;
+    border-radius: 12px;
+    padding: 1.2rem 2rem;
+    margin-top: 1.5vh;
+    font-size: 1.8rem; font-weight: 700;
+    text-align: center;
+    display: flex; align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .bottom-key .check {
+    background: white; color: #2C5AA0;
+    width: 2.4rem; height: 2.4rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-weight: 900;
+  }
+  .bottom-key .em { color: #FFE500; }
+
+  /* 2단 레이아웃 */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2vw;
+    flex: 1;
+    margin-top: 1.5vh;
+  }
+  .col-box {
+    background: white;
+    border-radius: 16px;
+    padding: 1.8rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    display: flex; flex-direction: column;
+  }
+  .col-box-title {
+    font-size: 2rem; font-weight: 900;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    color: white;
+    background: #2C5AA0;
+    margin-bottom: 1rem;
+    display: inline-block;
+    align-self: flex-start;
+  }
+  .col-box-title.red { background: #E74C3C; }
+
+  /* 마무리 슬라이드 */
+  .end-slide {
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    height: 100vh;
+    padding: 5vh 5vw;
+    text-align: center;
+    background: linear-gradient(135deg, #FFF5EE 0%, #FFE5D0 100%);
+  }
+  .end-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 8rem;
+    color: #2C5AA0;
+    line-height: 1.1;
+    margin-bottom: 3rem;
+  }
+  .end-title .red { color: #E74C3C; }
+  .end-message {
+    font-size: 2.4rem; font-weight: 700;
+    color: #444;
+    line-height: 1.6;
+    max-width: 70vw;
+    padding: 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+
+  /* 목차 슬라이드 */
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5vw 2vw;
+    margin-top: 2vh;
+    flex: 1;
+  }
+  .toc-item {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    display: flex; align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-left: 8px solid #2C5AA0;
+  }
+  .toc-item.red { border-left-color: #E74C3C; }
+  .toc-num {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 4rem;
+    color: #2C5AA0;
+    line-height: 1;
+    min-width: 3.5rem;
+  }
+  .toc-item.red .toc-num { color: #E74C3C; }
+  .toc-content {
+    display: flex; flex-direction: column;
+    gap: 0.3rem;
+  }
+  .toc-title {
+    font-size: 2.2rem; font-weight: 900;
+    color: #2C3E50;
+    line-height: 1.2;
+  }
+  .toc-desc {
+    font-size: 1.35rem; font-weight: 500;
+    color: #666;
+  }
+
+  /* 화살표 애니메이션 표시 */
+  .step-flow {
+    display: flex; align-items: center;
+    justify-content: space-around;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    flex: 1;
+    margin-top: 1.5vh;
+  }
+  .step-item {
+    text-align: center;
+    display: flex; flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 15vw;
+  }
+  .step-item .step-num {
+    background: #E74C3C; color: white;
+    width: 3.5rem; height: 3.5rem;
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 900;
+    margin-bottom: 0.5rem;
+  }
+  .step-item.blue .step-num { background: #2C5AA0; }
+  .step-item .step-icon {
+    background: #FFF5EE;
+    width: 8rem; height: 8rem;
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3.5rem;
+    border: 4px solid #E74C3C;
+  }
+  .step-item.blue .step-icon { border-color: #2C5AA0; }
+  .step-item .step-label {
+    font-size: 1.4rem; font-weight: 700;
+    color: #333;
+    margin-top: 0.5rem;
+  }
+  .step-item .step-desc {
+    font-size: 1.1rem; font-weight: 500;
+    color: #666;
+    line-height: 1.3;
+  }
+  .step-arrow {
+    color: #999; font-size: 3rem;
+  }
+
+  /* 큰 사인 (매수/매도 등) */
+  .sign-box {
+    background: white;
+    border: 4px solid #27AE60;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .sign-box.red-border { border-color: #E74C3C; }
+  .sign-box .sign-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 3rem;
+    color: #27AE60;
+    line-height: 1.1;
+  }
+  .sign-box.red-border .sign-title { color: #E74C3C; }
+  .sign-box .sign-body {
+    font-size: 1.5rem; font-weight: 500;
+    color: #444;
+    margin-top: 0.7rem;
+  }
+
+  /* 인쇄 - 슬라이드 각각 A4 */
+  @media print {
+    .slide { position: relative; opacity: 1 !important; page-break-after: always; height: 100vh; }
+    .nav { display: none !important; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="masthead">
-    <div class="logotype">도아쌤</div>
-    <svg class="brush" viewBox="0 0 168 12" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M2 6 Q 40 2, 80 5 T 166 7" fill="none" stroke="#E58A55" stroke-width="3" stroke-linecap="round"/>
-    </svg>
-    <div class="tagline">함께 배우는 주식 · 강의실</div>
-    <div class="subtag">천천히, 자기 것으로 · 도아쌤의 강의 자료 모음</div>
-  </div>
 
-  <div class="section">
-    <div class="section-head">
-      <div class="section-num">01</div>
-      <div class="section-title">주차별 강의</div>
+<div class="slide-container" id="slideContainer">
+<!--============================================================
+  1. 표지
+=============================================================-->
+<section class="slide active">
+  <div class="cover">
+    <div class="cover-chapter">CHAPTER 6</div>
+    <div class="cover-num">06</div>
+    <div class="cover-title">차트가 <span class="red">말해주는</span><br>매매의 <span class="red">타이밍</span></div>
+    <div class="cover-subtitle">📊 기술적 분석 - 이평선·지지저항·눌림목·반등·바닥</div>
+    <div class="cover-teacher">✨ 도아쌤 주식 초급반 ✨</div>
+  </div>
+</section>
+
+<!--============================================================
+  2. 목차
+=============================================================-->
+<section class="slide">
+  <div class="page-num">01</div>
+  <h1 class="slide-title"><span class="title-blue">오늘 배울</span> <span class="title-red">5가지 주제</span></h1>
+  <div class="subtitle-line">차트를 보는 눈이 완전히 달라져요 👀</div>
+  <div class="toc-grid">
+    <div class="toc-item">
+      <div class="toc-num">01</div>
+      <div class="toc-content">
+        <div class="toc-title">이동평균선</div>
+        <div class="toc-desc">추세를 보는 가장 강력한 도구</div>
+      </div>
     </div>
-    <div class="list">
-      <a href="week1_2026_stock_basics.html" class="item">
-        <div class="item-tag">1주차</div>
-        <div class="item-body">
-          <div class="item-title">주식, 처음 시작하기</div>
-          <div class="item-desc">주식이 뭔지, 왜 배우는지</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
-      <a href="week1_2026_stock_basics_titan.html" class="item">
-        <div class="item-tag">1주차</div>
-        <div class="item-body">
-          <div class="item-title">주식, 처음 시작하기 (심화)</div>
-          <div class="item-desc">확장 정리 버전</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
+    <div class="toc-item red">
+      <div class="toc-num">02</div>
+      <div class="toc-content">
+        <div class="toc-title">지지·저항·매물대</div>
+        <div class="toc-desc">가격이 멈추는 자리 찾기</div>
+      </div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">03</div>
+      <div class="toc-content">
+        <div class="toc-title">상승추세의 눌림목</div>
+        <div class="toc-desc">가장 좋은 매수 타이밍</div>
+      </div>
+    </div>
+    <div class="toc-item red">
+      <div class="toc-num">04</div>
+      <div class="toc-content">
+        <div class="toc-title">하락추세의 기술적 반등</div>
+        <div class="toc-desc">함정을 피하는 법</div>
+      </div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">05</div>
+      <div class="toc-content">
+        <div class="toc-title">바닥 신호</div>
+        <div class="toc-desc">진짜 반전을 알아보는 눈</div>
+      </div>
+    </div>
+    <div class="toc-item red">
+      <div class="toc-num">🎯</div>
+      <div class="toc-content">
+        <div class="toc-title">종합 정리</div>
+        <div class="toc-desc">실전 체크리스트</div>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="section">
-    <div class="section-head">
-      <div class="section-num">02</div>
-      <div class="section-title">기초 다지기</div>
-    </div>
-    <div class="list">
-      <a href="basics_3.html" class="item">
-        <div class="item-tag">기초</div>
-        <div class="item-body">
-          <div class="item-title">기초 3강</div>
-          <div class="item-desc">개념 정리</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
-      <a href="index-basic4.html" class="item">
-        <div class="item-tag">기초</div>
-        <div class="item-body">
-          <div class="item-title">기초 4강</div>
-          <div class="item-desc">한 걸음 더</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
-      <a href="index4.html" class="item">
-        <div class="item-tag">기초</div>
-        <div class="item-body">
-          <div class="item-title">4강 참고 자료</div>
-          <div class="item-desc">보충 학습</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
-    </div>
-  </div>
+<!--============================================================
+  3. 이평선 1 - 이평선이란?
+=============================================================-->
+<section class="slide">
+  <div class="page-num">02</div>
+  <h1 class="slide-title"><span class="title-blue">이동평균선은</span><br><span class="title-red">주가의 흐름을 담는 그릇</span></h1>
+  <div class="subtitle-line">추세를 한눈에 보여주는 가장 기본 지표</div>
 
-  <div class="section">
-    <div class="section-head">
-      <div class="section-num">03</div>
-      <div class="section-title">실전으로</div>
-    </div>
-    <div class="list">
-      <a href="index-chartbasic.html" class="item">
-        <div class="item-tag">차트</div>
-        <div class="item-body">
-          <div class="item-title">차트 기초</div>
-          <div class="item-desc">차트를 어떻게 볼까</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
-      <a href="index-company_analysis.html" class="item">
-        <div class="item-tag">분석</div>
-        <div class="item-body">
-          <div class="item-title">기업 분석</div>
-          <div class="item-desc">좋은 기업 알아보는 눈</div>
-        </div>
-        <span class="item-arrow">→</span>
-      </a>
+  <div class="core-box">
+    <div class="core-box-title">💡 핵심</div>
+    <div class="core-box-body">
+      최근 <span class="highlight">N일간의 평균 가격</span>을<br>
+      선으로 이은 것<br>
+      → 지금 추세가 어디로 가는지 <span class="highlight">방향</span>을 보여줌
     </div>
   </div>
 
-  <div class="foot">
-    도아쌤 강의실 · 함께 성장하는 투자 공부
+  <div class="main-content">
+    <div class="main-left">
+      <div class="chart-box">
+        <div class="chart-label">📈 이평선 예시</div>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+            <!-- 격자 -->
+            <defs>
+              <pattern id="grid1" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#F0EBE0" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect width="800" height="400" fill="url(#grid1)"/>
+
+            <!-- 캔들 데이터 (약식) -->
+            <g>
+              <!-- 상승 캔들 -->
+              <line x1="60" y1="280" x2="60" y2="320" stroke="#333" stroke-width="1"/>
+              <rect x="52" y="290" width="16" height="20" fill="#E74C3C"/>
+              <line x1="100" y1="270" x2="100" y2="310" stroke="#333" stroke-width="1"/>
+              <rect x="92" y="280" width="16" height="20" fill="#E74C3C"/>
+              <line x1="140" y1="260" x2="140" y2="300" stroke="#333" stroke-width="1"/>
+              <rect x="132" y="265" width="16" height="25" fill="#E74C3C"/>
+              <line x1="180" y1="250" x2="180" y2="290" stroke="#333" stroke-width="1"/>
+              <rect x="172" y="255" width="16" height="25" fill="#E74C3C"/>
+              <line x1="220" y1="240" x2="220" y2="280" stroke="#333" stroke-width="1"/>
+              <rect x="212" y="245" width="16" height="25" fill="#2C5AA0"/>
+              <line x1="260" y1="230" x2="260" y2="270" stroke="#333" stroke-width="1"/>
+              <rect x="252" y="235" width="16" height="20" fill="#E74C3C"/>
+              <line x1="300" y1="220" x2="300" y2="255" stroke="#333" stroke-width="1"/>
+              <rect x="292" y="225" width="16" height="20" fill="#E74C3C"/>
+              <line x1="340" y1="215" x2="340" y2="250" stroke="#333" stroke-width="1"/>
+              <rect x="332" y="220" width="16" height="20" fill="#2C5AA0"/>
+              <line x1="380" y1="210" x2="380" y2="245" stroke="#333" stroke-width="1"/>
+              <rect x="372" y="215" width="16" height="20" fill="#E74C3C"/>
+              <line x1="420" y1="200" x2="420" y2="240" stroke="#333" stroke-width="1"/>
+              <rect x="412" y="205" width="16" height="20" fill="#E74C3C"/>
+              <line x1="460" y1="195" x2="460" y2="235" stroke="#333" stroke-width="1"/>
+              <rect x="452" y="200" width="16" height="20" fill="#E74C3C"/>
+              <line x1="500" y1="190" x2="500" y2="225" stroke="#333" stroke-width="1"/>
+              <rect x="492" y="195" width="16" height="20" fill="#2C5AA0"/>
+              <line x1="540" y1="180" x2="540" y2="220" stroke="#333" stroke-width="1"/>
+              <rect x="532" y="185" width="16" height="20" fill="#E74C3C"/>
+              <line x1="580" y1="170" x2="580" y2="210" stroke="#333" stroke-width="1"/>
+              <rect x="572" y="175" width="16" height="25" fill="#E74C3C"/>
+              <line x1="620" y1="160" x2="620" y2="205" stroke="#333" stroke-width="1"/>
+              <rect x="612" y="165" width="16" height="25" fill="#E74C3C"/>
+              <line x1="660" y1="155" x2="660" y2="200" stroke="#333" stroke-width="1"/>
+              <rect x="652" y="160" width="16" height="25" fill="#E74C3C"/>
+              <line x1="700" y1="150" x2="700" y2="195" stroke="#333" stroke-width="1"/>
+              <rect x="692" y="155" width="16" height="25" fill="#E74C3C"/>
+              <line x1="740" y1="140" x2="740" y2="185" stroke="#333" stroke-width="1"/>
+              <rect x="732" y="145" width="16" height="25" fill="#E74C3C"/>
+            </g>
+
+            <!-- 5일선 (빨간색) -->
+            <polyline points="60,295 100,285 140,278 180,265 220,258 260,243 300,235 340,225 380,215 420,205 460,200 500,195 540,190 580,183 620,173 660,165 700,158 740,150" fill="none" stroke="#E74C3C" stroke-width="3.5"/>
+
+            <!-- 20일선 (파란색) -->
+            <polyline points="60,310 100,300 140,290 180,280 220,270 260,262 300,252 340,243 380,235 420,225 460,220 500,215 540,208 580,200 620,193 660,185 700,180 740,175" fill="none" stroke="#2C5AA0" stroke-width="3.5"/>
+
+            <!-- 60일선 (초록색) -->
+            <polyline points="60,330 100,325 140,318 180,312 220,305 260,297 300,288 340,278 380,270 420,260 460,255 500,248 540,240 580,232 620,225 660,218 700,210 740,205" fill="none" stroke="#27AE60" stroke-width="3.5" stroke-dasharray="8,4"/>
+
+            <!-- 범례 -->
+            <g transform="translate(600, 40)">
+              <rect x="0" y="0" width="180" height="80" fill="white" stroke="#DDD" stroke-width="1" rx="6"/>
+              <line x1="10" y1="20" x2="35" y2="20" stroke="#E74C3C" stroke-width="3.5"/>
+              <text x="45" y="24" font-size="14" font-weight="700" fill="#333">5일선 (단기)</text>
+              <line x1="10" y1="43" x2="35" y2="43" stroke="#2C5AA0" stroke-width="3.5"/>
+              <text x="45" y="47" font-size="14" font-weight="700" fill="#333">20일선 (중기)</text>
+              <line x1="10" y1="66" x2="35" y2="66" stroke="#27AE60" stroke-width="3.5" stroke-dasharray="6,3"/>
+              <text x="45" y="70" font-size="14" font-weight="700" fill="#333">60일선 (장기)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="main-right">
+      <div class="character">
+        <div class="speech-bubble">
+          이평선은 주가의<br>
+          <span class="em">방향키</span>야!<br>
+          위로 향하면 상승,<br>
+          아래로 향하면 하락 📍
+        </div>
+        <svg class="character-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <!-- 후드 -->
+          <ellipse cx="100" cy="90" rx="65" ry="60" fill="#5DADE2"/>
+          <ellipse cx="100" cy="95" rx="55" ry="50" fill="#FDE4C9"/>
+          <!-- 눈 -->
+          <circle cx="80" cy="95" r="4" fill="#333"/>
+          <circle cx="120" cy="95" r="4" fill="#333"/>
+          <!-- 볼 -->
+          <circle cx="70" cy="110" r="6" fill="#F8B7B7" opacity="0.6"/>
+          <circle cx="130" cy="110" r="6" fill="#F8B7B7" opacity="0.6"/>
+          <!-- 웃는 입 -->
+          <path d="M 90 115 Q 100 125 110 115" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- 몸 -->
+          <rect x="60" y="140" width="80" height="80" rx="15" fill="#5DADE2"/>
+          <rect x="80" y="165" width="40" height="20" rx="4" fill="white"/>
+          <text x="100" y="180" text-anchor="middle" font-size="10" font-weight="700" fill="#2C5AA0">도아쌤</text>
+        </svg>
+      </div>
+    </div>
   </div>
+</section>
+
+<!--============================================================
+  4. 이평선 2 - 4가지 이평선
+=============================================================-->
+<section class="slide">
+  <div class="page-num">03</div>
+  <h1 class="slide-title"><span class="title-blue">4가지 이평선의</span> <span class="title-red">역할</span></h1>
+  <div class="subtitle-line">단기·중기·장기, 각각의 임무가 달라요</div>
+
+  <table class="big-table" style="margin-top: 3vh;">
+    <thead>
+      <tr>
+        <th style="width:15%;">이평선</th>
+        <th style="width:20%;">기간</th>
+        <th style="width:30%;">의미</th>
+        <th style="width:35%;">투자자 관점</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strong">5일선</td>
+        <td>1주일(단기)</td>
+        <td>단기 심리·매매 흐름</td>
+        <td class="red">단타·스윙 매매의 기준</td>
+      </tr>
+      <tr>
+        <td class="strong">20일선</td>
+        <td>1개월(중기)</td>
+        <td>세력선·생명선</td>
+        <td class="red">가장 중요! 추세의 허리</td>
+      </tr>
+      <tr>
+        <td class="strong">60일선</td>
+        <td>3개월(중장기)</td>
+        <td>수급선·계절선</td>
+        <td>중기 투자자의 지지선</td>
+      </tr>
+      <tr>
+        <td class="strong">120일선</td>
+        <td>6개월(장기)</td>
+        <td>경기선·대세선</td>
+        <td>장기 추세의 방향</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bottom-key">
+    <span class="check">✓</span>
+    <span>주가가 <span class="em">20일선 위</span>에 있으면 <span class="em">상승추세</span>, <span class="em">아래</span>에 있으면 <span class="em">하락추세</span>로 봐요</span>
+  </div>
+</section>
+
+<!--============================================================
+  5. 이평선 3 - 정배열 vs 역배열
+=============================================================-->
+<section class="slide">
+  <div class="page-num">04</div>
+  <h1 class="slide-title"><span class="title-blue">정배열 vs</span> <span class="title-red">역배열</span></h1>
+  <div class="subtitle-line">이평선의 순서만 봐도 추세를 알 수 있어요</div>
+
+  <div class="two-col">
+    <div class="col-box">
+      <div class="col-box-title">📈 정배열 (상승추세)</div>
+      <div style="text-align:center; margin: 1rem 0;">
+        <svg viewBox="0 0 400 240" style="width: 100%; max-height: 30vh;">
+          <defs>
+            <pattern id="grid2" width="30" height="30" patternUnits="userSpaceOnUse">
+              <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#F0EBE0" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="400" height="240" fill="url(#grid2)"/>
+          <!-- 5일선 (맨 위) -->
+          <polyline points="10,180 40,170 80,155 120,140 160,130 200,115 240,100 280,90 320,75 360,60 390,50" fill="none" stroke="#E74C3C" stroke-width="3.5"/>
+          <!-- 20일선 -->
+          <polyline points="10,200 40,190 80,175 120,160 160,150 200,135 240,120 280,110 320,95 360,80 390,70" fill="none" stroke="#2C5AA0" stroke-width="3.5"/>
+          <!-- 60일선 -->
+          <polyline points="10,215 40,208 80,195 120,180 160,170 200,155 240,140 280,130 320,115 360,100 390,90" fill="none" stroke="#F39C12" stroke-width="3.5"/>
+          <!-- 120일선 (맨 아래) -->
+          <polyline points="10,225 40,220 80,210 120,195 160,185 200,170 240,155 280,145 320,130 360,115 390,105" fill="none" stroke="#27AE60" stroke-width="3.5"/>
+          <text x="20" y="30" font-size="15" font-weight="700" fill="#E74C3C">↑ 5일선 (위)</text>
+          <text x="20" y="230" font-size="14" font-weight="700" fill="#27AE60">↓ 120일선 (아래)</text>
+        </svg>
+      </div>
+      <div style="font-size: 1.5rem; font-weight: 700; color: #333; text-align: center; line-height: 1.6;">
+        위에서부터 <span style="color:#E74C3C;">5→20→60→120</span> 순서<br>
+        <span style="color: #E74C3C;">✓ 강한 상승 추세</span>
+      </div>
+    </div>
+    <div class="col-box">
+      <div class="col-box-title red">📉 역배열 (하락추세)</div>
+      <div style="text-align:center; margin: 1rem 0;">
+        <svg viewBox="0 0 400 240" style="width: 100%; max-height: 30vh;">
+          <rect width="400" height="240" fill="url(#grid2)"/>
+          <!-- 120일선 (맨 위) -->
+          <polyline points="10,50 40,60 80,75 120,90 160,105 200,120 240,135 280,150 320,165 360,175 390,185" fill="none" stroke="#27AE60" stroke-width="3.5"/>
+          <!-- 60일선 -->
+          <polyline points="10,70 40,80 80,95 120,110 160,125 200,140 240,155 280,170 320,180 360,190 390,200" fill="none" stroke="#F39C12" stroke-width="3.5"/>
+          <!-- 20일선 -->
+          <polyline points="10,90 40,100 80,115 120,130 160,145 200,160 240,175 280,185 320,195 360,205 390,210" fill="none" stroke="#2C5AA0" stroke-width="3.5"/>
+          <!-- 5일선 (맨 아래) -->
+          <polyline points="10,105 40,120 80,135 120,150 160,165 200,180 240,190 280,200 320,210 360,215 390,220" fill="none" stroke="#E74C3C" stroke-width="3.5"/>
+          <text x="20" y="30" font-size="14" font-weight="700" fill="#27AE60">↑ 120일선 (위)</text>
+          <text x="20" y="230" font-size="15" font-weight="700" fill="#E74C3C">↓ 5일선 (아래)</text>
+        </svg>
+      </div>
+      <div style="font-size: 1.5rem; font-weight: 700; color: #333; text-align: center; line-height: 1.6;">
+        위에서부터 <span style="color:#27AE60;">120→60→20→5</span> 순서<br>
+        <span style="color: #E74C3C;">✗ 강한 하락 추세, 매수 금물</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-key">
+    <span class="check">✓</span>
+    <span>정배열 상태에서 <span class="em">20일선까지 눌림</span>이 오면 가장 안전한 <span class="em">매수 자리</span>!</span>
+  </div>
+</section>
+
+<!--============================================================
+  6. 지지·저항·매물대 - 원리
+=============================================================-->
+<section class="slide">
+  <div class="page-num">05</div>
+  <h1 class="slide-title"><span class="title-red">지지·저항·매물대</span><br><span class="title-blue">가격이 멈추는 자리</span></h1>
+  <div class="subtitle-line">차트에는 사람들의 기억이 새겨져 있어요</div>
+
+  <div class="core-box">
+    <div class="core-box-title">💡 핵심</div>
+    <div class="core-box-body">
+      저항과 지지는 <span class="highlight">선(線)</span>이 아니라<br>
+      <span class="highlight">매물이 쌓인 가격대</span><br>
+      → 사람들의 <span class="highlight">기억</span>이 반응하는 곳
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="main-left">
+      <div class="chart-box">
+        <div class="chart-label">📊 지지·저항·매물대</div>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+            <rect width="800" height="400" fill="url(#grid1)"/>
+
+            <!-- 저항 영역 (상단) -->
+            <rect x="0" y="80" width="800" height="50" fill="#E74C3C" opacity="0.15"/>
+            <line x1="0" y1="80" x2="800" y2="80" stroke="#E74C3C" stroke-width="2" stroke-dasharray="6,4"/>
+            <line x1="0" y1="130" x2="800" y2="130" stroke="#E74C3C" stroke-width="2" stroke-dasharray="6,4"/>
+            <text x="30" y="105" font-size="16" font-weight="700" fill="#E74C3C">저항대 (매물 쌓인 자리)</text>
+
+            <!-- 지지 영역 (하단) -->
+            <rect x="0" y="290" width="800" height="50" fill="#2C5AA0" opacity="0.15"/>
+            <line x1="0" y1="290" x2="800" y2="290" stroke="#2C5AA0" stroke-width="2" stroke-dasharray="6,4"/>
+            <line x1="0" y1="340" x2="800" y2="340" stroke="#2C5AA0" stroke-width="2" stroke-dasharray="6,4"/>
+            <text x="30" y="315" font-size="16" font-weight="700" fill="#2C5AA0">지지대 (매물 쌓인 자리)</text>
+
+            <!-- 캔들 (박스권) -->
+            <g>
+              <line x1="60" y1="310" x2="60" y2="340" stroke="#333" stroke-width="1"/>
+              <rect x="52" y="315" width="16" height="20" fill="#E74C3C"/>
+              <line x1="100" y1="280" x2="100" y2="320" stroke="#333" stroke-width="1"/>
+              <rect x="92" y="285" width="16" height="30" fill="#E74C3C"/>
+              <line x1="140" y1="180" x2="140" y2="230" stroke="#333" stroke-width="1"/>
+              <rect x="132" y="190" width="16" height="35" fill="#E74C3C"/>
+              <line x1="180" y1="110" x2="180" y2="150" stroke="#333" stroke-width="1"/>
+              <rect x="172" y="115" width="16" height="30" fill="#2C5AA0"/>
+              <line x1="220" y1="160" x2="220" y2="210" stroke="#333" stroke-width="1"/>
+              <rect x="212" y="170" width="16" height="35" fill="#2C5AA0"/>
+              <line x1="260" y1="230" x2="260" y2="280" stroke="#333" stroke-width="1"/>
+              <rect x="252" y="240" width="16" height="35" fill="#2C5AA0"/>
+              <line x1="300" y1="290" x2="300" y2="330" stroke="#333" stroke-width="1"/>
+              <rect x="292" y="300" width="16" height="25" fill="#E74C3C"/>
+              <line x1="340" y1="250" x2="340" y2="300" stroke="#333" stroke-width="1"/>
+              <rect x="332" y="255" width="16" height="35" fill="#E74C3C"/>
+              <line x1="380" y1="170" x2="380" y2="220" stroke="#333" stroke-width="1"/>
+              <rect x="372" y="180" width="16" height="30" fill="#E74C3C"/>
+              <line x1="420" y1="100" x2="420" y2="140" stroke="#333" stroke-width="1"/>
+              <rect x="412" y="110" width="16" height="25" fill="#2C5AA0"/>
+              <line x1="460" y1="140" x2="460" y2="190" stroke="#333" stroke-width="1"/>
+              <rect x="452" y="145" width="16" height="35" fill="#2C5AA0"/>
+              <line x1="500" y1="230" x2="500" y2="290" stroke="#333" stroke-width="1"/>
+              <rect x="492" y="240" width="16" height="45" fill="#2C5AA0"/>
+              <line x1="540" y1="290" x2="540" y2="335" stroke="#333" stroke-width="1"/>
+              <rect x="532" y="300" width="16" height="30" fill="#E74C3C"/>
+              <line x1="580" y1="270" x2="580" y2="320" stroke="#333" stroke-width="1"/>
+              <rect x="572" y="275" width="16" height="35" fill="#E74C3C"/>
+              <line x1="620" y1="190" x2="620" y2="240" stroke="#333" stroke-width="1"/>
+              <rect x="612" y="195" width="16" height="35" fill="#E74C3C"/>
+              <line x1="660" y1="120" x2="660" y2="160" stroke="#333" stroke-width="1"/>
+              <rect x="652" y="130" width="16" height="25" fill="#2C5AA0"/>
+              <line x1="700" y1="180" x2="700" y2="240" stroke="#333" stroke-width="1"/>
+              <rect x="692" y="190" width="16" height="40" fill="#2C5AA0"/>
+              <line x1="740" y1="240" x2="740" y2="290" stroke="#333" stroke-width="1"/>
+              <rect x="732" y="245" width="16" height="35" fill="#2C5AA0"/>
+            </g>
+
+            <!-- 화살표 표시 -->
+            <text x="180" y="90" font-size="18" font-weight="900" fill="#E74C3C">↓ 밀림</text>
+            <text x="420" y="90" font-size="18" font-weight="900" fill="#E74C3C">↓ 밀림</text>
+            <text x="260" y="360" font-size="18" font-weight="900" fill="#2C5AA0">↑ 튐</text>
+            <text x="500" y="360" font-size="18" font-weight="900" fill="#2C5AA0">↑ 튐</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="main-right">
+      <div class="character">
+        <div class="speech-bubble">
+          예전에 <span class="em">많이 물렸던</span> 자리<br>
+          → 다시 오면 팔고 싶어짐<br>
+          → 그래서 <span class="em">밀림</span> 발생!
+        </div>
+        <svg class="character-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="90" rx="65" ry="60" fill="#E74C3C"/>
+          <ellipse cx="100" cy="95" rx="55" ry="50" fill="#FDE4C9"/>
+          <circle cx="80" cy="95" r="4" fill="#333"/>
+          <circle cx="120" cy="95" r="4" fill="#333"/>
+          <circle cx="70" cy="110" r="6" fill="#F8B7B7" opacity="0.6"/>
+          <circle cx="130" cy="110" r="6" fill="#F8B7B7" opacity="0.6"/>
+          <path d="M 90 115 Q 100 125 110 115" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="60" y="140" width="80" height="80" rx="15" fill="#E74C3C"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--============================================================
+  7. 지지·저항 - 역할 전환
+=============================================================-->
+<section class="slide">
+  <div class="page-num">06</div>
+  <h1 class="slide-title"><span class="title-blue">저항이 뚫리면</span><br><span class="title-red">지지가 된다</span></h1>
+  <div class="subtitle-line">역할 전환의 원리 - 실전에서 가장 중요</div>
+
+  <div class="card-row">
+    <div class="card blue">
+      <div class="card-num">01</div>
+      <div class="card-title">돌파 전</div>
+      <div class="card-desc">이 가격대에서 <span class="em">매도 심리</span>가 강해<br>→ 여러 번 밀려남 <span class="em">(저항)</span></div>
+    </div>
+    <div class="card">
+      <div class="card-num">02</div>
+      <div class="card-title">거래량 터지며 돌파</div>
+      <div class="card-desc"><span class="em">강한 매수세</span>가 매물을 모두 소화<br>→ 저항대를 <span class="em">위로 뚫음</span></div>
+    </div>
+    <div class="card green">
+      <div class="card-num">03</div>
+      <div class="card-title">돌파 후 되돌림</div>
+      <div class="card-desc">뚫린 자리로 다시 내려와도<br>→ 이제는 <span class="em-blue">지지</span>로 작용</div>
+    </div>
+  </div>
+
+  <div class="chart-box" style="margin-top: 2vh;">
+    <div class="chart-label" style="background:#27AE60;">🔄 역할 전환 차트</div>
+    <div class="chart-svg-wrap">
+      <svg viewBox="0 0 900 260" preserveAspectRatio="xMidYMid meet">
+        <rect width="900" height="260" fill="url(#grid1)"/>
+
+        <!-- 이전 저항 -> 지지 -->
+        <line x1="0" y1="120" x2="900" y2="120" stroke="#E74C3C" stroke-width="3" stroke-dasharray="8,4"/>
+
+        <!-- 왼쪽: 저항 표시 -->
+        <text x="20" y="110" font-size="16" font-weight="700" fill="#E74C3C">← 저항 (돌파 전)</text>
+
+        <!-- 오른쪽: 지지 표시 -->
+        <text x="700" y="110" font-size="16" font-weight="700" fill="#27AE60">지지 (돌파 후) →</text>
+
+        <!-- 캔들: 박스권 + 돌파 + 되돌림 + 재상승 -->
+        <!-- 저항 부딪히는 구간 -->
+        <line x1="60" y1="130" x2="60" y2="160" stroke="#333" stroke-width="1"/>
+        <rect x="52" y="135" width="16" height="25" fill="#E74C3C"/>
+        <line x1="100" y1="115" x2="100" y2="145" stroke="#333" stroke-width="1"/>
+        <rect x="92" y="120" width="16" height="25" fill="#2C5AA0"/>
+        <line x1="140" y1="140" x2="140" y2="170" stroke="#333" stroke-width="1"/>
+        <rect x="132" y="145" width="16" height="25" fill="#2C5AA0"/>
+        <line x1="180" y1="150" x2="180" y2="180" stroke="#333" stroke-width="1"/>
+        <rect x="172" y="155" width="16" height="25" fill="#E74C3C"/>
+        <line x1="220" y1="120" x2="220" y2="150" stroke="#333" stroke-width="1"/>
+        <rect x="212" y="125" width="16" height="20" fill="#E74C3C"/>
+        <line x1="260" y1="118" x2="260" y2="145" stroke="#333" stroke-width="1"/>
+        <rect x="252" y="125" width="16" height="20" fill="#2C5AA0"/>
+
+        <!-- 돌파 캔들 (긴 양봉) -->
+        <line x1="300" y1="70" x2="300" y2="130" stroke="#333" stroke-width="1"/>
+        <rect x="290" y="75" width="20" height="50" fill="#E74C3C"/>
+        <text x="290" y="65" font-size="14" font-weight="900" fill="#E74C3C">돌파!</text>
+
+        <!-- 돌파 후 상승 -->
+        <line x1="340" y1="60" x2="340" y2="90" stroke="#333" stroke-width="1"/>
+        <rect x="332" y="65" width="16" height="20" fill="#E74C3C"/>
+        <line x1="380" y1="70" x2="380" y2="100" stroke="#333" stroke-width="1"/>
+        <rect x="372" y="80" width="16" height="15" fill="#2C5AA0"/>
+
+        <!-- 되돌림 (이전 저항 라인까지) -->
+        <line x1="420" y1="90" x2="420" y2="120" stroke="#333" stroke-width="1"/>
+        <rect x="412" y="95" width="16" height="20" fill="#2C5AA0"/>
+        <line x1="460" y1="100" x2="460" y2="125" stroke="#333" stroke-width="1"/>
+        <rect x="452" y="110" width="16" height="15" fill="#2C5AA0"/>
+
+        <!-- 지지 반응 (튐) -->
+        <line x1="500" y1="95" x2="500" y2="125" stroke="#333" stroke-width="1"/>
+        <rect x="492" y="100" width="16" height="20" fill="#E74C3C"/>
+        <text x="480" y="145" font-size="18" font-weight="900" fill="#27AE60">↑</text>
+
+        <!-- 재상승 -->
+        <line x1="540" y1="75" x2="540" y2="105" stroke="#333" stroke-width="1"/>
+        <rect x="532" y="80" width="16" height="20" fill="#E74C3C"/>
+        <line x1="580" y1="55" x2="580" y2="85" stroke="#333" stroke-width="1"/>
+        <rect x="572" y="60" width="16" height="20" fill="#E74C3C"/>
+        <line x1="620" y1="45" x2="620" y2="75" stroke="#333" stroke-width="1"/>
+        <rect x="612" y="50" width="16" height="20" fill="#E74C3C"/>
+        <line x1="660" y1="35" x2="660" y2="65" stroke="#333" stroke-width="1"/>
+        <rect x="652" y="40" width="16" height="20" fill="#E74C3C"/>
+        <line x1="700" y1="25" x2="700" y2="55" stroke="#333" stroke-width="1"/>
+        <rect x="692" y="30" width="16" height="20" fill="#E74C3C"/>
+        <line x1="740" y1="20" x2="740" y2="50" stroke="#333" stroke-width="1"/>
+        <rect x="732" y="25" width="16" height="20" fill="#E74C3C"/>
+        <line x1="780" y1="15" x2="780" y2="45" stroke="#333" stroke-width="1"/>
+        <rect x="772" y="20" width="16" height="20" fill="#E74C3C"/>
+        <line x1="820" y1="20" x2="820" y2="45" stroke="#333" stroke-width="1"/>
+        <rect x="812" y="25" width="16" height="15" fill="#E74C3C"/>
+
+        <!-- 튐 화살표 -->
+        <path d="M 465 130 Q 490 145 505 125" fill="none" stroke="#27AE60" stroke-width="3" marker-end="url(#arrGreen)"/>
+        <defs>
+          <marker id="arrGreen" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+            <polygon points="0,0 10,5 0,10" fill="#27AE60"/>
+          </marker>
+        </defs>
+
+      </svg>
+    </div>
+  </div>
+
+  <div class="bottom-key">
+    <span class="check">✓</span>
+    <span>돌파 후 <span class="em">되돌림 자리</span>가 <span class="em">가장 안전한 매수 자리</span> - 저항이 지지로 바뀐 순간!</span>
+  </div>
+</section>
+
+<!--============================================================
+  8. 상승추세 눌림목 - 개념
+=============================================================-->
+<section class="slide">
+  <div class="page-num">07</div>
+  <h1 class="slide-title"><span class="title-red">상승 중 잠시 쉬어가는 자리</span><br><span class="title-blue">그것이 눌림목</span></h1>
+  <div class="subtitle-line">가장 안전하고 확률 높은 매수 타이밍</div>
+
+  <div class="core-box">
+    <div class="core-box-title">💡 핵심</div>
+    <div class="core-box-body">
+      상승추세는 <span class="highlight">직선</span>이 아니다<br>
+      → 오르고 <span class="highlight">쉬고</span>, 오르고 쉬고<br>
+      → 그 <span class="highlight">쉬는 자리</span>가 눌림목
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="main-left">
+      <div class="chart-box">
+        <div class="chart-label">📈 눌림목 형성 원리</div>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+            <rect width="800" height="400" fill="url(#grid1)"/>
+
+            <!-- 20일선 (기준) -->
+            <polyline points="20,320 100,280 200,240 300,220 400,180 500,160 600,120 700,90 780,60" fill="none" stroke="#2C5AA0" stroke-width="4"/>
+            <text x="700" y="55" font-size="14" font-weight="700" fill="#2C5AA0">20일선</text>
+
+            <!-- 상승 → 눌림 → 상승 → 눌림 → 상승 (지그재그) -->
+            <!-- 첫번째 상승 -->
+            <line x1="60" y1="340" x2="60" y2="370" stroke="#333" stroke-width="1"/>
+            <rect x="52" y="345" width="16" height="25" fill="#E74C3C"/>
+            <line x1="100" y1="310" x2="100" y2="340" stroke="#333" stroke-width="1"/>
+            <rect x="92" y="315" width="16" height="25" fill="#E74C3C"/>
+            <line x1="140" y1="280" x2="140" y2="310" stroke="#333" stroke-width="1"/>
+            <rect x="132" y="285" width="16" height="25" fill="#E74C3C"/>
+            <line x1="180" y1="250" x2="180" y2="280" stroke="#333" stroke-width="1"/>
+            <rect x="172" y="255" width="16" height="25" fill="#E74C3C"/>
+
+            <!-- 눌림 1 -->
+            <line x1="220" y1="255" x2="220" y2="290" stroke="#333" stroke-width="1"/>
+            <rect x="212" y="260" width="16" height="25" fill="#2C5AA0"/>
+            <line x1="260" y1="270" x2="260" y2="305" stroke="#333" stroke-width="1"/>
+            <rect x="252" y="275" width="16" height="25" fill="#2C5AA0"/>
+            <ellipse cx="240" cy="290" rx="45" ry="30" fill="none" stroke="#27AE60" stroke-width="3" stroke-dasharray="4,3"/>
+            <text x="230" y="335" font-size="14" font-weight="900" fill="#27AE60">눌림①</text>
+
+            <!-- 두번째 상승 -->
+            <line x1="300" y1="240" x2="300" y2="275" stroke="#333" stroke-width="1"/>
+            <rect x="292" y="245" width="16" height="25" fill="#E74C3C"/>
+            <line x1="340" y1="210" x2="340" y2="245" stroke="#333" stroke-width="1"/>
+            <rect x="332" y="215" width="16" height="25" fill="#E74C3C"/>
+            <line x1="380" y1="180" x2="380" y2="215" stroke="#333" stroke-width="1"/>
+            <rect x="372" y="185" width="16" height="25" fill="#E74C3C"/>
+            <line x1="420" y1="160" x2="420" y2="195" stroke="#333" stroke-width="1"/>
+            <rect x="412" y="165" width="16" height="25" fill="#E74C3C"/>
+
+            <!-- 눌림 2 -->
+            <line x1="460" y1="170" x2="460" y2="210" stroke="#333" stroke-width="1"/>
+            <rect x="452" y="175" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="500" y1="180" x2="500" y2="215" stroke="#333" stroke-width="1"/>
+            <rect x="492" y="185" width="16" height="25" fill="#2C5AA0"/>
+            <ellipse cx="480" cy="205" rx="45" ry="30" fill="none" stroke="#27AE60" stroke-width="3" stroke-dasharray="4,3"/>
+            <text x="470" y="250" font-size="14" font-weight="900" fill="#27AE60">눌림②</text>
+
+            <!-- 세번째 상승 -->
+            <line x1="540" y1="150" x2="540" y2="180" stroke="#333" stroke-width="1"/>
+            <rect x="532" y="155" width="16" height="25" fill="#E74C3C"/>
+            <line x1="580" y1="120" x2="580" y2="150" stroke="#333" stroke-width="1"/>
+            <rect x="572" y="125" width="16" height="25" fill="#E74C3C"/>
+            <line x1="620" y1="90" x2="620" y2="120" stroke="#333" stroke-width="1"/>
+            <rect x="612" y="95" width="16" height="25" fill="#E74C3C"/>
+            <line x1="660" y1="70" x2="660" y2="100" stroke="#333" stroke-width="1"/>
+            <rect x="652" y="75" width="16" height="25" fill="#E74C3C"/>
+            <line x1="700" y1="55" x2="700" y2="85" stroke="#333" stroke-width="1"/>
+            <rect x="692" y="60" width="16" height="25" fill="#E74C3C"/>
+            <line x1="740" y1="45" x2="740" y2="75" stroke="#333" stroke-width="1"/>
+            <rect x="732" y="50" width="16" height="25" fill="#E74C3C"/>
+
+            <!-- 상승 화살표 -->
+            <path d="M 40 380 L 780 40" stroke="#E74C3C" stroke-width="2" stroke-dasharray="6,3" opacity="0.4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="main-right">
+      <div class="character">
+        <div class="speech-bubble">
+          숨차게 뛰면<br>
+          잠깐 <span class="em">숨 고르기</span>가 필요하듯,<br>
+          주가도 <span class="em">쉬어가야</span><br>
+          더 멀리 갈 수 있어! 💨
+        </div>
+        <svg class="character-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="90" rx="65" ry="60" fill="#F39C12"/>
+          <ellipse cx="100" cy="95" rx="55" ry="50" fill="#FDE4C9"/>
+          <circle cx="80" cy="95" r="4" fill="#333"/>
+          <circle cx="120" cy="95" r="4" fill="#333"/>
+          <circle cx="70" cy="110" r="6" fill="#F8B7B7" opacity="0.6"/>
+          <circle cx="130" cy="110" r="6" fill="#F8B7B7" opacity="0.6"/>
+          <path d="M 90 115 Q 100 128 110 115" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="60" y="140" width="80" height="80" rx="15" fill="#F39C12"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--============================================================
+  9. 눌림목 - 매수 타이밍
+=============================================================-->
+<section class="slide">
+  <div class="page-num">08</div>
+  <h1 class="slide-title"><span class="title-blue">좋은 눌림목</span><br><span class="title-red">4가지 조건</span></h1>
+  <div class="subtitle-line">이 조건들이 맞을 때만 매수하세요</div>
+
+  <div class="card-row">
+    <div class="card blue">
+      <div class="card-num">01</div>
+      <div class="card-title">추세는 살아있음</div>
+      <div class="card-desc"><span class="em-blue">20일선</span>이 아직 <span class="em-blue">우상향</span><br>→ 큰 흐름이 상승 중</div>
+    </div>
+    <div class="card">
+      <div class="card-num">02</div>
+      <div class="card-title">거래량 감소</div>
+      <div class="card-desc">눌릴 때는 <span class="em">거래량이 줄어야</span><br>→ 매도세가 약하다는 신호</div>
+    </div>
+  </div>
+  <div class="card-row">
+    <div class="card green">
+      <div class="card-num">03</div>
+      <div class="card-title">지지선까지 눌림</div>
+      <div class="card-desc"><span style="color:#27AE60; font-weight:700;">이전 저항 → 현재 지지</span><br>또는 <span style="color:#27AE60; font-weight:700;">20일선</span>까지만 눌러야</div>
+    </div>
+    <div class="card orange">
+      <div class="card-num">04</div>
+      <div class="card-title">양봉 반전 확인</div>
+      <div class="card-desc"><span style="color:#F39C12; font-weight:700;">눌림 마지막</span>에 <span style="color:#F39C12; font-weight:700;">양봉</span> 등장<br>→ 그때가 매수 진입!</div>
+    </div>
+  </div>
+
+  <div class="bottom-key">
+    <span class="check">!</span>
+    <span><span class="em">20일선을 이탈</span>하거나 <span class="em">거래량이 늘면서 하락</span>하면 - 눌림이 아니라 <span class="em">추세 이탈</span>!</span>
+  </div>
+</section>
+
+<!--============================================================
+  10. 눌림목 - 진짜/가짜 구별
+=============================================================-->
+<section class="slide">
+  <div class="page-num">09</div>
+  <h1 class="slide-title"><span class="title-blue">진짜 눌림 vs</span> <span class="title-red">가짜 눌림</span></h1>
+  <div class="subtitle-line">이걸 구별해야 손실을 막을 수 있어요</div>
+
+  <div class="two-col">
+    <div class="col-box" style="border-top: 8px solid #27AE60;">
+      <div class="col-box-title" style="background:#27AE60;">✅ 진짜 눌림 (매수 OK)</div>
+      <div style="text-align:center; margin: 1.5rem 0;">
+        <svg viewBox="0 0 400 200" style="width:100%; max-height: 25vh;">
+          <rect width="400" height="200" fill="url(#grid2)"/>
+          <polyline points="20,160 60,140 100,120 140,100 180,110 220,115 260,90 300,70 340,50 380,30" fill="none" stroke="#2C5AA0" stroke-width="3.5"/>
+          <!-- 상승 → 조금 눌림 → 재상승 -->
+          <text x="150" y="130" font-size="16" font-weight="700" fill="#27AE60">얕은 눌림</text>
+          <text x="270" y="60" font-size="16" font-weight="700" fill="#27AE60">재상승 ↑</text>
+        </svg>
+      </div>
+      <div style="font-size: 1.5rem; line-height: 1.6;">
+        ✔ 20일선 <span style="color:#27AE60; font-weight:700;">위에서</span> 눌림<br>
+        ✔ 거래량 <span style="color:#27AE60; font-weight:700;">감소</span><br>
+        ✔ 5~10% 정도의 <span style="color:#27AE60; font-weight:700;">얕은</span> 조정
+      </div>
+    </div>
+    <div class="col-box" style="border-top: 8px solid #E74C3C;">
+      <div class="col-box-title red">❌ 가짜 눌림 (매수 금물)</div>
+      <div style="text-align:center; margin: 1.5rem 0;">
+        <svg viewBox="0 0 400 200" style="width:100%; max-height: 25vh;">
+          <rect width="400" height="200" fill="url(#grid2)"/>
+          <polyline points="20,50 60,70 100,90 140,110 180,140 220,160 260,170 300,175 340,180 380,180" fill="none" stroke="#2C5AA0" stroke-width="3.5"/>
+          <text x="180" y="130" font-size="16" font-weight="700" fill="#E74C3C">계속 이탈</text>
+          <text x="280" y="170" font-size="16" font-weight="700" fill="#E74C3C">추세 전환 ↓</text>
+        </svg>
+      </div>
+      <div style="font-size: 1.5rem; line-height: 1.6;">
+        ✗ 20일선 <span style="color:#E74C3C; font-weight:700;">아래로 이탈</span><br>
+        ✗ 거래량 <span style="color:#E74C3C; font-weight:700;">증가</span>하며 하락<br>
+        ✗ 15% 이상 <span style="color:#E74C3C; font-weight:700;">깊은</span> 조정
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-key" style="background:#E74C3C;">
+    <span class="check" style="color:#E74C3C;">!</span>
+    <span>"이번엔 다르겠지"라는 마음이 가장 큰 <span class="em">함정</span>이에요 - <span class="em">원칙</span>만 지키세요</span>
+  </div>
+</section>
+
+<!--============================================================
+  11. 하락추세 기술적 반등 - 개념
+=============================================================-->
+<section class="slide">
+  <div class="page-num">10</div>
+  <h1 class="slide-title"><span class="title-red">하락 중의 반등은</span><br><span class="title-blue">'속임수'일 수 있다</span></h1>
+  <div class="subtitle-line">기술적 반등을 매수 신호로 착각하지 마세요</div>
+
+  <div class="core-box">
+    <div class="core-box-title">⚠️ 주의</div>
+    <div class="core-box-body">
+      하락추세에서의 반등은<br>
+      <span class="highlight">잠깐의 숨고르기</span>일 뿐<br>
+      → 오래 못 가고 <span class="highlight">다시 하락</span>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="main-left">
+      <div class="chart-box">
+        <div class="chart-label" style="background:#E74C3C;">📉 하락 중 기술적 반등</div>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+            <rect width="800" height="400" fill="url(#grid1)"/>
+
+            <!-- 20일선 (하락) -->
+            <polyline points="20,60 100,100 200,150 300,180 400,220 500,260 600,290 700,320 780,350" fill="none" stroke="#2C5AA0" stroke-width="4"/>
+            <text x="60" y="55" font-size="14" font-weight="700" fill="#2C5AA0">20일선 (하락 중)</text>
+
+            <!-- 하락 → 반등 → 하락 → 반등 → 하락 (지그재그) -->
+            <line x1="60" y1="70" x2="60" y2="100" stroke="#333" stroke-width="1"/>
+            <rect x="52" y="75" width="16" height="25" fill="#2C5AA0"/>
+            <line x1="100" y1="100" x2="100" y2="130" stroke="#333" stroke-width="1"/>
+            <rect x="92" y="105" width="16" height="25" fill="#2C5AA0"/>
+            <line x1="140" y1="130" x2="140" y2="165" stroke="#333" stroke-width="1"/>
+            <rect x="132" y="140" width="16" height="25" fill="#2C5AA0"/>
+            <line x1="180" y1="155" x2="180" y2="195" stroke="#333" stroke-width="1"/>
+            <rect x="172" y="165" width="16" height="30" fill="#2C5AA0"/>
+
+            <!-- 반등 1 -->
+            <line x1="220" y1="140" x2="220" y2="180" stroke="#333" stroke-width="1"/>
+            <rect x="212" y="145" width="16" height="30" fill="#E74C3C"/>
+            <line x1="260" y1="125" x2="260" y2="160" stroke="#333" stroke-width="1"/>
+            <rect x="252" y="130" width="16" height="25" fill="#E74C3C"/>
+            <ellipse cx="240" cy="150" rx="55" ry="35" fill="none" stroke="#E74C3C" stroke-width="3" stroke-dasharray="4,3"/>
+            <text x="220" y="105" font-size="16" font-weight="900" fill="#E74C3C">반등① (속임)</text>
+
+            <!-- 다시 하락 -->
+            <line x1="300" y1="150" x2="300" y2="190" stroke="#333" stroke-width="1"/>
+            <rect x="292" y="160" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="340" y1="190" x2="340" y2="230" stroke="#333" stroke-width="1"/>
+            <rect x="332" y="195" width="16" height="35" fill="#2C5AA0"/>
+            <line x1="380" y1="220" x2="380" y2="260" stroke="#333" stroke-width="1"/>
+            <rect x="372" y="230" width="16" height="30" fill="#2C5AA0"/>
+
+            <!-- 반등 2 -->
+            <line x1="420" y1="210" x2="420" y2="245" stroke="#333" stroke-width="1"/>
+            <rect x="412" y="215" width="16" height="25" fill="#E74C3C"/>
+            <line x1="460" y1="195" x2="460" y2="230" stroke="#333" stroke-width="1"/>
+            <rect x="452" y="200" width="16" height="25" fill="#E74C3C"/>
+            <ellipse cx="440" cy="220" rx="55" ry="30" fill="none" stroke="#E74C3C" stroke-width="3" stroke-dasharray="4,3"/>
+            <text x="420" y="180" font-size="16" font-weight="900" fill="#E74C3C">반등② (속임)</text>
+
+            <!-- 다시 하락 -->
+            <line x1="500" y1="220" x2="500" y2="260" stroke="#333" stroke-width="1"/>
+            <rect x="492" y="225" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="540" y1="255" x2="540" y2="295" stroke="#333" stroke-width="1"/>
+            <rect x="532" y="265" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="580" y1="285" x2="580" y2="325" stroke="#333" stroke-width="1"/>
+            <rect x="572" y="295" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="620" y1="315" x2="620" y2="350" stroke="#333" stroke-width="1"/>
+            <rect x="612" y="320" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="660" y1="330" x2="660" y2="365" stroke="#333" stroke-width="1"/>
+            <rect x="652" y="335" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="700" y1="345" x2="700" y2="380" stroke="#333" stroke-width="1"/>
+            <rect x="692" y="350" width="16" height="30" fill="#2C5AA0"/>
+            <line x1="740" y1="360" x2="740" y2="390" stroke="#333" stroke-width="1"/>
+            <rect x="732" y="365" width="16" height="25" fill="#2C5AA0"/>
+
+            <!-- 하락 큰 화살표 -->
+            <path d="M 40 40 L 780 380" stroke="#2C5AA0" stroke-width="2" stroke-dasharray="6,3" opacity="0.3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="main-right">
+      <div class="character">
+        <div class="speech-bubble">
+          "이제 바닥이겠지"<br>
+          하고 사면<br>
+          → <span class="em">더 큰 손실!</span><br>
+          잠깐의 반등에<br>
+          속지 마세요 ⚠️
+        </div>
+        <svg class="character-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="90" rx="65" ry="60" fill="#95A5A6"/>
+          <ellipse cx="100" cy="95" rx="55" ry="50" fill="#FDE4C9"/>
+          <circle cx="80" cy="95" r="4" fill="#333"/>
+          <circle cx="120" cy="95" r="4" fill="#333"/>
+          <path d="M 90 118 Q 100 110 110 118" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="60" y="140" width="80" height="80" rx="15" fill="#95A5A6"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--============================================================
+  12. 하락추세 기술적 반등 - 함정 회피
+=============================================================-->
+<section class="slide">
+  <div class="page-num">11</div>
+  <h1 class="slide-title"><span class="title-red">기술적 반등의</span><br><span class="title-blue">3가지 특징</span></h1>
+  <div class="subtitle-line">이 특징이 보이면 매수 금지!</div>
+
+  <div class="step-flow">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-icon">📉</div>
+      <div class="step-label" style="font-size:1.6rem;">거래량 부족</div>
+      <div class="step-desc" style="font-size:1.3rem;">반등할 때 거래량이<br>확 늘지 않음</div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-icon">⏱️</div>
+      <div class="step-label" style="font-size:1.6rem;">짧은 상승</div>
+      <div class="step-desc" style="font-size:1.3rem;">3~5일 안에<br>다시 하락으로 전환</div>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-icon">🚫</div>
+      <div class="step-label" style="font-size:1.6rem;">이평선 못 뚫음</div>
+      <div class="step-desc" style="font-size:1.3rem;">20일선·60일선을<br>돌파하지 못함</div>
+    </div>
+  </div>
+
+  <div class="card-row" style="margin-top: 2vh;">
+    <div class="card blue">
+      <div class="card-title" style="font-size:2.2rem;">🎯 대응 원칙</div>
+      <div class="card-desc" style="font-size:1.5rem;">
+        1. 하락추세면 <span class="em-blue">일단 손절</span><br>
+        2. 반등이 와도 <span class="em-blue">추격 매수 금지</span><br>
+        3. <span class="em-blue">진짜 바닥 신호</span>가 나올 때까지 기다림
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:2.2rem;">💡 기억할 것</div>
+      <div class="card-desc" style="font-size:1.5rem;">
+        <span class="em">"떨어지는 칼날은</span><br>
+        <span class="em">잡지 마라"</span><br>
+        - 칼이 바닥에 <span class="em">꽂히고 나서</span> 잡는 게 안전!
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--============================================================
+  13. 바닥 신호 - 3가지 유형
+=============================================================-->
+<section class="slide">
+  <div class="page-num">12</div>
+  <h1 class="slide-title"><span class="title-blue">바닥은</span> <span class="title-red">이렇게 찾는다</span></h1>
+  <div class="subtitle-line">진짜 바닥에서 나타나는 3가지 신호</div>
+
+  <div class="card-row">
+    <div class="card">
+      <div class="card-num">01</div>
+      <div class="card-title">거래량 폭발</div>
+      <div class="card-desc"><span class="em">투매(공포 매도)</span> 나오면서<br>거래량이 <span class="em">평소의 2~3배</span><br>→ 물량이 다 나옴</div>
+    </div>
+    <div class="card blue">
+      <div class="card-num">02</div>
+      <div class="card-title">망치형 캔들</div>
+      <div class="card-desc">밑꼬리가 <span class="em-blue">몸통의 2배 이상</span><br>→ 아래에서 <span class="em-blue">받쳐주는 힘</span><br>→ 매수세 진입 신호</div>
+    </div>
+    <div class="card green">
+      <div class="card-num">03</div>
+      <div class="card-title">이평선 반전</div>
+      <div class="card-desc"><span style="color:#27AE60; font-weight:700;">5일선이 20일선</span>을<br><span style="color:#27AE60; font-weight:700;">위로 돌파</span> (골든크로스)<br>→ 추세 전환 확인</div>
+    </div>
+  </div>
+
+  <div class="chart-box" style="margin-top: 2vh; flex: 0.9;">
+    <div class="chart-label" style="background:#27AE60;">🌱 바닥 신호 예시</div>
+    <div class="chart-svg-wrap">
+      <svg viewBox="0 0 900 240" preserveAspectRatio="xMidYMid meet">
+        <rect width="900" height="240" fill="url(#grid1)"/>
+
+        <!-- 하락 -->
+        <line x1="40" y1="40" x2="40" y2="80" stroke="#333" stroke-width="1"/>
+        <rect x="32" y="45" width="16" height="30" fill="#2C5AA0"/>
+        <line x1="80" y1="75" x2="80" y2="115" stroke="#333" stroke-width="1"/>
+        <rect x="72" y="80" width="16" height="30" fill="#2C5AA0"/>
+        <line x1="120" y1="110" x2="120" y2="145" stroke="#333" stroke-width="1"/>
+        <rect x="112" y="115" width="16" height="25" fill="#2C5AA0"/>
+        <line x1="160" y1="140" x2="160" y2="175" stroke="#333" stroke-width="1"/>
+        <rect x="152" y="145" width="16" height="25" fill="#2C5AA0"/>
+
+        <!-- 투매 -->
+        <line x1="200" y1="165" x2="200" y2="215" stroke="#333" stroke-width="1"/>
+        <rect x="192" y="170" width="16" height="40" fill="#2C5AA0"/>
+        <text x="180" y="230" font-size="14" font-weight="900" fill="#E74C3C">① 투매</text>
+
+        <!-- 망치형 -->
+        <line x1="260" y1="175" x2="260" y2="230" stroke="#333" stroke-width="2"/>
+        <rect x="252" y="175" width="16" height="15" fill="#E74C3C"/>
+        <text x="250" y="165" font-size="14" font-weight="900" fill="#E74C3C">② 망치형 ↓</text>
+
+        <!-- 반등 시작 -->
+        <line x1="320" y1="155" x2="320" y2="185" stroke="#333" stroke-width="1"/>
+        <rect x="312" y="160" width="16" height="25" fill="#E74C3C"/>
+        <line x1="380" y1="135" x2="380" y2="165" stroke="#333" stroke-width="1"/>
+        <rect x="372" y="140" width="16" height="25" fill="#E74C3C"/>
+        <line x1="440" y1="120" x2="440" y2="150" stroke="#333" stroke-width="1"/>
+        <rect x="432" y="125" width="16" height="20" fill="#E74C3C"/>
+
+        <!-- 골든크로스 -->
+        <line x1="500" y1="100" x2="500" y2="135" stroke="#333" stroke-width="1"/>
+        <rect x="492" y="105" width="16" height="25" fill="#E74C3C"/>
+        <circle cx="500" cy="120" r="30" fill="none" stroke="#27AE60" stroke-width="3" stroke-dasharray="4,3"/>
+        <text x="475" y="70" font-size="14" font-weight="900" fill="#27AE60">③ 골든크로스</text>
+
+        <!-- 계속 상승 -->
+        <line x1="560" y1="80" x2="560" y2="115" stroke="#333" stroke-width="1"/>
+        <rect x="552" y="85" width="16" height="25" fill="#E74C3C"/>
+        <line x1="620" y1="60" x2="620" y2="95" stroke="#333" stroke-width="1"/>
+        <rect x="612" y="65" width="16" height="25" fill="#E74C3C"/>
+        <line x1="680" y1="45" x2="680" y2="80" stroke="#333" stroke-width="1"/>
+        <rect x="672" y="50" width="16" height="25" fill="#E74C3C"/>
+        <line x1="740" y1="35" x2="740" y2="65" stroke="#333" stroke-width="1"/>
+        <rect x="732" y="40" width="16" height="20" fill="#E74C3C"/>
+        <line x1="800" y1="25" x2="800" y2="55" stroke="#333" stroke-width="1"/>
+        <rect x="792" y="30" width="16" height="20" fill="#E74C3C"/>
+        <line x1="860" y1="20" x2="860" y2="50" stroke="#333" stroke-width="1"/>
+        <rect x="852" y="25" width="16" height="20" fill="#E74C3C"/>
+
+        <!-- 5일선 (붉은) -->
+        <polyline points="20,60 80,90 120,120 160,155 200,180 260,190 320,175 380,150 440,130 500,110 560,90 620,70 680,55 740,45 800,35 860,28" fill="none" stroke="#E74C3C" stroke-width="3"/>
+        <!-- 20일선 (파란) -->
+        <polyline points="20,55 80,80 120,110 160,140 200,165 260,180 320,175 380,165 440,150 500,135 560,120 620,105 680,90 740,80 800,70 860,60" fill="none" stroke="#2C5AA0" stroke-width="3"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!--============================================================
+  14. 바닥 신호 - 확인 방법
+=============================================================-->
+<section class="slide">
+  <div class="page-num">13</div>
+  <h1 class="slide-title"><span class="title-blue">진짜 바닥의</span> <span class="title-red">확인 절차</span></h1>
+  <div class="subtitle-line">한 가지 신호가 아니라 여러 신호가 겹쳐야 진짜</div>
+
+  <table class="big-table" style="margin-top: 3vh;">
+    <thead>
+      <tr>
+        <th style="width:15%;">순서</th>
+        <th style="width:30%;">확인 항목</th>
+        <th style="width:55%;">체크 포인트</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strong">1단계</td>
+        <td>거래량 급증</td>
+        <td>바닥에서 <span class="red">투매성 대량 거래</span> 발생</td>
+      </tr>
+      <tr>
+        <td class="strong">2단계</td>
+        <td>반전 캔들</td>
+        <td><span class="red">망치형·장대양봉·상승 십자성</span> 등 등장</td>
+      </tr>
+      <tr>
+        <td class="strong">3단계</td>
+        <td>이평선 저항 돌파</td>
+        <td>주가가 <span class="red">5일선·20일선</span>을 차례로 돌파</td>
+      </tr>
+      <tr>
+        <td class="strong">4단계</td>
+        <td>골든크로스</td>
+        <td><span class="red">5일선이 20일선을 위로</span> 뚫음</td>
+      </tr>
+      <tr>
+        <td class="strong">5단계</td>
+        <td>눌림 후 재상승</td>
+        <td>돌파 후 <span class="red">얕은 눌림</span> 소화하고 계속 상승</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="bottom-key">
+    <span class="check">✓</span>
+    <span>1~2단계만 보고 매수하지 말고, <span class="em">3단계 이상</span> 확인된 후 진입이 <span class="em">안전!</span></span>
+  </div>
+</section>
+
+<!--============================================================
+  15. 종합 정리 - 실전 체크리스트
+=============================================================-->
+<section class="slide">
+  <div class="page-num">14</div>
+  <h1 class="slide-title"><span class="title-red">실전 매매</span><br><span class="title-blue">체크리스트</span></h1>
+  <div class="subtitle-line">매수하기 전, 이 6가지를 반드시 확인!</div>
+
+  <div class="toc-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1.5vh 2vw;">
+    <div class="toc-item">
+      <div class="toc-num">✓</div>
+      <div class="toc-content">
+        <div class="toc-title" style="font-size:1.9rem;">이평선 정배열인가?</div>
+        <div class="toc-desc" style="font-size:1.3rem;">5→20→60→120 순서 확인</div>
+      </div>
+    </div>
+    <div class="toc-item red">
+      <div class="toc-num">✓</div>
+      <div class="toc-content">
+        <div class="toc-title" style="font-size:1.9rem;">주가가 20일선 위인가?</div>
+        <div class="toc-desc" style="font-size:1.3rem;">추세의 허리를 지키는지</div>
+      </div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">✓</div>
+      <div class="toc-content">
+        <div class="toc-title" style="font-size:1.9rem;">눌림목에 왔는가?</div>
+        <div class="toc-desc" style="font-size:1.3rem;">거래량 감소 + 지지선 도달</div>
+      </div>
+    </div>
+    <div class="toc-item red">
+      <div class="toc-num">✓</div>
+      <div class="toc-content">
+        <div class="toc-title" style="font-size:1.9rem;">양봉 반전 확인?</div>
+        <div class="toc-desc" style="font-size:1.3rem;">눌림 끝에 매수세 등장</div>
+      </div>
+    </div>
+    <div class="toc-item">
+      <div class="toc-num">✓</div>
+      <div class="toc-content">
+        <div class="toc-title" style="font-size:1.9rem;">저항대는 어디?</div>
+        <div class="toc-desc" style="font-size:1.3rem;">1차 목표가·2차 목표가 설정</div>
+      </div>
+    </div>
+    <div class="toc-item red">
+      <div class="toc-num">✓</div>
+      <div class="toc-content">
+        <div class="toc-title" style="font-size:1.9rem;">손절가 정했는가?</div>
+        <div class="toc-desc" style="font-size:1.3rem;">지지선 이탈 시 무조건 매도</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-key">
+    <span class="check">🎯</span>
+    <span>차트는 <span class="em">과거의 흔적</span>이지만, <span class="em">사람 심리</span>는 반복됩니다 - 원칙을 지키세요!</span>
+  </div>
+</section>
+
+<!--============================================================
+  16. 마무리
+=============================================================-->
+<section class="slide">
+  <div class="end-slide">
+    <div class="end-title">오늘도 <span class="red">수고</span><br>하셨어요! 👏</div>
+    <div class="end-message">
+      💡 차트는 <span style="color:#E74C3C; font-weight:900;">"미래를 맞추는 도구"</span>가 아니라<br>
+      <span style="color:#2C5AA0; font-weight:900;">"확률 높은 자리를 찾는 지도"</span>예요.<br><br>
+      오늘 배운 <span style="color:#E74C3C; font-weight:900;">이평선 · 지지저항 · 눌림목 · 반등 · 바닥</span>을<br>
+      실제 차트에서 <span style="color:#2C5AA0; font-weight:900;">스스로 찾아보는 연습</span>을 해보세요.<br><br>
+      <span style="font-size: 2rem;">✨ 다음 시간에 만나요! ✨</span>
+    </div>
+  </div>
+</section>
+
 </div>
+
+<!-- 네비게이션 -->
+<div class="nav">
+  <button id="prevBtn" onclick="prevSlide()">← 이전</button>
+  <div class="page-indicator" id="pageIndicator">1 / 16</div>
+  <button id="nextBtn" onclick="nextSlide()">다음 →</button>
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    document.getElementById('pageIndicator').textContent = `${idx + 1} / ${total}`;
+    document.getElementById('prevBtn').disabled = (idx === 0);
+    document.getElementById('nextBtn').disabled = (idx === total - 1);
+  }
+  function nextSlide() { if (current < total - 1) { current++; showSlide(current); } }
+  function prevSlide() { if (current > 0) { current--; showSlide(current); } }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Home') { current = 0; showSlide(current); }
+    if (e.key === 'End') { current = total - 1; showSlide(current); }
+  });
+
+  showSlide(0);
+</script>
+
 </body>
 </html>
